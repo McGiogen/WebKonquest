@@ -132,5 +132,9 @@ export abstract class Player implements GameMachineState {
     }
   }
 
+  toString(): string {
+    return this.name;
+  }
+
   abstract play(): void;
 }

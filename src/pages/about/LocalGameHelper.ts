@@ -2,6 +2,7 @@ import {Game} from "../../game/game";
 import {GameOptions, InteractMode} from "../../services/GameOptions";
 import {Planet} from "../../game/planet";
 import {Player} from "../../game/player";
+import {LocalPlayer} from "../../game/localplayer";
 
 export class LocalGameHelper {
   planetWithFocus: Planet;
@@ -43,12 +44,15 @@ export class LocalGameHelper {
   }
 
   endTurn(): void {
-    this.game.newTurn();
+    let player = this.game.machine.currentState as Player;
+    if (player instanceof LocalPlayer) {
+      player.done();
 
-    // Cleaning attack informations
-    this.attackSource = null;
-    this.attackDestination = null;
-    this.attackShipCount = null;
+      // Cleaning attack informations
+      this.attackSource = null;
+      this.attackDestination = null;
+      this.attackShipCount = null;
+    }
   }
 
   private configureAttackPlanets(target: Planet): void {

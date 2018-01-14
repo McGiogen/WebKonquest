@@ -22,10 +22,13 @@ export class AboutPage {
     this.helper = new LocalGameHelper(this.game, this.options);
 
     // Adding some data to the game
-    let player = new LocalPlayer(this.game, 'Gioele', 'green');
-    this.game.addPlayer(player);
+    let player1 = new LocalPlayer(this.game, 'Gioele', 'green');
+    this.game.addPlayer(player1);
+    let player2 = new LocalPlayer(this.game, 'Linus Torvalds', 'black');
+    this.game.addPlayer(player2);
     this.game.model.map.addNeutralPlanetSomewhere(this.game.model.neutral);
-    this.game.model.map.addPlayerPlanetSomewhere(player);
+    this.game.model.map.addPlayerPlanetSomewhere(player1);
+    this.game.model.map.addPlayerPlanetSomewhere(player2);
 
     this.game.start();
   }
@@ -38,9 +41,9 @@ export class AboutPage {
   }
 
   playerInTurn(): string {
-    let curState: any = this.game.machine.currentState;
-    if (curState.name) {
-      return curState.name;
+    let curState = this.game.machine.currentState;
+    if (curState) {
+      return curState.toString();
     }
     return '';
   }
@@ -50,6 +53,6 @@ export class AboutPage {
   }
 
   endTurn(): void {
-    this.helper.
+    this.helper.endTurn();
   }
 }
