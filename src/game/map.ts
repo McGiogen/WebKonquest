@@ -158,12 +158,10 @@ export class GameMap {
 
   // TODO business logic -> sposta
   static * planetNameGenerator(): IterableIterator<string> {
-    let char: string = 'A';
-    let charCode: number = char.charCodeAt(0);
+    let charCode: number = 'A'.charCodeAt(0);
 
     for (let i = 0; i < 50; i++) {
-        yield String.fromCharCode(charCode);
-        charCode++;
+        yield String.fromCharCode(charCode + i);
     }
   }
 
