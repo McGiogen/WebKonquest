@@ -10,7 +10,7 @@
         <div
           class="map-grid-cell-content"
         >
-          {{ sector.planet == null ? '-' : sector.planet.name }}
+          {{ sector.planet == null ? '-' : sector.planet.name + ' ' + sector.planet.fleet.shipCount }}
         </div>
       </div>
     </div>

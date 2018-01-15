@@ -12,9 +12,12 @@ export class GameMap {
   private rowsCount: number;
   private columnsCount: number;
   grid: Array<Array<Sector>>;
+  private planetNameGenerator: IterableIterator<string>;
 
   constructor(rowsCount: number, colsCount: number) {
     this.resizeMap(rowsCount, colsCount);
+
+    this.planetNameGenerator = GameMap.planetNameGenerator();
   }
 
   resizeMap(rowsCount: number, columnsCount: number): void {
@@ -41,7 +44,8 @@ export class GameMap {
   }
 
   addPlanet(sector, player, prodRate, killPercentage): void {
-    sector.planet = new Planet(this.nextPlanetName(), player, prodRate, killPercentage, sector);
+    const planetName = this.planetNameGenerator.next().value;
+    sector.planet = new Planet(planetName, player, prodRate, killPercentage, sector);
   }
 
   addPlayerPlanetSomewhere(player): Planet {
@@ -49,7 +53,8 @@ export class GameMap {
     if (!sector) {
       return null;
     }
-    sector.planet = Planet.createPlayerPlanet(this.nextPlanetName(), player, sector.coordinate);
+    const planetName = this.planetNameGenerator.next().value;
+    sector.planet = Planet.createPlayerPlanet(planetName, player, sector.coordinate);
     return sector.planet;
   }
 
@@ -58,7 +63,8 @@ export class GameMap {
     if (!sector) {
       return null;
     }
-    sector.planet = Planet.createNeutralPlanet(this.nextPlanetName(), neutral, sector.coordinate);
+    const planetName = this.planetNameGenerator.next().value;
+    sector.planet = Planet.createNeutralPlanet(planetName, neutral, sector.coordinate);
     return sector.planet;
   }
 
@@ -115,7 +121,8 @@ export class GameMap {
     for (let x = 0; x < numNeutralPlanets; ++x) {
       const sector = this.findRandomFreeSector();
       if (sector) {
-        Planet.createNeutralPlanet(this.nextPlanetName(), neutral, sector.coordinate);
+        const planetName = this.planetNameGenerator.next().value;
+        Planet.createNeutralPlanet(planetName, neutral, sector.coordinate);
       }
     }
 
@@ -150,19 +157,14 @@ export class GameMap {
   }
 
   // TODO business logic -> sposta
-  nextPlanetName(): string {
+  static * planetNameGenerator(): IterableIterator<string> {
     let char: string = 'A';
     let charCode: number = char.charCodeAt(0);
 
-    for (const planet of this.getPlanets()) {
-      if (planet.name && planet.name.startsWith(char)) {
+    for (let i = 0; i < 50; i++) {
+        yield String.fromCharCode(charCode);
         charCode++;
-        char = String.fromCharCode(charCode);
-      } else {
-        return char;
-      }
     }
-    return char;
   }
 
   static createArray<T>(size: number, fillFn: (index: number) => T): Array<T> {

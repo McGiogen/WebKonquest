@@ -35,6 +35,7 @@ export class LocalGameHelper {
     if (!this.attackSource || !this.attackDestination || this.attackShipCount == null) {
       throw new Error('Impossibile iniziare l\'attacco: uno o più parametri mancanti');
     }
+    console.log(`Attack from ${this.attackSource.name} to ${this.attackDestination.name} with ${this.attackShipCount} ships.`);
     this.game.attack(this.attackSource, this.attackDestination, this.attackShipCount, false);
 
     // Cleaning attack informations
