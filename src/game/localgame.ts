@@ -1,9 +1,10 @@
 import {Game} from "./game";
 import {Player} from "./player";
+import {GameConfig} from "./config";
 
 export class LocalGame extends Game {
-  constructor() {
-    super();
+  constructor(gameConfig: GameConfig) {
+    super(gameConfig);
   }
 
   start() {

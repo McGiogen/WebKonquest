@@ -1,4 +1,4 @@
-export class GameOptions {
+export class AppOptions {
   interactMode: InteractMode;
 }
 

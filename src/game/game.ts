@@ -11,13 +11,14 @@ import {Planet} from "./planet";
 import {Player} from "./player";
 import {NeutralPlayer} from "./neutralPlayer";
 import {GameMachine} from "./gameMachine";
+import {GameConfig} from "./config";
 
 export abstract class Game {
   model: GameModel;
   machine: GameMachine;
 
-  constructor() {
-    this.model = new GameModel(new NeutralPlayer(this));
+  constructor(public gameConfig: GameConfig) {
+    this.model = new GameModel(new NeutralPlayer(this), gameConfig);
     this.machine = new GameMachine();
 
     // finalState = new
@@ -179,17 +180,14 @@ export class GameModel {
   turnCounter: number;
   map: GameMap;
   players: Array<Player>;
-  // TODO options
-  options: any;
 
   currentPlayer: Player;
 
-  constructor(public neutral: NeutralPlayer) {
+  constructor(public neutral: NeutralPlayer, public configs: GameConfig) {
     this.turnCounter = 0;
     this.currentPlayer = undefined;
     this.map = new GameMap(10, 10);
     this.players = [];
-    this.options = {};
   }
 
   getPlanets(): Array<Planet> {

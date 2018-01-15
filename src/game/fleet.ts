@@ -8,43 +8,39 @@ import {Planet} from "./planet";
 import {Player} from "./player";
 
 export class Fleet {
-  constructor(protected _shipCount: number) {
+  constructor(public shipCount: number) {
   }
 
-  removeShips(lostShips: number) {
-    this._shipCount -= lostShips;
-  }
-
-  get shipCount() {
-    return this._shipCount;
+  removeShips(lostShips: number): void {
+    this.shipCount -= lostShips;
   }
 }
 
 export class AttackFleet extends Fleet {
   readonly owner: Player;
 
-  constructor(readonly source: Planet, readonly destination: Planet, protected _shipCount: number, public arrivalTurn: number) {
-    super(_shipCount);
+  constructor(readonly source: Planet, readonly destination: Planet, shipCount: number, public arrivalTurn: number) {
+    super(shipCount);
     this.owner = source.owner;
   }
 }
 
 // TODO estrai la logica
 export class DefenseFleet extends Fleet {
-  constructor(protected _home: Planet, protected _shipCount: number) {
-    super(_shipCount);
+  constructor(protected _home: Planet, shipCount: number) {
+    super(shipCount);
   }
 
-  absorb(attackFleet) {
-    this._shipCount += attackFleet.shipCount;
+  absorb(attackFleet: AttackFleet): void {
+    this.shipCount += attackFleet.shipCount;
   }
 
-  become(attackFleet) {
-    this._shipCount = attackFleet.shipCount;
+  become(attackFleet: AttackFleet): void {
+    this.shipCount = attackFleet.shipCount;
   }
 
-  spawnAttackFleet(destination, shipCount, arrivalTurn) {
-    if (this._shipCount < shipCount) {
+  spawnAttackFleet(destination: Planet, shipCount: number, arrivalTurn: number): AttackFleet {
+    if (this.shipCount < shipCount) {
       // Non ci sono abbastanza navi per l'attacco
       return null;
     }
@@ -58,11 +54,11 @@ export class DefenseFleet extends Fleet {
     return newAttackFleet;
   }
 
-  addShips(shipCount) {
-    this._shipCount += shipCount;
+  addShips(shipCount: number): void {
+    this.shipCount += shipCount;
 
-    if (this._shipCount < 0) { /* to allow for negative production planets */
-      this._shipCount = 0;
+    if (this.shipCount < 0) { /* to allow for negative production planets */
+      this.shipCount = 0;
     }
   }
 }

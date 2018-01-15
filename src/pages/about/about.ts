@@ -3,7 +3,8 @@ import {NavController} from 'ionic-angular';
 import {LocalGame} from "../../game/localgame";
 import {LocalPlayer} from "../../game/localplayer";
 import {LocalGameHelper} from "./LocalGameHelper";
-import {GameOptions, InteractMode} from "../../services/GameOptions";
+import {AppOptions, InteractMode} from "../../services/AppOptions";
+import {GameConfig} from "../../game/config";
 
 @Component({
   selector: 'page-about',
@@ -12,14 +13,15 @@ import {GameOptions, InteractMode} from "../../services/GameOptions";
 export class AboutPage {
 
   private game: LocalGame;
-  private options: GameOptions;
+  private appOptions: AppOptions;
   private helper: LocalGameHelper;
 
   constructor(public navCtrl: NavController) {
-    this.game = new LocalGame();
-    this.options = new GameOptions();
-    this.options.interactMode = InteractMode.SingleTap;
-    this.helper = new LocalGameHelper(this.game, this.options);
+    const gameConfig = new GameConfig();
+    this.game = new LocalGame(gameConfig);
+    this.appOptions = new AppOptions();
+    this.appOptions.interactMode = InteractMode.DoubleTap;
+    this.helper = new LocalGameHelper(this.game, this.appOptions);
 
     // Adding some data to the game
     let player1 = new LocalPlayer(this.game, 'Gioele', 'green');

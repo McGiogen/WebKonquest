@@ -11,6 +11,8 @@
           class="map-grid-cell-content"
         >
           {{ sector.planet == null ? '-' : sector.planet.name + ' ' + sector.planet.fleet.shipCount }}
+          <br>
+          {{ sector.planet == null ? '' : sector.planet.owner.name }}
         </div>
       </div>
     </div>

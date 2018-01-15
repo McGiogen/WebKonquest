@@ -1,5 +1,5 @@
 import {Game} from "../../game/game";
-import {GameOptions, InteractMode} from "../../services/GameOptions";
+import {AppOptions, InteractMode} from "../../services/AppOptions";
 import {Planet} from "../../game/planet";
 import {Player} from "../../game/player";
 import {LocalPlayer} from "../../game/localplayer";
@@ -11,7 +11,7 @@ export class LocalGameHelper {
   attackDestination: Planet;
   attackShipCount: number;
 
-  constructor(private game: Game, private options: GameOptions) {}
+  constructor(private game: Game, private options: AppOptions) {}
 
   selectPlanet(planet: Planet): void {
     if (this.options.interactMode === InteractMode.SingleTap) {

@@ -6,6 +6,7 @@ import {DefenseFleet} from "./fleet";
 import {GameUtils} from "./game";
 import {Player} from "./player";
 import {Coordinate} from "./coordinate";
+import {GameConfig} from "./config";
 
 export class Planet {
   readonly originalProductionRate: number;
@@ -40,17 +41,17 @@ export class Planet {
   }
 
   // TODO probabilmente business logic -> sposta
-  turn(/* GameOptions */options) {
+  turn(config: GameConfig) {
     //qDebug() << "Planet::turn...";
 
-    if (options.ProductionAfterConquere || !this.justConquered) {
-      const shipsProduction = this.owner.isNeutral() ? options.NeutralsProduction : this.productionRate;
+    if (config.productionAfterConquere || !this.justConquered) {
+      const shipsProduction = this.owner.isNeutral() ? config.neutralsProduction : this.productionRate;
       this.fleet.addShips(shipsProduction);
       this.owner.shipsBuilt += shipsProduction;
       this.owner.turnProduction += shipsProduction;
       this.owner.shipCount += this.fleet.shipCount;
 
-      if (options.CumulativeProduction) {
+      if (config.cumulativeProduction) {
         this.productionRate++;
       }
     }
