@@ -6,6 +6,7 @@ import {MyApp} from './app.component';
 import {PlayPage} from '../pages/play/play';
 import {AboutPage} from '../pages/about/about';
 import {HomePage} from '../pages/home/home';
+import {OptionsPage} from '../pages/options/options';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -16,6 +17,7 @@ import {ComponentsModule} from "../components/components.module";
     MyApp,
     PlayPage,
     AboutPage,
+    OptionsPage,
     HomePage
   ],
   imports: [
@@ -28,6 +30,7 @@ import {ComponentsModule} from "../components/components.module";
     MyApp,
     PlayPage,
     AboutPage,
+    OptionsPage,
     HomePage
   ],
   providers: [
