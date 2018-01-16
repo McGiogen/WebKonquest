@@ -7,11 +7,25 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-start></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col>
+        <ion-list radio-group [(ngModel)]="appOptions.interactMode">
+          <ion-list-header>
+            Interact mode
+          </ion-list-header>
+
+          <ion-item>
+            <ion-label>Single tap</ion-label>
+            <ion-radio [value]="InteractMode.SingleTap"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Double tap</ion-label>
+            <ion-radio [value]="InteractMode.DoubleTap"></ion-radio>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

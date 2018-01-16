@@ -6,12 +6,15 @@ import {LocalPlayer} from "../../game/localplayer";
 
 export class LocalGameHelper {
   planetWithFocus: Planet;
+  options: AppOptions;
 
   attackSource: Planet;
   attackDestination: Planet;
   attackShipCount: number;
 
-  constructor(private game: Game, private options: AppOptions) {}
+  constructor(private game: Game) {
+    this.options = AppOptions.instance;
+  }
 
   selectPlanet(planet: Planet): void {
     if (this.options.interactMode === InteractMode.SingleTap) {

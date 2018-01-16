@@ -1,5 +1,5 @@
 import {Game} from "./game";
-import {gameEmitter, GAME_EVENT} from "./event";
+import {gameEmitter, GameEvent} from "./event";
 import {AttackFleet} from "./fleet";
 import {Planet} from "./planet";
 import {GameMachineState} from "./gameMachine";
@@ -43,7 +43,7 @@ export abstract class Player implements GameMachineState {
     //qDebug() << this->metaObject()->className();
     this.game.model.currentPlayer = this;
     if (this.isDead()) {
-      gameEmitter.emit(GAME_EVENT.PLAYER_TURN_DONE);
+      gameEmitter.emit(GameEvent.PlayerTurnDone);
     } else {
       this.play();
     }

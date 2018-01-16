@@ -1,4 +1,4 @@
-import {gameEmitter, GAME_EVENT} from "./event";
+import {gameEmitter, GameEvent} from "./event";
 
 export class GameMachine {
   initialState: GameMachineState;
@@ -10,7 +10,7 @@ export class GameMachine {
     this.currentState = null;
     this.states = [];
 
-    gameEmitter.on(GAME_EVENT.PLAYER_TURN_DONE, this.next.bind(this));
+    gameEmitter.on(GameEvent.PlayerTurnDone, this.next.bind(this));
   }
 
   start(): void {

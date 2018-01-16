@@ -14,8 +14,8 @@ export const gameEmitter = new GameEmitter();
  *
 */
 
-export const GAME_EVENT = Object.freeze({
-  GAME_START: 'game:start',
-  PLAYER_TURN_DONE: 'game:player:done',
-  PLAYER_TURN_START: 'game:player:start',
-});
+export const enum GameEvent {
+  GameStart = 'game:start',
+  PlayerTurnDone = 'game:player:done',
+  PlayerTurnStart = 'game:player:start',
+}

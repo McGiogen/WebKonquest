@@ -5,7 +5,13 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button (click)="startLocalGame($event)">Start local game</button>
-  <button ion-button (click)="startLocalGame($event)">Options</button>
-  <button ion-button (click)="startLocalGame($event)">About</button>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col>
+        <button ion-button (click)="startLocalGame($event)">Start local game</button>
+        <button ion-button (click)="openAppOptions($event)">Options</button>
+        <button ion-button (click)="openAbout($event)">About</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

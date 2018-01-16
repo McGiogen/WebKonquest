@@ -1,6 +1,6 @@
 import {Player} from "./player";
 import {Game} from "./game";
-import {gameEmitter, GAME_EVENT} from "./event";
+import {gameEmitter, GameEvent} from "./event";
 
 export class NeutralPlayer extends Player {
   constructor(game: Game) {
@@ -42,6 +42,6 @@ export class NeutralPlayer extends Player {
     this.game.findWinner();
 
     // After all that mess... It's done
-    gameEmitter.emit(GAME_EVENT.PLAYER_TURN_DONE);
+    gameEmitter.emit(GameEvent.PlayerTurnDone);
   }
 }

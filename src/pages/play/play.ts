@@ -13,15 +13,14 @@ import {GameConfig} from "../../game/config";
 export class PlayPage {
 
   private game: LocalGame;
-  private appOptions: AppOptions;
   private helper: LocalGameHelper;
+  private appOptions: AppOptions;
 
   constructor(public navCtrl: NavController) {
+    this.appOptions = AppOptions.instance;
     const gameConfig = new GameConfig();
     this.game = new LocalGame(gameConfig);
-    this.appOptions = new AppOptions();
-    this.appOptions.interactMode = InteractMode.DoubleTap;
-    this.helper = new LocalGameHelper(this.game, this.appOptions);
+    this.helper = new LocalGameHelper(this.game);
 
     // Adding some data to the game
     let player1 = new LocalPlayer(this.game, 'Gioele', 'green');
