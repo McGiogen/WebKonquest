@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Play
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-md-6 col-12>
+        <h2>Turno del giocatore {{ playerInTurn() }}</h2>
+        <hr>
+        <div [hidden]="helper.planetWithFocus == null">
+          Pianeta selezionato: {{ helper.planetWithFocus?.name }}<br>
+          Coordinate: {{ helper.planetWithFocus?.coordinate.x }},{{ helper.planetWithFocus?.coordinate.y }}<br>
+          Kill percentage: {{ helper.planetWithFocus?.killPercentage | percent }}<br>
+          Production rate: {{ helper.planetWithFocus?.productionRate }}<br>
+          Owner: {{ helper.planetWithFocus?.owner?.name }}<br>
+        </div>
+        <hr>
+        <h3>Attacco</h3>
+        <div>
+          <span>From {{ helper.attackSource?.name }}</span>
+          <span [hidden]="helper.attackSource == null">to {{ helper.attackDestination?.name }}</span>
+          <span [hidden]="helper.attackDestination == null">with <ion-input type="number" [(ngModel)]="helper.attackShipCount"></ion-input> ships</span>
+          <button ion-button (click)="attack()" [hidden]="!helper.attackShipCount">Confirm</button>
+        </div>
+        <div>
+          <button ion-button (click)="endTurn()">End turn</button>
+        </div>
+      </ion-col>
+      <ion-col col-md-6 col-12>
+        <game-map [map]="game.model.map" (selectedSector)="mapSelectedSector($event)"></game-map>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

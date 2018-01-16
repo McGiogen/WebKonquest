@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { AboutPage } from '../about/about';
+import { PlayPage } from '../play/play';
 
 @Component({
   selector: 'page-home',
@@ -13,8 +13,8 @@ export class HomePage {
   }
 
   startLocalGame(event: MouseEvent) {
-    console.log('push AboutPage', event);
-    this.navController.push(AboutPage)
+    console.log('push PlayPage', event);
+    this.navController.push(PlayPage)
   }
 
 }
