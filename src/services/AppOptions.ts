@@ -22,5 +22,5 @@ export class AppOptions {
   }
   // endregion
 
-  interactMode: InteractMode = InteractMode.DoubleTap;
+  interactMode: InteractMode = InteractMode.SingleTap;
 }

@@ -13,14 +13,14 @@
         <h2>Turno del giocatore {{ playerInTurn() }}</h2>
         <hr>
         <div [hidden]="helper.planetWithFocus == null">
-          Pianeta selezionato: {{ helper.planetWithFocus?.name }}<br>
+          Planet {{ helper.planetWithFocus?.name }}<br>
           Coordinate: {{ helper.planetWithFocus?.coordinate.x }},{{ helper.planetWithFocus?.coordinate.y }}<br>
           Kill percentage: {{ helper.planetWithFocus?.killPercentage | percent }}<br>
           Production rate: {{ helper.planetWithFocus?.productionRate }}<br>
           Owner: {{ helper.planetWithFocus?.owner?.name }}<br>
         </div>
         <hr>
-        <h3>Attacco</h3>
+        <h3>Attack</h3>
         <div>
           <span>From {{ helper.attackSource?.name }}</span>
           <span [hidden]="helper.attackSource == null">to {{ helper.attackDestination?.name }}</span>

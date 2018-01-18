@@ -97,7 +97,7 @@ export abstract class Player implements GameMachineState {
   }
 
   attackDone(fleet: AttackFleet): void {
-    this.attackList = this.attackList.filter(f => f === fleet);
+    this.attackList = this.attackList.filter(f => f !== fleet);
   }
 
   addAttackFleet(fleet: AttackFleet): void {
@@ -113,10 +113,10 @@ export abstract class Player implements GameMachineState {
       if (!this.standingOrders.includes(fleet)) {
         return;
       } else {
-        this.standingOrders = this.standingOrders.filter(f => f === fleet);
+        this.standingOrders = this.standingOrders.filter(f => f !== fleet);
       }
     } else {
-      this.newAttacks = this.newAttacks.filter(f => f === fleet);
+      this.newAttacks = this.newAttacks.filter(f => f !== fleet);
       fleet.source.fleet.absorb(fleet);
     }
   }

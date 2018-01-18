@@ -110,30 +110,20 @@ export abstract class Game {
     return true;
   }
 
-  makeKill(fleet: Fleet, player: Player) {
+  makeKill(fleet: Fleet, player: Player): void {
     fleet.removeShips(1);
     player.enemyShipsDestroyed++;
   }
 
-  findWinner() {
+  findWinner(): void {
     //qDebug() << "Searching for survivors";
     // Check for survivors
-    let winner: Player;
-    for (let player of this.model.players) {
-      if (player.isNeutral() || player.isSpectator() || player.isDead()) {
-        continue;
-      }
-      if (winner) {
-        //qDebug() << "Ok, returning 0";
-        return;
-      } else {
-        winner = player;
-      }
-    }
-    //qDebug() << "Ok, returning " << winner;
-    if (winner) {
+    let alives = this.model.players
+      .filter(p => !p.isDead() && !p.isNeutral() && !p.isSpectator());
+
+    if (alives.length <= 1) {
       // We got a winner
-      //qDebug() << "Trying to stop";
+      // const winner = alives[0];
       this.stop();
       // emit(finished());
     }

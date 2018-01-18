@@ -3,8 +3,10 @@ import {NavController} from 'ionic-angular';
 import {LocalGame} from "../../game/localgame";
 import {LocalPlayer} from "../../game/localplayer";
 import {LocalGameHelper} from "./LocalGameHelper";
-import {AppOptions, InteractMode} from "../../services/AppOptions";
+import {AppOptions} from "../../services/AppOptions";
 import {GameConfig} from "../../game/config";
+import {gameEmitter, GameEvent} from "../../game/event";
+import {GameoverPage} from "../gameover/gameover";
 
 @Component({
   selector: 'page-play',
@@ -16,7 +18,7 @@ export class PlayPage {
   private helper: LocalGameHelper;
   private appOptions: AppOptions;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navController: NavController) {
     this.appOptions = AppOptions.instance;
     const gameConfig = new GameConfig();
     this.game = new LocalGame(gameConfig);
@@ -30,6 +32,8 @@ export class PlayPage {
     this.game.model.map.addNeutralPlanetSomewhere(this.game.model.neutral);
     this.game.model.map.addPlayerPlanetSomewhere(player1);
     this.game.model.map.addPlayerPlanetSomewhere(player2);
+
+    gameEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
 
     this.game.start();
   }
@@ -55,5 +59,9 @@ export class PlayPage {
 
   endTurn(): void {
     this.helper.endTurn();
+  }
+
+  endGame(): void {
+    this.navController.push(GameoverPage);
   }
 }

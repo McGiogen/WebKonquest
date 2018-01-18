@@ -7,6 +7,7 @@ import {PlayPage} from '../pages/play/play';
 import {AboutPage} from '../pages/about/about';
 import {HomePage} from '../pages/home/home';
 import {OptionsPage} from '../pages/options/options';
+import {GameoverPage} from '../pages/gameover/gameover';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -18,6 +19,7 @@ import {ComponentsModule} from "../components/components.module";
     PlayPage,
     AboutPage,
     OptionsPage,
+    GameoverPage,
     HomePage
   ],
   imports: [
@@ -31,6 +33,7 @@ import {ComponentsModule} from "../components/components.module";
     PlayPage,
     AboutPage,
     OptionsPage,
+    GameoverPage,
     HomePage
   ],
   providers: [

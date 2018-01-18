@@ -22,6 +22,7 @@ export class GameMachine {
 
   stop(): void {
     this.currentState = null;
+    gameEmitter.emit(GameEvent.GameOver);
   }
 
   addState(state: GameMachineState) {
