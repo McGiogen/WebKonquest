@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {LocalGame} from "../../game/localgame";
 import {LocalPlayer} from "../../game/localplayer";
 import {LocalGameHelper} from "./LocalGameHelper";
@@ -19,20 +19,10 @@ export class PlayPage {
   private helper: LocalGameHelper;
   private appOptions: AppOptions;
 
-  constructor(public navController: NavController) {
+  constructor(public navController: NavController, private navParams: NavParams) {
     this.appOptions = AppOptions.instance;
-    const gameConfig = new GameConfig();
-    this.game = new LocalGame(gameConfig);
+    this.game = navParams.get('game');
     this.helper = new LocalGameHelper(this.game);
-
-    // Adding some data to the game
-    let player1 = new LocalPlayer(this.game, 'Gioele', PlanetLook.One);
-    this.game.addPlayer(player1);
-    let player2 = new LocalPlayer(this.game, 'Linus', PlanetLook.Two);
-    this.game.addPlayer(player2);
-    this.game.model.map.addNeutralPlanetSomewhere(this.game.model.neutral);
-    this.game.model.map.addPlayerPlanetSomewhere(player1);
-    this.game.model.map.addPlayerPlanetSomewhere(player2);
 
     gameEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
 
