@@ -1,3 +1,5 @@
+@import '../../theme/variables.scss';
+
 // Faccio in modo che il div sia sempre quadrato
 // Sto attento alla compatibilità con almeno Chrome e Firefox
 // Reference: https://stackoverflow.com/a/19068538/3687018
@@ -12,6 +14,8 @@
   }
 }
 
+$map-shadow: 0 0 3px rgba(204, 204, 204, 0.7);
+
 game-map {
   .map-container {
     /** Creazione del contenitore della mappa in modo che sia responsive
@@ -23,13 +27,14 @@ game-map {
      insieme ai vari margini/padding dei contenitori.
      */
     @include square-size(100%);
-    max-width: calc(100vh - ((56px + 26px) * 2));
-    max-height: calc(100vh - ((56px + 26px) * 2));
+    max-width: calc(100vh - (56px + (26px * 2)));
+    max-height: calc(100vh - (56px + (26px * 2)));
 
     .map-grid {
       position: absolute;
       width: 100%;
       height: 100%;
+      box-shadow: $map-shadow;
 
       &-row {
         display: flex;
@@ -41,7 +46,7 @@ game-map {
       // Il contenuto deve poi essere in position: absolute
       &-cell {
         @include square-size(10%);
-        background-color: lightblue;
+        box-shadow: inset $map-shadow;
 
         &.active {
           background-color: yellow;
@@ -55,6 +60,13 @@ game-map {
           position: absolute;
           width: 100%;
           height: 100%;
+
+          @for $i from 1 through 10 {
+            &.planet-look-#{$i} {
+              background-image: url($imgs-path + 'planets/planet1' + $i + '.png');
+              background-size: cover;
+            }
+          }
         }
       }
     }

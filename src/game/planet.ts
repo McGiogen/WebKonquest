@@ -9,13 +9,13 @@ import {Coordinate} from "./coordinate";
 import {GameConfig} from "./config";
 
 export class Planet {
+  planetLook: number;
   readonly originalProductionRate: number;
-  public fleet: DefenseFleet;
+  fleet: DefenseFleet;
   private oldShips: number;
 
   private showCurrentShips: boolean;
   private justConquered: boolean;
-  private planetLook: number;
 
   constructor(readonly name: string, public owner: Player, public productionRate: number, public killPercentage: number, public coordinate: Coordinate) {
     this.fleet = new DefenseFleet(this, 0);
@@ -25,7 +25,7 @@ export class Planet {
     // initial state
     this.showCurrentShips = true;
     this.justConquered = false;
-    this.planetLook = Math.floor(Math.random() * 10);
+    this.planetLook = Math.floor(Math.random() * 9);
 
     // connect
     // connect(&m_homeFleet, &DefenseFleet::update, this, &Planet::update);

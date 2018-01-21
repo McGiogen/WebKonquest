@@ -9,10 +9,12 @@
       >
         <div
           class="map-grid-cell-content"
+          [ngClass]="sector.planet != null ? 'planet-look-' + sector.planet.planetLook : ''"
         >
-          {{ sector.planet == null ? '-' : sector.planet.name + ' ' + sector.planet.fleet.shipCount }}
+          {{ sector.planet == null ? '' : sector.planet.name }}
+          <!-- {{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}
           <br>
-          {{ sector.planet == null ? '' : sector.planet.owner.name }}
+          {{ sector.planet == null ? '' : sector.planet.owner.name }} -->
         </div>
       </div>
     </div>

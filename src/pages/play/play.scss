@@ -1,2 +1,8 @@
+@import '../../theme/variables';
+
 page-play {
+  ion-content {
+    background: url($imgs-path + 'play-background.png') no-repeat;
+    background-size: cover;
+  }
 }
