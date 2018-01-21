@@ -10,7 +10,7 @@
   <ion-grid>
     <ion-row>
       <ion-col col-md-6 col-12>
-        <h2>Turno del giocatore {{ playerInTurn() }}</h2>
+        <h2>Turn of {{ playerInTurn() }}</h2>
         <hr>
         <div [hidden]="helper.planetWithFocus == null">
           Planet {{ helper.planetWithFocus?.name }}<br>

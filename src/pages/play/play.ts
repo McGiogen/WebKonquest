@@ -7,6 +7,7 @@ import {AppOptions} from "../../services/AppOptions";
 import {GameConfig} from "../../game/config";
 import {gameEmitter, GameEvent} from "../../game/event";
 import {GameoverPage} from "../gameover/gameover";
+import {PlanetLook} from "../../game/planet";
 
 @Component({
   selector: 'page-play',
@@ -25,9 +26,9 @@ export class PlayPage {
     this.helper = new LocalGameHelper(this.game);
 
     // Adding some data to the game
-    let player1 = new LocalPlayer(this.game, 'Gioele', 'green');
+    let player1 = new LocalPlayer(this.game, 'Gioele', PlanetLook.One);
     this.game.addPlayer(player1);
-    let player2 = new LocalPlayer(this.game, 'Linus Torvalds', 'black');
+    let player2 = new LocalPlayer(this.game, 'Linus', PlanetLook.Two);
     this.game.addPlayer(player2);
     this.game.model.map.addNeutralPlanetSomewhere(this.game.model.neutral);
     this.game.model.map.addPlayerPlanetSomewhere(player1);

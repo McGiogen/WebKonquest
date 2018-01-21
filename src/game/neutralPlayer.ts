@@ -1,10 +1,11 @@
 import {Player} from "./player";
 import {Game} from "./game";
 import {gameEmitter, GameEvent} from "./event";
+import {PlanetLook} from "./planet";
 
 export class NeutralPlayer extends Player {
-  constructor(game: Game) {
-    super(game, 'neutral', 'gray');
+  constructor(game: Game, planetLook: PlanetLook) {
+    super(game, 'neutral', planetLook);
   }
 
   isNeutral(): boolean {
@@ -34,7 +35,7 @@ export class NeutralPlayer extends Player {
     }
 
     // Go over each planet, adding its ships
-    for (let planet of this.game.model.map.getPlanets()) {
+    for (let planet of this.game.model.getPlanets()) {
       //qDebug() << "Turn for planet " << planet->name();
       planet.turn(this.game.model.configs);
     }

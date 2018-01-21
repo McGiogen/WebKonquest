@@ -9,7 +9,6 @@ import {Coordinate} from "./coordinate";
 import {GameConfig} from "./config";
 
 export class Planet {
-  planetLook: number;
   readonly originalProductionRate: number;
   fleet: DefenseFleet;
   private oldShips: number;
@@ -25,7 +24,6 @@ export class Planet {
     // initial state
     this.showCurrentShips = true;
     this.justConquered = false;
-    this.planetLook = Math.floor(Math.random() * 9);
 
     // connect
     // connect(&m_homeFleet, &DefenseFleet::update, this, &Planet::update);
@@ -76,4 +74,17 @@ export class Planet {
 
     return new Planet(planetName, initialOwner, productionRate, killPercentage, coordinate);
   }
+}
+
+export enum PlanetLook {
+  One = 1,
+  Two,
+  Three,
+  Four,
+  Five,
+  Six,
+  Seven,
+  Eight,
+  Nine,
+  Ten,
 }

@@ -1,7 +1,7 @@
 import {Game} from "./game";
 import {gameEmitter, GameEvent} from "./event";
 import {AttackFleet} from "./fleet";
-import {Planet} from "./planet";
+import {Planet, PlanetLook} from "./planet";
 import {GameMachineState} from "./gameMachine";
 
 export abstract class Player implements GameMachineState {
@@ -21,7 +21,7 @@ export abstract class Player implements GameMachineState {
   turnProduction: number;
   turnShips: number;
 
-  constructor(protected game: Game, public name: string, protected color: string) {
+  constructor(protected game: Game, public name: string, public planetLook: PlanetLook) {
     this.attackList = [];
     this.newAttacks = [];
     this.standingOrders = [];

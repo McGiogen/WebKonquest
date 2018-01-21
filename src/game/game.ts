@@ -7,7 +7,7 @@
 import {Coordinate} from "./coordinate";
 import {GameMap} from "./map";
 import {AttackFleet, DefenseFleet, Fleet} from "./fleet";
-import {Planet} from "./planet";
+import {Planet, PlanetLook} from "./planet";
 import {Player} from "./player";
 import {NeutralPlayer} from "./neutralPlayer";
 import {GameMachine} from "./gameMachine";
@@ -18,7 +18,8 @@ export abstract class Game {
   machine: GameMachine;
 
   constructor(public gameConfig: GameConfig) {
-    this.model = new GameModel(new NeutralPlayer(this), gameConfig);
+    const neutral = new NeutralPlayer(this, PlanetLook.Nine);
+    this.model = new GameModel(neutral, gameConfig);
     this.machine = new GameMachine();
 
     // finalState = new

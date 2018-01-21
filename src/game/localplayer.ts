@@ -1,10 +1,11 @@
 import {Game} from "./game";
 import {Player} from "./player";
 import {gameEmitter, GameEvent} from "./event";
+import {PlanetLook} from "./planet";
 
 export class LocalPlayer extends Player {
-  constructor(game: Game, name: string, color: string) {
-    super(game, name, color);
+  constructor(game: Game, name: string, planetLook: PlanetLook) {
+    super(game, name, planetLook);
   }
 
   play(): void {

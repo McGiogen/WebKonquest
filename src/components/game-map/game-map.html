@@ -5,15 +5,15 @@
         *ngFor='let sector of row; trackBy: index'
         class="map-grid-cell"
         (click)="selectSector(sector)"
-        [ngClass]="{'active': selectedSector === sector}"
+        [ngClass]="{active: selectedSector === sector}"
       >
         <div
           class="map-grid-cell-content"
-          [ngClass]="sector.planet != null ? 'planet-look-' + sector.planet.planetLook : ''"
+          [ngClass]="sector.planet != null ? 'planet-look-' + sector.planet.owner.planetLook : ''"
         >
           {{ sector.planet == null ? '' : sector.planet.name }}
-          <!-- {{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}
-          <br>
+          {{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}
+          <!-- <br>
           {{ sector.planet == null ? '' : sector.planet.owner.name }} -->
         </div>
       </div>
