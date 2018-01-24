@@ -12,6 +12,7 @@ import {Player} from "./player";
 import {NeutralPlayer} from "./neutralPlayer";
 import {GameMachine} from "./gameMachine";
 import {GameConfig} from "./config";
+import {gameEmitter} from "./event";
 
 export abstract class Game {
   model: GameModel;
@@ -21,6 +22,8 @@ export abstract class Game {
     const neutral = new NeutralPlayer(this, PlanetLook.Nine);
     this.model = new GameModel(neutral, gameConfig);
     this.machine = new GameMachine();
+
+    gameEmitter.removeAllListeners();
 
     // finalState = new
     // gameMachine.addState(finalState)
