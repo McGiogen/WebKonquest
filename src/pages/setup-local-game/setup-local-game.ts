@@ -18,9 +18,11 @@ import {LocalPlayer} from "../../game/localplayer";
 })
 export class SetupLocalGamePage {
   private game: LocalGame;
+  private player: any;
 
   constructor(public navController: NavController, public navParams: NavParams) {
     this.game = navParams.get('game');
+    this.player = {};
 
     // Adding some data to the game
     let player1 = new LocalPlayer(this.game, 'Gioele', PlanetLook.One);

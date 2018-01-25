@@ -1,13 +1,10 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {LocalGame} from "../../game/localgame";
-import {LocalPlayer} from "../../game/localplayer";
 import {LocalGameHelper} from "./LocalGameHelper";
 import {AppOptions} from "../../services/AppOptions";
-import {GameConfig} from "../../game/config";
 import {gameEmitter, GameEvent} from "../../game/event";
 import {GameoverPage} from "../gameover/gameover";
-import {PlanetLook} from "../../game/planet";
 
 @Component({
   selector: 'page-play',
@@ -19,7 +16,7 @@ export class PlayPage {
   private helper: LocalGameHelper;
   private appOptions: AppOptions;
 
-  constructor(public navController: NavController, private navParams: NavParams) {
+  constructor(public navController: NavController, navParams: NavParams) {
     this.appOptions = AppOptions.instance;
     this.game = navParams.get('game');
     this.helper = new LocalGameHelper(this.game);

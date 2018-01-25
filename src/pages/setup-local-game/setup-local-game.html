@@ -14,5 +14,23 @@
 
 
 <ion-content padding>
-  <button ion-button (click)="startLocalGame($event)">Play</button>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-md-6 col-12>
+        <form>
+          <ion-item>
+            <ion-label floating>Player name</ion-label>
+            <ion-input type="text" [(ngModel)]="player.name" name="playerName"></ion-input>
+          </ion-item>
+          <image-selector></image-selector>
+          <button ion-button type="submit" block>Add Player</button>
+        </form>
+      </ion-col>
+      <ion-col col-md-6 col-12>
+      </ion-col>
+      <ion-col col-12>
+        <button ion-button (click)="startLocalGame($event)">Play</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
