@@ -14,21 +14,21 @@
 
 
 <ion-content padding>
-  <ion-grid>
+  <ion-grid fixed>
     <ion-row>
-      <ion-col col-md-6 col-12>
+      <ion-col col-md-6 col-12
+               *ngFor='let player of players; trackBy: index; let i = index'
+      >
         <form>
           <ion-item>
-            <ion-label floating>Player name</ion-label>
-            <ion-input type="text" [(ngModel)]="player.name" name="playerName"></ion-input>
+            <ion-label floating>Player {{i+1}}</ion-label>
+            <ion-input type="text" [(ngModel)]="player.name" name="player{{i+1}}Name"></ion-input>
           </ion-item>
-          <image-selector></image-selector>
-          <button ion-button type="submit" block>Add Player</button>
+          <image-selector class="item-md" [imgs]="planetImages" (onSelect)="updatePlanetLook(i, $event)"></image-selector>
         </form>
       </ion-col>
-      <ion-col col-md-6 col-12>
-      </ion-col>
       <ion-col col-12>
+        <button ion-button color="dark" (click)="addNewPlayer()">Add Player</button>
         <button ion-button (click)="startLocalGame($event)">Play</button>
       </ion-col>
     </ion-row>

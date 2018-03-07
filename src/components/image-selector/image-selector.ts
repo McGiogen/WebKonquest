@@ -1,10 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 /**
- * Generated class for the ImageSelectorComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
+ * Image selector
+ * Accessibility reference: https://pattern-library.dequelabs.com/components/selects
  */
 @Component({
   selector: 'image-selector',
@@ -14,11 +12,20 @@ export class ImageSelectorComponent {
 
   @Input() imgs: Array<string>;
   @Output() onSelect = new EventEmitter<number>();
+  private selectionIndex: number;
 
   constructor() {
+    this.selectionIndex = 0;
+    this.onSelect.emit(this.selectionIndex);
   }
 
-  select(index: number): void {
-    this.onSelect.emit(index);
+  selectBack() {
+    this.selectionIndex = (this.selectionIndex - 1 + this.imgs.length) % this.imgs.length;
+    this.onSelect.emit(this.selectionIndex);
+  }
+
+  selectNext() {
+    this.selectionIndex = (this.selectionIndex + 1) % this.imgs.length;
+    this.onSelect.emit(this.selectionIndex);
   }
 }

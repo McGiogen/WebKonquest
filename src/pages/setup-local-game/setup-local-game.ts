@@ -18,27 +18,44 @@ import {LocalPlayer} from "../../game/localplayer";
 })
 export class SetupLocalGamePage {
   private game: LocalGame;
-  private player: any;
+  private players: Array<{name: string, look: number}>;
+  private planetImages: Array<string>;
 
   constructor(public navController: NavController, public navParams: NavParams) {
-    this.game = navParams.get('game');
-    this.player = {};
+    this.initPlanetImages();
 
-    // Adding some data to the game
-    let player1 = new LocalPlayer(this.game, 'Gioele', PlanetLook.One);
-    this.game.addPlayer(player1);
-    let player2 = new LocalPlayer(this.game, 'Linus', PlanetLook.Two);
-    this.game.addPlayer(player2);
-    this.game.model.map.addNeutralPlanetSomewhere(this.game.model.neutral);
-    this.game.model.map.addPlayerPlanetSomewhere(player1);
-    this.game.model.map.addPlayerPlanetSomewhere(player2);
+    this.game = navParams.get('game');
+    this.players = [];
+    this.addNewPlayer();
+    this.addNewPlayer();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SetupLocalGamePage');
+  initPlanetImages() {
+    const basePath = '/assets/imgs/planets/';
+    this.planetImages = [];
+    for (let i = 0; i < 18; i++) {
+      const imageName = `planet${i + 1}.png`;
+      this.planetImages.push(basePath + imageName);
+    }
+  }
+
+  addNewPlayer() {
+    this.players.push({ name: '', look: 0 });
+  }
+
+  updatePlanetLook(playerIndex: number, look: number) {
+    this.players[playerIndex].look = look;
   }
 
   startLocalGame() {
+    // Adding some data to the game
+    for (let playerData of this.players) {
+      const player = new LocalPlayer(this.game, playerData.name, playerData.look + 1);
+      this.game.addPlayer(player);
+      this.game.model.map.addPlayerPlanetSomewhere(player);
+    }
+    this.game.model.map.addNeutralPlanetSomewhere(this.game.model.neutral);
+
     this.navController.push(PlayPage, {game: this.game});
   }
 }

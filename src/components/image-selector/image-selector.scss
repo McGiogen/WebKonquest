@@ -1,7 +1,28 @@
 image-selector {
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  display: block;
+
+  //.container {
+  //  display: flex;
+  //  flex-wrap: wrap;
+  //  align-items: center;
+  //  width: 50px;
+  //
+  //}
+
+  // ul {
+  //   list-style-type: none;
+  // }
+
+  img {
+    width: 50px;
+    vertical-align: middle;
   }
+
+  .button {
+    vertical-align: middle;
+  }
+
+  //.button.button-round-md {
+  //  padding: 0 1.6rem;
+  //}
 }

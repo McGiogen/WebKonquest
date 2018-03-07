@@ -4,5 +4,6 @@ page-home {
   ion-content {
     background: url($imgs-path + 'home-background.png') no-repeat;
     background-size: cover;
+    text-align: center;
   }
 }
