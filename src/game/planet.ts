@@ -75,16 +75,3 @@ export class Planet {
     return new Planet(planetName, initialOwner, productionRate, killPercentage, coordinate);
   }
 }
-
-export enum PlanetLook {
-  One = 1,
-  Two,
-  Three,
-  Four,
-  Five,
-  Six,
-  Seven,
-  Eight,
-  Nine,
-  Ten,
-}
