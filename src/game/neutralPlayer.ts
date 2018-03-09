@@ -1,11 +1,11 @@
 import {Player} from "./player";
 import {Game} from "./game";
 import {gameEmitter, GameEvent} from "./event";
-import {PlanetLook} from "./planet";
+import {PlayerLook} from "./playerLook";
 
 export class NeutralPlayer extends Player {
-  constructor(game: Game, planetLook: PlanetLook) {
-    super(game, 'neutral', planetLook);
+  constructor(game: Game, look: PlayerLook) {
+    super(game, 'neutral', look);
   }
 
   isNeutral(): boolean {

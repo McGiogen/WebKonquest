@@ -9,7 +9,7 @@
       >
         <div
           class="map-grid-cell-content"
-          [ngClass]="sector.planet != null ? 'planet-look-' + sector.planet.owner.planetLook : ''"
+          [ngClass]="sector.planet != null ? 'planet-look-' + sector.planet.owner.look : ''"
         >
           {{ sector.planet == null ? '' : sector.planet.name }}
           {{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}

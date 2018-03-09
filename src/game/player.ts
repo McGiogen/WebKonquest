@@ -1,12 +1,9 @@
 import {Game} from "./game";
 import {gameEmitter, GameEvent} from "./event";
 import {AttackFleet} from "./fleet";
-import {Planet, PlanetLook} from "./planet";
+import {Planet} from "./planet";
 import {GameMachineState} from "./gameMachine";
-
-export class PlayerLook {
-  constructor(public name: string, public planetImage: string) {}
-}
+import {PlayerLook} from "./playerLook";
 
 export abstract class Player implements GameMachineState {
   // Attack fleets sent by this player that are still moving
@@ -25,13 +22,7 @@ export abstract class Player implements GameMachineState {
   turnProduction: number;
   turnShips: number;
 
-  static looks: PlayerLook[] = [
-    new PlayerLook( 'One', 'planet1.png' ),
-    new PlayerLook( 'Two', 'planet2.png' ),
-    new PlayerLook( 'Three', 'planet3.png' )
-  ];
-
-  constructor(protected game: Game, public name: string, public planetLook: PlanetLook) {
+  constructor(protected game: Game, public name: string, public look: PlayerLook) {
     this.attackList = [];
     this.newAttacks = [];
     this.standingOrders = [];

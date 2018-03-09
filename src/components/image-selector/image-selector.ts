@@ -11,21 +11,21 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class ImageSelectorComponent {
 
   @Input() imgs: Array<string>;
-  @Output() onSelect = new EventEmitter<number>();
-  private selectionIndex: number;
+  @Input() model: number;
+  @Output() modelChange = new EventEmitter<number>();
 
   constructor() {
-    this.selectionIndex = 0;
-    this.onSelect.emit(this.selectionIndex);
+    this.model = 0;
+    this.modelChange.emit(this.model);
   }
 
   selectBack() {
-    this.selectionIndex = (this.selectionIndex - 1 + this.imgs.length) % this.imgs.length;
-    this.onSelect.emit(this.selectionIndex);
+    this.model = (this.model - 1 + this.imgs.length) % this.imgs.length;
+    this.modelChange.emit(this.model);
   }
 
   selectNext() {
-    this.selectionIndex = (this.selectionIndex + 1) % this.imgs.length;
-    this.onSelect.emit(this.selectionIndex);
+    this.model = (this.model + 1) % this.imgs.length;
+    this.modelChange.emit(this.model);
   }
 }
