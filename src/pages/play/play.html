@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Play
+      Play - Turn {{ game.model.turnCounter }}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -10,7 +10,7 @@
   <ion-grid>
     <ion-row>
       <ion-col col-md-6 col-12>
-        <h2>Turn of {{ playerInTurn() }}</h2>
+        <h2>Attack phase of {{ playerInTurn() }}</h2>
         <hr>
         <div [hidden]="helper.planetWithFocus == null">
           Planet {{ helper.planetWithFocus?.name }}<br>
@@ -19,14 +19,14 @@
           Production rate: {{ helper.planetWithFocus?.productionRate }}<br>
           Owner: {{ helper.planetWithFocus?.owner?.name }}<br>
         </div>
-        <hr>
-        <h3>Attack</h3>
-        <div>
-          <span>From {{ helper.attackSource?.name }}</span>
-          <span [hidden]="helper.attackSource == null">to {{ helper.attackDestination?.name }}</span>
-          <span [hidden]="helper.attackDestination == null">with <ion-input type="number" [(ngModel)]="helper.attackShipCount"></ion-input> ships</span>
-          <button ion-button (click)="attack()" [hidden]="!helper.attackShipCount">Confirm</button>
+        <hr [hidden]="helper.planetWithFocus == null">
+        <div class="attack-info">
+          <span>From {{ helper.attackSource ? helper.attackSource.name : '?' }}</span>
+          <span [hidden]="helper.attackSource == null">to {{ helper.attackDestination ? helper.attackDestination.name : '?' }}</span>
+          <span [hidden]="helper.attackDestination == null">with <ion-input type="number" class="ion-input-inline ion-input-underline ion-input-centered" [(ngModel)]="helper.attackShipCount"></ion-input> ships</span>
+          <button ion-button color="danger" (click)="attack()" [hidden]="!helper.attackShipCount">Confirm</button>
         </div>
+        <hr>
         <div>
           <button ion-button (click)="endTurn()">End turn</button>
         </div>

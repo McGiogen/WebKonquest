@@ -14,3 +14,31 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.ion-input-inline {
+  display: inline-block;
+  width: 50px;
+
+  > input {
+    margin: 2px;
+    width: calc(100% - 4px);
+  }
+}
+
+.ion-input-underline {
+  border-bottom: 1px solid #dedede;
+}
+
+.ion-input-centered > input {
+  text-align: center;
+}
+
+// Hide of input number arrows in desktop browsers
+input[type='number'] {
+  -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

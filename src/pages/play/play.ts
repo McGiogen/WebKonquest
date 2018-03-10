@@ -27,7 +27,7 @@ export class PlayPage {
   }
 
   mapSelectedSector(sector) {
-    console.log('Settore selezionato: ', sector);
+    console.debug('Settore selezionato: ', sector);
     if (sector) {
       this.helper.selectPlanet(sector.planet);
     }
