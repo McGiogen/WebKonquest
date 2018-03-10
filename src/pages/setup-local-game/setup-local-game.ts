@@ -21,6 +21,7 @@ export class SetupLocalGamePage {
     this.players = [];
     this.addNewPlayer(true,'Neutral');
     this.addNewPlayer();
+    this.addNewPlayer();
   }
 
   initPlanetImages() {
@@ -49,12 +50,23 @@ export class SetupLocalGamePage {
 
   startLocalGame() {
     // Adding some data to the game
-    for (let playerData of this.players) {
-      const player = new LocalPlayer(this.game, playerData.name, PLAYER_LOOK[playerData.look]);
-      this.game.addPlayer(player);
-      this.game.model.map.addPlayerPlanetSomewhere(player);
+    for (let i = 0; i < this.players.length; i++) {
+      const playerData = this.players[i];
+      const look = PLAYER_LOOK[playerData.look];
+
+      if (playerData.neutral) {
+        // Neutral player
+        const neutral = this.game.model.neutral;
+        neutral.look = look;
+        this.game.model.map.addNeutralPlanetSomewhere(neutral);
+      } else {
+        // Human player
+        const name = playerData.name || `Player ${i}`;
+        const player = new LocalPlayer(this.game, name, look);
+        this.game.addPlayer(player);
+        this.game.model.map.addPlayerPlanetSomewhere(player);
+      }
     }
-    this.game.model.map.addNeutralPlanetSomewhere(this.game.model.neutral);
 
     this.navController.push(PlayPage, {game: this.game});
   }

@@ -12,8 +12,8 @@ class PlayerLookFactory {
   }
 }
 
-export const PLAYER_LOOK: PlayerLook[] = [
-  PlayerLookFactory.build( 'One', 'planet1.png' ),
-  PlayerLookFactory.build( 'Two', 'planet2.png' ),
-  PlayerLookFactory.build( 'Three', 'planet3.png' )
-];
+const PLAYER_LOOK: PlayerLook[] = [];
+for (let i = 1; i <= 18; i++) {
+  PLAYER_LOOK.push(PlayerLookFactory.build( i + '', `planet${i}.png` ));
+}
+export { PLAYER_LOOK };
