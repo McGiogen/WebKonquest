@@ -21,10 +21,10 @@
       >
         <form>
           <ion-item>
-            <ion-label floating>Player {{i+1}}</ion-label>
-            <ion-input type="text" [(ngModel)]="player.name" name="player{{i+1}}Name"></ion-input>
+            <ion-label floating>{{player.neutral ? '&nbsp;' : 'Player ' + i}}</ion-label>
+            <ion-input type="text" [(ngModel)]="player.name" [disabled]="player.neutral" name="player{{i}}Name"></ion-input>
           </ion-item>
-          <image-selector class="item-md" [imgs]="planetImages" (onSelect)="updatePlanetLook(i, $event)"></image-selector>
+          <image-selector class="item-md" [imgs]="planetImages" [(model)]="this.players[i].look"></image-selector>
         </form>
       </ion-col>
       <ion-col col-12>

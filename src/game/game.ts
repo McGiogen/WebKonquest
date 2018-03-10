@@ -7,19 +7,20 @@
 import {Coordinate} from "./coordinate";
 import {GameMap} from "./map";
 import {AttackFleet, DefenseFleet, Fleet} from "./fleet";
-import {Planet, PlanetLook} from "./planet";
+import {Planet} from "./planet";
 import {Player} from "./player";
 import {NeutralPlayer} from "./neutralPlayer";
 import {GameMachine} from "./gameMachine";
 import {GameConfig} from "./config";
 import {gameEmitter} from "./event";
+import {PLAYER_LOOK} from "./playerLook";
 
 export abstract class Game {
   model: GameModel;
   machine: GameMachine;
 
   constructor(public gameConfig: GameConfig) {
-    const neutral = new NeutralPlayer(this, PlanetLook.Nine);
+    const neutral = new NeutralPlayer(this, PLAYER_LOOK[9]);
     this.model = new GameModel(neutral, gameConfig);
     this.machine = new GameMachine();
 
