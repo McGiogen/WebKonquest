@@ -9,14 +9,14 @@ export class GameMachine {
     this.initialState = null;
     this.currentState = null;
     this.states = [];
-
-    gameEmitter.on(GameEvent.PlayerTurnDone, this.next.bind(this));
   }
 
   start(): void {
-    console.log('The game is starting');
+    console.debug('The game is starting');
     this.currentState = this.initialState;
-    console.log('Turn of ' + this.currentState.toString());
+    gameEmitter.on(GameEvent.PlayerTurnDone, this.next.bind(this));
+
+    console.debug('Turn of ' + this.currentState.toString());
     this.currentState.onEntry();
   }
 
