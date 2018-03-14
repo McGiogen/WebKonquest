@@ -22,14 +22,22 @@
         <form>
           <ion-item>
             <ion-label floating>{{player.neutral ? '&nbsp;' : 'Player ' + i}}</ion-label>
-            <ion-input type="text" [(ngModel)]="player.name" [disabled]="player.neutral" name="player{{i}}Name"></ion-input>
+            <ion-input type="text" [(ngModel)]="player.name" [readonly]="player.neutral" name="player{{i}}Name"></ion-input>
+            <button *ngIf="!player.neutral"
+                    ion-button clear large color="danger" item-end
+                    (click)="removePlayer(i)">
+              <ion-icon name="close"></ion-icon>
+            </button>
           </ion-item>
-          <image-selector class="item-md" [imgs]="planetImages" [(model)]="this.players[i].look"></image-selector>
+          <image-selector
+            class="item-md" [ngClass]="{'item-neutral': player.neutral}"
+            [imgs]="planetImages" [(model)]="this.players[i].look"
+          ></image-selector>
         </form>
       </ion-col>
       <ion-col col-12>
         <button ion-button color="dark" (click)="addNewPlayer()">Add Player</button>
-        <button ion-button (click)="startLocalGame($event)">Play</button>
+        <button ion-button (click)="startLocalGame($event)" [disabled]="players.length < 3">Play</button>
       </ion-col>
     </ion-row>
   </ion-grid>

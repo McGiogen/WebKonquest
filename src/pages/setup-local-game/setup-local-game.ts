@@ -44,11 +44,19 @@ export class SetupLocalGamePage {
     this.players.push({ name, look, neutral });
   }
 
+  removePlayer(index) {
+    this.players.splice(index, 1);
+  }
+
   updatePlayerLook(playerIndex: number, look: number) {
     this.players[playerIndex].look = look;
   }
 
   startLocalGame() {
+    if (this.players.length < 3) {
+      return;
+    }
+
     // Adding some data to the game
     for (let i = 0; i < this.players.length; i++) {
       const playerData = this.players[i];
