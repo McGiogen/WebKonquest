@@ -10,6 +10,7 @@
         <div
           class="map-grid-cell-content"
           [ngClass]="sector.planet != null ? 'planet-look-' + sector.planet.owner.look.name : ''"
+          [attr.tabindex]="sector.planet == null ? null : 0"
         >
           {{ sector.planet == null ? '' : sector.planet.name }}
           {{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}

@@ -24,7 +24,7 @@
             <ion-label floating>{{player.neutral ? '&nbsp;' : 'Player ' + i}}</ion-label>
             <ion-input type="text" [(ngModel)]="player.name" [readonly]="player.neutral" name="player{{i}}Name"></ion-input>
             <button *ngIf="!player.neutral"
-                    ion-button clear large color="danger" item-end
+                    ion-button clear color="danger" icon-only item-end
                     (click)="removePlayer(i)">
               <ion-icon name="close"></ion-icon>
             </button>
