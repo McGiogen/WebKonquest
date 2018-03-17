@@ -6,17 +6,18 @@
         class="map-grid-cell"
         (click)="selectSector(sector)"
         [ngClass]="{active: selectedSector === sector}"
+        [attr.tabindex]="sector.planet == null ? null : 0"
       >
         <div
-          class="map-grid-cell-content"
+          class="map-grid-cell-planet"
           [ngClass]="sector.planet != null ? 'planet-look-' + sector.planet.owner.look.name : ''"
-          [attr.tabindex]="sector.planet == null ? null : 0"
-        >
+        ></div>
+        <span class="map-grid-cell-content">
           {{ sector.planet == null ? '' : sector.planet.name }}
           {{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}
           <!-- <br>
           {{ sector.planet == null ? '' : sector.planet.owner.name }} -->
-        </div>
+        </span>
       </div>
     </div>
   </div>
