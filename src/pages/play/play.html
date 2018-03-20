@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Play - Turn {{ game.model.turnCounter }}
+      Turn {{ game.model.turnCounter }} of {{ playerInTurn() }}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -10,7 +10,7 @@
   <ion-grid>
     <ion-row>
       <ion-col col-md-6 col-12>
-        <h2>Attack phase of {{ playerInTurn() }}</h2>
+        <h2>Attack phase</h2>
         <hr>
         <div [hidden]="helper.planetWithFocus == null">
           Planet {{ helper.planetWithFocus?.name }}<br>

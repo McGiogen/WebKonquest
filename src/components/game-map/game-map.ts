@@ -21,6 +21,9 @@ export class GameMapComponent {
   constructor() {}
 
   selectSector(sector: Sector) {
+    if (sector.planet == null) {
+      return;
+    }
     this.selectedSector = sector;
     this.selectedSectorEmitter.emit(sector);
   }
