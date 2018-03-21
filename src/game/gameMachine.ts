@@ -1,4 +1,5 @@
 import {gameEmitter, GameEvent} from "./event";
+import {log} from "./logger";
 
 export class GameMachine {
   initialState: GameMachineState;
@@ -12,11 +13,11 @@ export class GameMachine {
   }
 
   start(): void {
-    console.debug('The game is starting');
+    log.info('New game starting.');
     this.currentState = this.initialState;
     gameEmitter.on(GameEvent.PlayerTurnDone, this.next.bind(this));
 
-    console.debug('Turn of ' + this.currentState.toString());
+    log.info(`Turn of ${this.currentState}.`);
     this.currentState.onEntry();
   }
 
@@ -42,7 +43,7 @@ export class GameMachine {
     }
     const nextStateIndex = (this.states.indexOf(this.currentState) + 1) % this.states.length;
     this.currentState = this.states[nextStateIndex];
-    console.log('Turn of ' + this.currentState.toString());
+    log.info(`Turn of ${this.currentState}`);
     this.currentState.onEntry();
   }
 }

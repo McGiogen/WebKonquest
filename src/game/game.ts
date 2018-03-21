@@ -12,10 +12,12 @@ import {Player} from "./player";
 import {NeutralPlayer} from "./neutralPlayer";
 import {GameMachine} from "./gameMachine";
 import {GameConfig} from "./config";
-import {gameEmitter} from "./event";
+import {GameEmitter} from "./event";
 import {PLAYER_LOOK} from "./playerLook";
+import {log} from "./logger";
 
 export abstract class Game {
+  eventEmitter: GameEmitter;
   model: GameModel;
   machine: GameMachine;
 
@@ -23,13 +25,10 @@ export abstract class Game {
     const neutral = new NeutralPlayer(this, PLAYER_LOOK[9]);
     this.model = new GameModel(neutral, gameConfig);
     this.machine = new GameMachine();
-
-    gameEmitter.removeAllListeners();
+    this.eventEmitter = new GameEmitter();
 
     // finalState = new
     // gameMachine.addState(finalState)
-
-    // connect(...)
   }
 
   abstract start(): void;
@@ -52,9 +51,7 @@ export abstract class Game {
     if (fleet.owner === fleet.destination.owner) {
       fleet.destination.fleet.absorb(fleet);
       // if (!fleet.owner.isAiPlayer()) {
-      // emit gameMsg(ki18np("Reinforcements (1 ship) have arrived for planet %2.",
-      // 				"Reinforcements (%1 ships) have arrived for planet %2.")
-      // 	.subs(fleet->shipCount()), 0, fleet->destination);
+      log.info(`Reinforcements (${fleet.shipCount} ships) have arrived for planet ${fleet.destination}.`)
       // }
     } else {
       // let's get ready to rumble...
@@ -101,15 +98,12 @@ export abstract class Game {
 
       if (planetHolds) {
         defenderPlanet.owner.enemyFleetsDestroyed++;
-        // emit gameMsg(ki18n("Planet %2 has held against an attack from %1."),
-        // 			 attacker->owner, defenderPlanet);
+        log.info(`Planet ${defenderPlanet} has held against an attack from ${attacker.owner}`);
       } else {
         attacker.owner.enemyFleetsDestroyed++;
         defenderPlanet.conquer(attacker);
 
-        // const defender = defenderPlanet.owner;
-        // emit gameMsg(ki18n("Planet %2 has fallen to %1."),
-        // 			 attacker->owner, defenderPlanet, defender);
+        log.info(`Planet ${defenderPlanet} has fallen to ${defenderPlanet.owner}`)
       }
     }
     return true;
@@ -121,7 +115,7 @@ export abstract class Game {
   }
 
   findWinner(): void {
-    //qDebug() << "Searching for survivors";
+    log.info(`Searching for survivors`);
     // Check for survivors
     let alives = this.model.players
       .filter(p => !p.isDead() && !p.isNeutral() && !p.isSpectator());

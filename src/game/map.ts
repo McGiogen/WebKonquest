@@ -30,8 +30,6 @@ export class GameMap {
       row => GameMap.createArray<Sector>(
         columnsCount,
         col => new Sector(new Coordinate(row, col))
-        // connect
-        // connect(&m_grid[row][col], &Sector::update, this, &Map::childSectorUpdate)
       )
     );
   }
@@ -108,8 +106,6 @@ export class GameMap {
         sector.planet = null
       }
     }
-
-    // emit update();
   }
 
   populateMap(players: Array<Player>, neutral: Player, numNeutralPlanets: number): void {
@@ -125,8 +121,6 @@ export class GameMap {
         Planet.createNeutralPlanet(planetName, neutral, sector.coordinate);
       }
     }
-
-    // emit update();
   }
 
   static distance(p1: Planet, p2: Planet): number {

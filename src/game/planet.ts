@@ -7,6 +7,7 @@ import {GameUtils} from "./game";
 import {Player} from "./player";
 import {Coordinate} from "./coordinate";
 import {GameConfig} from "./config";
+import {log} from "./logger";
 
 export class Planet {
   readonly originalProductionRate: number;
@@ -24,9 +25,6 @@ export class Planet {
     // initial state
     this.showCurrentShips = true;
     this.justConquered = false;
-
-    // connect
-    // connect(&m_homeFleet, &DefenseFleet::update, this, &Planet::update);
   }
 
   conquer(attackingFleet) {
@@ -40,7 +38,7 @@ export class Planet {
 
   // TODO probabilmente business logic -> sposta
   turn(config: GameConfig) {
-    //qDebug() << "Planet::turn...";
+    log.debug(`Turn of planet ${this}.`);
 
     if (config.productionAfterConquere || !this.justConquered) {
       const shipsProduction = this.owner.isNeutral() ? config.neutralsProduction : this.productionRate;
@@ -57,11 +55,14 @@ export class Planet {
     this.oldShips = this.fleet.shipCount;
     this.showCurrentShips = true;
     this.justConquered = false;
-    // emit update();
   }
 
   destroy() {
     // this.sector.removePlanet();
+  }
+
+  toString() {
+    return this.name;
   }
 
   static createPlayerPlanet(planetName: string, initialOwner: Player, coordinate: Coordinate) {

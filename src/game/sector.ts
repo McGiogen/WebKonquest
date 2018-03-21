@@ -27,23 +27,11 @@ export class Sector {
   // 	// emit update();
   // }
 
-  removePlanet() {
-    this.planet = null;
-
-    // emit update();
-  }
+  // removePlanet() {
+    // this.planet = null;
+  // }
 
   // childPlanetUpdate() {
   // emit update();
   // }
 }
-
-// TODO usare clone()?
-/*Sector &
-Sector::operator=( const Sector &other )
-{
-    m_coord  = other.m_coord;
-    m_planet = other.m_planet;
-
-    return *this;
-}*/
