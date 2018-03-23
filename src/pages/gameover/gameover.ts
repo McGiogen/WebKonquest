@@ -21,4 +21,7 @@ export class GameoverPage {
     console.log('ionViewDidLoad GameoverPage');
   }
 
+  goToHome() {
+    this.navCtrl.goToRoot({});
+  }
 }
