@@ -49,8 +49,6 @@ export class DefenseFleet extends Fleet {
 
     this.removeShips(shipCount);
 
-    // emit update();
-
     return newAttackFleet;
   }
 

@@ -1,6 +1,7 @@
 import {Game} from "./game";
 import {Player} from "./player";
 import {GameConfig} from "./config";
+import {log} from "./logger";
 
 export class LocalGame extends Game {
   constructor(gameConfig: GameConfig) {
@@ -10,10 +11,10 @@ export class LocalGame extends Game {
   start() {
     if (!this.machine.isRunning()) {
       this.buildMachine();
-      //qDebug() << "Starting machine";
+      log.debug('Starting machine');
       this.machine.start();
       // this.qApp.processEvents();  // Really important : ignoring this will not apply the change soon enough
-      //qDebug() << "Machine state" << m_gameMachine.isRunning();
+      log.debug(`Machine state ${this.machine.isRunning()}`)
     }
   }
 
@@ -21,7 +22,7 @@ export class LocalGame extends Game {
     if (this.machine.isRunning()) {
       this.machine.stop();
       // this.qApp.processEvents();  // Really important : ignoring this will not apply the change soon enough
-      //qDebug() << "Machine state" << m_gameMachine.isRunning();
+      log.debug(`Machine state ${this.machine.isRunning()}`)
     }
   }
 
@@ -32,7 +33,7 @@ export class LocalGame extends Game {
   }
 
   buildMachine(): void {
-    //qDebug() << "Building machine";
+    log.debug('Building machine')
     if (this.machine.isRunning()) {
       return;
     }
@@ -46,20 +47,18 @@ export class LocalGame extends Game {
     this.machine.addState(this.model.neutral);
     this.machine.initialState = this.model.neutral;
 
-    // connect(m_neutral, &NeutralPlayer::donePlaying, this, &LocalGame::playerIsDone);
-
     // Now add transitions
     for (let i = 0; i < this.model.players.length; i++) {
-      this.machine.addState(this.model.players[i]);
+      const player = this.model.players[i];
+      const nextPlayer = this.model.players[i];
+      this.machine.addState(player);
 
-      //qDebug() << "Adding transition from "
-      //<< player->name() << " to " << nextPlayer->name();
-      // connect(player, &Player::donePlaying, this, &LocalGame::playerIsDone);
+      log.debug(`Adding transition from ${player} to ${nextPlayer}.`)
     }
   }
 
   // playerIsDone(): void {
-    //qDebug() << "It seems a player is done :" << currentPlayer()->name();
+    //log.debug(`It seems a player is done: ${this.currentPlayer}.`)
   // }
 }
 

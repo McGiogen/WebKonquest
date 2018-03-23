@@ -2,6 +2,7 @@ import {Player} from "./player";
 import {Game} from "./game";
 import {gameEmitter, GameEvent} from "./event";
 import {PlayerLook} from "./playerLook";
+import {log} from "./logger";
 
 export class NeutralPlayer extends Player {
   constructor(game: Game, look: PlayerLook) {
@@ -17,7 +18,7 @@ export class NeutralPlayer extends Player {
   }
 
   play(): void {
-    //qDebug() << "NeutralPlayer::play";
+    log.debug('NeutralPlayer::play');
 
     // Go on each attack...
     for (let player of this.game.model.players) {
@@ -36,7 +37,7 @@ export class NeutralPlayer extends Player {
 
     // Go over each planet, adding its ships
     for (let planet of this.game.model.getPlanets()) {
-      //qDebug() << "Turn for planet " << planet->name();
+      log.debug(`Turn for planet ${planet}`)
       planet.turn(this.game.model.configs);
     }
 

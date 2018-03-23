@@ -62,17 +62,17 @@
   dependencies:
     tslib "^1.7.1"
 
-"@ionic-native/core@4.5.3":
-  version "4.5.3"
-  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-4.5.3.tgz#bd0fd39e7257ded4c55c3062bb73c9741a2263bc"
+"@ionic-native/core@4.6.0":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-4.6.0.tgz#75129be4225a87f3fb05bf58fcec3edc481b190d"
 
-"@ionic-native/splash-screen@4.5.3":
-  version "4.5.3"
-  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-4.5.3.tgz#1f76d947091f4a8aa50963fd692f633738ac79d9"
+"@ionic-native/splash-screen@4.6.0":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-4.6.0.tgz#5fe2d8edbe61c3a4e7d874e2af7ea08a5f440665"
 
-"@ionic-native/status-bar@4.5.3":
-  version "4.5.3"
-  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-4.5.3.tgz#e48d7a638e52887f59c761adff5ed5cf6d8fdb58"
+"@ionic-native/status-bar@4.6.0":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-4.6.0.tgz#758a04c27e060f9b906eac1740efb0161ea1d4b9"
 
 "@ionic/app-scripts@3.1.8":
   version "3.1.8"
@@ -3606,6 +3606,10 @@ strip-indent@^1.0.1:
 strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
+
+structured-log@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/structured-log/-/structured-log-0.2.0.tgz#b9be1794c39d6399f265666b84635a3307611c5b"
 
 supports-color@^2.0.0:
   version "2.0.0"

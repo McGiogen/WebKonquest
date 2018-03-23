@@ -4,6 +4,7 @@ import {AttackFleet} from "./fleet";
 import {Planet} from "./planet";
 import {GameMachineState} from "./gameMachine";
 import {PlayerLook} from "./playerLook";
+import {log} from "./logger";
 
 export abstract class Player implements GameMachineState {
   // Attack fleets sent by this player that are still moving
@@ -40,8 +41,7 @@ export abstract class Player implements GameMachineState {
       this.game.newTurn();
     }
 
-    //qDebug() << "Entering state for player " << m_name;
-    //qDebug() << this->metaObject()->className();
+    log.debug(`Entering state for player ${this} (${this.constructor.name}).`);
     this.game.model.currentPlayer = this;
     if (this.isDead()) {
       gameEmitter.emit(GameEvent.PlayerTurnDone);
@@ -51,8 +51,8 @@ export abstract class Player implements GameMachineState {
   }
 
   onExit(): void {
-    //qDebug() << "Exiting state for player " << m_name;
-    //qDebug() << "We are moving our new attacks to our attacks";
+    log.debug(`Exiting state for player ${this}.`);
+    log.debug('We are moving our new attacks to our attacks.');
     for (let a of this.standingOrders) {
       const fleet: AttackFleet = a.source.fleet.spawnAttackFleet(a.destination, a.shipCount, a.arrivalTurn);
       a.arrivalTurn++;

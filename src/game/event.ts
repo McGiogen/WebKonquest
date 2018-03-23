@@ -1,7 +1,8 @@
 import {Event} from "typescript.events";
 
-class GameEmitter extends Event {}
+export class GameEmitter extends Event {}
 
+// TODO rimuovi e usa emitter dell'oggetto game
 export const gameEmitter = new GameEmitter();
 
 /**** HOW TO USE ****
