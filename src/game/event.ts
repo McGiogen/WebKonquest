@@ -21,3 +21,10 @@ export const enum GameEvent {
   PlayerTurnStart = 'game:player:start',
   GameOver = 'game:over',
 }
+
+// export const GameEvent = {
+//   GameStart: 'game:start',
+//   PlayerTurnDone: 'game:player:done',
+//   PlayerTurnStart: 'game:player:start',
+//   GameOver: 'game:over',
+// };
