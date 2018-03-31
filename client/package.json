@@ -1,9 +1,9 @@
 {
-  "name": "client",
+  "name": "webkonquest-client",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
-  "private": true,
+  "author": "McGiogen",
+  "homepage": "https://github.com/McGiogen/WebKonquest",
+  "license": "MIT",
   "scripts": {
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",

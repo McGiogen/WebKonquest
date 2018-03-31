@@ -1,0 +1,27 @@
+{
+  "name": "webkonquest-server",
+  "version": "0.0.1",
+  "author": "McGiogen",
+  "homepage": "https://github.com/McGiogen/WebKonquest",
+  "license": "MIT",
+  "main": "server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "yarn run build && node ./dist/server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "del": "3.0.0",
+    "express": "^4.16.3",
+    "http": "0.0.0",
+    "method-override": "^2.3.10",
+    "morgan": "^1.9.0",
+    "ws": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.11.1",
+    "@types/ws": "^4.0.2",
+    "typescript": "^2.8.1"
+  }
+}
