@@ -13,7 +13,6 @@ import {NeutralPlayer} from "./neutralPlayer";
 import {GameMachine} from "./gameMachine";
 import {GameConfig} from "./config";
 import {GameEmitter} from "./event";
-import {PLAYER_LOOK} from "./playerLook";
 import {log} from "./logger";
 
 export abstract class Game {
@@ -22,7 +21,7 @@ export abstract class Game {
   machine: GameMachine;
 
   constructor(public gameConfig: GameConfig) {
-    const neutral = new NeutralPlayer(this, PLAYER_LOOK[9]);
+    const neutral = new NeutralPlayer(this);
     this.model = new GameModel(neutral, gameConfig);
     this.machine = new GameMachine();
     this.eventEmitter = new GameEmitter();
@@ -174,7 +173,7 @@ export class GameModel {
 
   constructor(public neutral: NeutralPlayer, public configs: GameConfig) {
     this.turnCounter = 0;
-    this.currentPlayer = undefined;
+    this.currentPlayer = null;
     this.map = new GameMap(10, 10);
     this.players = [];
   }

@@ -1,5 +1,6 @@
 {
   "name": "webkonquest-client",
+  "description": "Konquest web version",
   "version": "0.0.1",
   "author": "McGiogen",
   "homepage": "https://github.com/McGiogen/WebKonquest",
@@ -29,12 +30,11 @@
     "rxjs": "5.5.7",
     "structured-log": "^0.2.0",
     "sw-toolbox": "3.6.0",
-    "typescript.events": "7.9.0",
+    "webkonquest-core": "../core",
     "zone.js": "0.8.20"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.8",
     "typescript": "2.7.2"
-  },
-  "description": "An Ionic project"
+  }
 }

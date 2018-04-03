@@ -13,6 +13,10 @@ export class GameMachine {
   }
 
   start(): void {
+    if (!this.initialState) {
+      throw new Error('Game machine cannot start. Initial state is null.');
+    }
+
     log.info('New game starting.');
     this.currentState = this.initialState;
     gameEmitter.on(GameEvent.PlayerTurnDone, this.next.bind(this));
@@ -38,9 +42,7 @@ export class GameMachine {
     if (!this.isRunning()) {
       return;
     }
-    if (this.currentState) {
-      this.currentState.onExit();
-    }
+    this.currentState.onExit();
     const nextStateIndex = (this.states.indexOf(this.currentState) + 1) % this.states.length;
     this.currentState = this.states[nextStateIndex];
     log.info(`Turn of ${this.currentState}`);

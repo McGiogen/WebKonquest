@@ -3,12 +3,13 @@ import {gameEmitter, GameEvent} from "./event";
 import {AttackFleet} from "./fleet";
 import {Planet} from "./planet";
 import {GameMachineState} from "./gameMachine";
-import {PlayerLook} from "./playerLook";
 import {log} from "./logger";
 
 export abstract class Player implements GameMachineState {
   // Attack fleets sent by this player that are still moving
   public attackList: Array<AttackFleet>;
+  public look: string;
+
   // Fleets to send at the end of this turn
   protected newAttacks: Array<AttackFleet>;
   protected standingOrders: Array<AttackFleet>;
@@ -23,7 +24,7 @@ export abstract class Player implements GameMachineState {
   turnProduction: number;
   turnShips: number;
 
-  constructor(protected game: Game, public name: string, public look: PlayerLook) {
+  constructor(protected game: Game, public name: string) {
     this.attackList = [];
     this.newAttacks = [];
     this.standingOrders = [];

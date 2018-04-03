@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {GameMap} from "../../game/map";
-import {Sector} from "../../game/sector";
+import {GameMap, Sector} from 'webkonquest-core';
 
 /**
  * Generated class for the GameMapComponent component.

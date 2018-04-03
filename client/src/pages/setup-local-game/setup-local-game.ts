@@ -1,9 +1,8 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
-import {PlayPage} from "../play/play";
-import {LocalGame} from "../../game/localgame";
-import {PLAYER_LOOK} from "../../game/playerLook";
-import {LocalPlayer} from "../../game/localplayer";
+import {PlayPage} from '../play/play';
+import {PLAYER_LOOK} from '../../services/playerLook';
+import {LocalGame, LocalPlayer} from 'webkonquest-core';
 
 @Component({
   selector: 'page-setup-local-game',
@@ -70,7 +69,8 @@ export class SetupLocalGamePage {
       } else {
         // Human player
         const name = playerData.name || `Player ${i}`;
-        const player = new LocalPlayer(this.game, name, look);
+        const player = new LocalPlayer(this.game, name);
+        player.look = look;
         this.game.addPlayer(player);
         this.game.model.map.addPlayerPlanetSomewhere(player);
       }

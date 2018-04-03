@@ -1,8 +1,5 @@
-import {Game} from "../../game/game";
-import {AppOptions, InteractMode} from "../../services/AppOptions";
-import {Planet} from "../../game/planet";
-import {Player} from "../../game/player";
-import {LocalPlayer} from "../../game/localplayer";
+import {Game, Planet, Player, LocalPlayer} from 'webkonquest-core';
+import {AppOptions, InteractMode} from '../../services/AppOptions';
 
 export class LocalGameHelper {
   planetWithFocus: Planet;

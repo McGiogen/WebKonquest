@@ -33,7 +33,7 @@ export class LocalGame extends Game {
   }
 
   buildMachine(): void {
-    log.debug('Building machine')
+    log.debug('Building machine');
     if (this.machine.isRunning()) {
       return;
     }

@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
-import {LocalGame} from "../../game/localgame";
-import {LocalGameHelper} from "./LocalGameHelper";
-import {AppOptions} from "../../services/AppOptions";
-import {gameEmitter, GameEvent} from "../../game/event";
-import {GameoverPage} from "../gameover/gameover";
+import {LocalGame, gameEmitter, GameEvent} from 'webkonquest-core';
+import {LocalGameHelper} from './LocalGameHelper';
+import {AppOptions} from '../../services/AppOptions';
+import {GameoverPage} from '../gameover/gameover';
 
 @Component({
   selector: 'page-play',

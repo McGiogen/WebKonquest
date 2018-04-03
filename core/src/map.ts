@@ -7,15 +7,14 @@ import {Coordinate} from "./coordinate";
 import {Planet} from "./planet";
 import {GameUtils} from "./game";
 import {Player} from "./player";
+import {NeutralPlayer} from "./neutralPlayer";
 
 export class GameMap {
-  private rowsCount: number;
-  private columnsCount: number;
-  grid: Array<Array<Sector>>;
+  public grid: Array<Array<Sector>>;
   private planetNameGenerator: IterableIterator<string>;
 
-  constructor(rowsCount: number, colsCount: number) {
-    this.resizeMap(rowsCount, colsCount);
+  constructor(private rowsCount: number, private columnsCount: number) {
+    this.resizeMap(rowsCount, columnsCount);
 
     this.planetNameGenerator = GameMap.planetNameGenerator();
   }
@@ -41,12 +40,12 @@ export class GameMap {
       .map(sector => sector.planet);
   }
 
-  addPlanet(sector, player, prodRate, killPercentage): void {
+  addPlanet(sector: Sector, player: Player, prodRate: number, killPercentage: number): void {
     const planetName = this.planetNameGenerator.next().value;
-    sector.planet = new Planet(planetName, player, prodRate, killPercentage, sector);
+    sector.planet = new Planet(planetName, player, prodRate, killPercentage, sector.coordinate);
   }
 
-  addPlayerPlanetSomewhere(player): Planet {
+  addPlayerPlanetSomewhere(player: Player): Planet | null {
     const sector: Sector = this.findRandomFreeSector();
     if (!sector) {
       return null;
@@ -56,7 +55,7 @@ export class GameMap {
     return sector.planet;
   }
 
-  addNeutralPlanetSomewhere(neutral): Planet {
+  addNeutralPlanetSomewhere(neutral: NeutralPlayer): Planet | null {
     const sector: Sector = this.findRandomFreeSector();
     if (!sector) {
       return null;
@@ -78,8 +77,7 @@ export class GameMap {
   }
 
   removePlayerPlanets(player: Player): void {
-    while (this.removePlayerPlanet(player)) {
-    }
+    while (this.removePlayerPlanet(player)) {}
   }
 
   turnOverPlayerPlanets(owner: Player, newOwner: Player): void {
@@ -90,7 +88,7 @@ export class GameMap {
     }
   }
 
-  playerPlanetCount(player): number {
+  playerPlanetCount(player: Player): number {
     let count = 0;
     for (let planet of this.getPlanets()) {
       if (planet.owner === player) {

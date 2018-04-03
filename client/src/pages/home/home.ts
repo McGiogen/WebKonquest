@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {OptionsPage} from "../options/options";
-import {AboutPage} from "../about/about";
-import {LocalGame} from "../../game/localgame";
-import {GameConfig} from "../../game/config";
-import {SetupLocalGamePage} from "../setup-local-game/setup-local-game";
+import {LocalGame, GameConfig} from 'webkonquest-core';
+import {OptionsPage} from '../options/options';
+import {AboutPage} from '../about/about';
+import {SetupLocalGamePage} from '../setup-local-game/setup-local-game';
 
 @Component({
   selector: 'page-home',

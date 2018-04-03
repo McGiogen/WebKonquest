@@ -3806,7 +3806,7 @@ type-is@~1.6.15, type-is@~1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.18"
 
-typescript.events@7.9.0:
+typescript.events@^7.9.0:
   version "7.9.0"
   resolved "https://registry.yarnpkg.com/typescript.events/-/typescript.events-7.9.0.tgz#6d7ccaef7487c4dc90b7006528a3152b1ae9f8fc"
 
@@ -3961,6 +3961,11 @@ watchpack@^1.4.0:
     chokidar "^2.0.2"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+
+webkonquest-core@../core:
+  version "0.0.1"
+  dependencies:
+    typescript.events "^7.9.0"
 
 webpack-sources@^1.0.1:
   version "1.1.0"

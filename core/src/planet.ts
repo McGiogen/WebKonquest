@@ -2,7 +2,7 @@
 // class Planet
 //---------------------------------------------------------------------------
 
-import {DefenseFleet} from "./fleet";
+import {AttackFleet, DefenseFleet} from "./fleet";
 import {GameUtils} from "./game";
 import {Player} from "./player";
 import {Coordinate} from "./coordinate";
@@ -27,7 +27,7 @@ export class Planet {
     this.justConquered = false;
   }
 
-  conquer(attackingFleet) {
+  conquer(attackingFleet: AttackFleet) {
     this.owner.deleteStandingOrders(this);
     this.owner = attackingFleet.owner;
     this.owner.planetsConquered++;
