@@ -1,7 +1,7 @@
-import {Game} from "./game";
-import {Player} from "./player";
-import {gameEmitter, GameEvent} from "./event";
-import {log} from "./logger";
+import {Game} from "../game";
+import {Player} from "../player";
+import {gameEmitter, GameEvent} from "../event";
+import {log} from "../logger";
 
 export class LocalPlayer extends Player {
   constructor(game: Game, name: string) {

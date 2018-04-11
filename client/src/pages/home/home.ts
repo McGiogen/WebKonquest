@@ -4,6 +4,7 @@ import {LocalGame, GameConfig} from 'webkonquest-core';
 import {OptionsPage} from '../options/options';
 import {AboutPage} from '../about/about';
 import {SetupLocalGamePage} from '../setup-local-game/setup-local-game';
+import {SetupRemoteGamePage} from '../setup-remote-game/setup-remote-game';
 
 @Component({
   selector: 'page-home',
@@ -15,17 +16,21 @@ export class HomePage {
 
   }
 
-  setupLocalGame(event: MouseEvent) {
+  setupLocalGame() {
     const game = new LocalGame(new GameConfig());
     this.navController.push(SetupLocalGamePage, {game});
   }
 
-  openAppOptions(event: MouseEvent) {
+  setupRemoteGame() {
+    const game = new LocalGame(new GameConfig());
+    this.navController.push(SetupRemoteGamePage, {game});
+  }
+
+  openAppOptions() {
     this.navController.push(OptionsPage);
   }
 
-  openAbout(event: MouseEvent) {
+  openAbout() {
     this.navController.push(AboutPage);
   }
-
 }

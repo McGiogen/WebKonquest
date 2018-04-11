@@ -47,10 +47,6 @@ export class SetupLocalGamePage {
     this.players.splice(index, 1);
   }
 
-  updatePlayerLook(playerIndex: number, look: number) {
-    this.players[playerIndex].look = look;
-  }
-
   startLocalGame() {
     if (this.players.length < 3) {
       return;

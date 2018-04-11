@@ -1,7 +1,7 @@
-import {Game} from "./game";
-import {Player} from "./player";
-import {GameConfig} from "./config";
-import {log} from "./logger";
+import {Game} from "../game";
+import {Player} from "../player";
+import {GameConfig} from "../config";
+import {log} from "../logger";
 
 export class LocalGame extends Game {
   constructor(gameConfig: GameConfig) {

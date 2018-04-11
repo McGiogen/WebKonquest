@@ -514,12 +514,20 @@ statuses@~1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.4.0.tgz#bb73d446da2796106efcc1b601a253d6c46bd087"
 
+structured-log@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/structured-log/-/structured-log-0.2.0.tgz#b9be1794c39d6399f265666b84635a3307611c5b"
+
 type-is@~1.6.15, type-is@~1.6.16:
   version "1.6.16"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.16.tgz#f89ce341541c672b25ee7ae3c73dee3b2be50194"
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.18"
+
+typescript.events@^7.9.0:
+  version "7.9.0"
+  resolved "https://registry.yarnpkg.com/typescript.events/-/typescript.events-7.9.0.tgz#6d7ccaef7487c4dc90b7006528a3152b1ae9f8fc"
 
 typescript@^2.8.1:
   version "2.8.1"
@@ -539,6 +547,9 @@ vary@^1, vary@~1.1.2:
 
 webkonquest-core@../core:
   version "0.0.1"
+  dependencies:
+    structured-log "^0.2.0"
+    typescript.events "^7.9.0"
 
 wrappy@1:
   version "1.0.2"

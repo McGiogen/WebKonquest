@@ -9,6 +9,7 @@ import {HomePage} from '../pages/home/home';
 import {OptionsPage} from '../pages/options/options';
 import {GameoverPage} from '../pages/gameover/gameover';
 import {SetupLocalGamePage} from '../pages/setup-local-game/setup-local-game';
+import {SetupRemoteGamePage} from '../pages/setup-remote-game/setup-remote-game';
 
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
@@ -22,6 +23,7 @@ import {ComponentsModule} from "../components/components.module";
     OptionsPage,
     GameoverPage,
     SetupLocalGamePage,
+    SetupRemoteGamePage,
     HomePage
   ],
   imports: [
@@ -37,6 +39,7 @@ import {ComponentsModule} from "../components/components.module";
     OptionsPage,
     GameoverPage,
     SetupLocalGamePage,
+    SetupRemoteGamePage,
     HomePage
   ],
   providers: [
