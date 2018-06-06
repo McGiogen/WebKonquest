@@ -13,7 +13,6 @@ export class LocalGame extends Game {
       this.buildMachine();
       log.debug('Starting machine');
       this.machine.start();
-      // this.qApp.processEvents();  // Really important : ignoring this will not apply the change soon enough
       log.debug(`Machine state ${this.machine.isRunning()}`)
     }
   }
@@ -21,7 +20,6 @@ export class LocalGame extends Game {
   stop(): void {
     if (this.machine.isRunning()) {
       this.machine.stop();
-      // this.qApp.processEvents();  // Really important : ignoring this will not apply the change soon enough
       log.debug(`Machine state ${this.machine.isRunning()}`)
     }
   }
