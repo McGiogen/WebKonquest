@@ -63,29 +63,89 @@ game-map {
           -webkit-box-shadow: 0 0 8px 1px #51a7e8;
           box-shadow: 0 0 8px 1px #51a7e8;
         }
+      }
+    }
+  }
 
-        &-planet {
-          position: absolute;
-          width: 100%;
-          height: 100%;
+  /***** THEMES *****/
+  // Colors
+  // Reference: https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
+  $colors:
+    ('red' #e6194b),
+    ('green' #3cb44b),
+    ('yellow' #ffe119),
+    ('blue' #0082c8),
+    ('orange' #f58231),
+    //('purple' #911eb4),
+    ('cyan' #46f0f0),
+    //('magenta' #f032e6),
+    ('lime' #d2f53c),
+    ('pink' #fabebe),
+    //('teal' #008080),
+    //('lavender' #e6beff),
+    //('brown' #aa6e28),
+    ('beige' #fffac8),
+    //('maroon' #800000),
+    //('mint' #aaffc3),
+    //('olive' #808000),
+    //('coral' #ffd8b1),
+    ('navy' #000080),
+    ('grey' #808080);
+    //('white' #FFFFFF),
+    //('black' #000000);
 
-          @for $i from 1 through 18 {
-            &.planet-look-#{$i} {
-              background-image: url($imgs-path + 'planets/planet' + $i + '.png');
-              background-size: cover;
-            }
-          }
-        }
+  // 2D Theme
+  .theme-2d .map-grid-cell {
+    &-planet {
+      position: absolute;
+      width: 90%;
+      height: 90%;
+      margin: 5%;
+      border-radius: 50%;
 
-        &-content {
-          position: absolute;
-          bottom: 10%;
-          width: 100%;
-          text-align: center;
-          font-size: 1.2em;
-          text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+      @each $pair in $colors {
+        $name: nth($pair, 1);
+        $color: nth($pair, 2);
+        &.planet-look-#{$name} {
+          background-color: $color;
+          //border: 4px solid darken($color, 20%);
         }
       }
+    }
+
+    &-content {
+      position: absolute;
+      bottom: 10%;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2em;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+  }
+
+  // 3D Theme
+  .theme-3d .map-grid-cell {
+    &-planet {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+
+      @each $pair in $colors {
+        $name: nth($pair, 1);
+        &.planet-look-#{$name} {
+          background-image: url($imgs-path + 'planets/planet' + $name + '.png');
+        }
+      }
+    }
+
+    &-content {
+      position: absolute;
+      bottom: 10%;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2em;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     }
   }
 }

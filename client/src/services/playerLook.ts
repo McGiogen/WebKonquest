@@ -12,8 +12,9 @@ class PlayerLookFactory {
   }
 }
 
+const COLORS = [ 'grey', 'blue', 'red', 'green', 'yellow', 'orange', 'cyan', 'lime', 'pink', 'beige', 'navy'];
 const PLAYER_LOOK: PlayerLook[] = [];
-for (let i = 1; i <= 18; i++) {
-  PLAYER_LOOK.push(PlayerLookFactory.build( i + '', `planet${i}.png` ));
+for (let color of COLORS) {
+  PLAYER_LOOK.push(PlayerLookFactory.build( color, `planet-${color}.png` ));
 }
 export { PLAYER_LOOK };

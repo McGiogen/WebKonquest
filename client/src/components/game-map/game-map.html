@@ -1,5 +1,5 @@
 <div class="map-container">
-  <div class="map-grid">
+  <div class="map-grid" [ngClass]="1 != null ? 'theme-2d' : 'theme-3d'">
     <div *ngFor='let row of map.grid; trackBy: index;' class="map-grid-row">
       <div
         *ngFor='let sector of row; trackBy: index'
