@@ -3965,6 +3965,7 @@ watchpack@^1.4.0:
 webkonquest-core@../core:
   version "0.0.1"
   dependencies:
+    structured-log "^0.2.0"
     typescript.events "^7.9.0"
 
 webpack-sources@^1.0.1:

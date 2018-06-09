@@ -1,6 +1,6 @@
 {
-  "name": "Ionic",
-  "short_name": "Ionic",
+  "name": "WebKonquest",
+  "short_name": "WebKonquest",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{
