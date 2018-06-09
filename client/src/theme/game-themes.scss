@@ -1,0 +1,67 @@
+@import 'variables';
+
+// Colors
+// Reference: https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
+$colors:
+    ('red' #e6194b),
+    ('green' #3cb44b),
+    ('yellow' #ffe119),
+    ('blue' #0082c8),
+    ('orange' #f58231),
+    //('purple' #911eb4),
+    ('cyan' #46f0f0),
+    //('magenta' #f032e6),
+    ('lime' #d2f53c),
+    ('pink' #fabebe),
+    //('teal' #008080),
+    //('lavender' #e6beff),
+    //('brown' #aa6e28),
+    ('beige' #fffac8),
+    //('maroon' #800000),
+    //('mint' #aaffc3),
+    //('olive' #808000),
+    //('coral' #ffd8b1),
+    ('navy' #000080),
+    //('white' #FFFFFF),
+    //('black' #000000),
+    ('grey' #808080);
+
+@mixin theme-2d() {
+  width: 90%;
+  height: 90%;
+  margin: 5%;
+  border-radius: 50%;
+
+  @each $pair in $colors {
+    $name: nth($pair, 1);
+    $color: nth($pair, 2);
+    &.planet-#{$name} {
+      background-color: $color;
+      //border: 4px solid darken($color, 20%);
+    }
+  }
+}
+
+@mixin theme-3d() {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+
+  @each $pair in $colors {
+    $name: nth($pair, 1);
+    &.planet-#{$name} {
+      background-image: url($imgs-path + 'planets/planet-' + $name + '.png');
+    }
+  }
+}
+
+/***** THEMES *****/
+// 2D Theme
+.theme-2d .planet {
+  @include theme-2d();
+}
+
+// 3D Theme
+.theme-3d .planet {
+  @include theme-3d();
+}

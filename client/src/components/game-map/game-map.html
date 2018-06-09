@@ -9,8 +9,8 @@
         [attr.tabindex]="sector.planet == null ? null : 0"
       >
         <div
-          class="map-grid-cell-planet"
-          [ngClass]="sector.planet != null ? 'planet-look-' + sector.planet.owner.look.name : ''"
+          class="planet"
+          [ngClass]="sector.planet != null ? 'planet-' + sector.planet.owner.look : ''"
         ></div>
         <span class="map-grid-cell-content">
           {{ sector.planet == null ? '' : sector.planet.name }}

@@ -10,5 +10,7 @@
 -->
 
 <button ion-button clear color="light" icon-only (click)="selectBack()"><ion-icon name="arrow-dropleft"></ion-icon></button>
-<img [src]="imgs[model]" alt="Planet {{ model }}">
+<div class="color-container" [attr.title]="model">
+  <div class="planet" [ngClass]="'planet-' + model"></div>
+</div>
 <button ion-button clear color="light" icon-only (click)="selectNext()"><ion-icon name="arrow-dropright"></ion-icon></button>

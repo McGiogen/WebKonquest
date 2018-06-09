@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {GameMapComponent} from './game-map/game-map';
 import {BrowserModule} from "@angular/platform-browser";
-import {ImageSelectorComponent} from './image-selector/image-selector';
+import {ImageSelectorComponent} from './color-selector/color-selector';
 import {IonicModule} from "ionic-angular";
 
 @NgModule({

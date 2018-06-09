@@ -6,7 +6,7 @@
 
 </ion-header>
 
-<ion-content padding>
+<ion-content padding [ngClass]="'theme-2d'">
   <ion-grid fixed>
     <ion-row>
       <ion-col col-md-6 col-12>
@@ -15,9 +15,9 @@
             <ion-label floating>&nbsp;</ion-label>
             <ion-input type="text" [(ngModel)]="neutral.name" readonly name="neutralName"></ion-input>
           </ion-item>
-          <image-selector
-            class="item-md item-neutral" [imgs]="planetImages" [(model)]="this.neutral.look"
-          ></image-selector>
+          <color-selector
+            class="item-md item-neutral" [(model)]="this.neutral.look"
+          ></color-selector>
         </form>
       </ion-col>
       <ion-col col-md-6 col-12>
@@ -26,9 +26,9 @@
             <ion-label floating>You</ion-label>
             <ion-input type="text" [(ngModel)]="player.name" name="playerName"></ion-input>
           </ion-item>
-          <image-selector
-            class="item-md" [imgs]="planetImages" [(model)]="player.look"
-          ></image-selector>
+          <color-selector
+            class="item-md" [(model)]="player.look"
+          ></color-selector>
         </form>
       </ion-col>
       <ion-col col-md-6 col-12
@@ -39,9 +39,9 @@
             <ion-label floating>{{ 'Player ' + (i + 1) }}</ion-label>
             <ion-input type="text" [(ngModel)]="enemy.name" readonly name="enemy{{i}}Name"></ion-input>
           </ion-item>
-          <image-selector
-            class="item-md" [imgs]="planetImages" [(model)]="enemy.look"
-          ></image-selector>
+          <color-selector
+            class="item-md" [(model)]="enemy.look"
+          ></color-selector>
         </form>
       </ion-col>
       <ion-col col-12>

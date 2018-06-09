@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {PlayPage} from '../play/play';
-import {PLAYER_LOOK} from '../../services/playerLook';
+import {PLAYER_COLORS} from '../../services/playerColors';
 import {LocalGame, LocalPlayer} from 'webkonquest-core';
 
 @Component({
@@ -10,12 +10,9 @@ import {LocalGame, LocalPlayer} from 'webkonquest-core';
 })
 export class SetupLocalGamePage {
   private game: LocalGame;
-  private players: Array<{name: string, look: number, neutral: boolean}>;
-  private planetImages: Array<string>;
+  private players: Array<{name: string, look: string, neutral: boolean}>;
 
   constructor(public navController: NavController, public navParams: NavParams) {
-    this.initPlanetImages();
-
     this.game = navParams.get('game');
     this.players = [];
     this.addNewPlayer(true,'Neutral');
@@ -23,20 +20,12 @@ export class SetupLocalGamePage {
     this.addNewPlayer();
   }
 
-  initPlanetImages() {
-    const basePath = '/assets/imgs/planets/';
-    this.planetImages = [];
-    for (let i = 0; i < PLAYER_LOOK.length; i++) {
-      const imageName = PLAYER_LOOK[i].planetImage;
-      this.planetImages.push(basePath + imageName);
-    }
-  }
-
-  addNewPlayer(neutral = false, name = '', look?: number) {
+  addNewPlayer(neutral = false, name = '', look?: string) {
     if (look == null) {
-      for (let i = 0; i < PLAYER_LOOK.length && look == null; i++) {
-        if (this.players.every(p => p.look !== i)) {
-          look = i;
+      for (let i = 0; i < PLAYER_COLORS.length && look == null; i++) {
+        let color = PLAYER_COLORS[i];
+        if (this.players.every(p => p.look !== color)) {
+          look = color;
         }
       }
     }
@@ -55,7 +44,7 @@ export class SetupLocalGamePage {
     // Adding some data to the game
     for (let i = 0; i < this.players.length; i++) {
       const playerData = this.players[i];
-      const look = PLAYER_LOOK[playerData.look];
+      const look = playerData.look;
 
       if (playerData.neutral) {
         // Neutral player
