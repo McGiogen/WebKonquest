@@ -2,8 +2,21 @@
 
 page-home {
   ion-content {
-    background: url($imgs-path + 'backgrounds/home-background.png') no-repeat;
     background-size: cover;
     text-align: center;
+
+    background: url($imgs-path + 'backgrounds/home-background-848x600.png') no-repeat;
+    @media (min-width: 849px), (min-height: 601px) {
+      background: url($imgs-path + 'backgrounds/home-background-1366x966.png') no-repeat;
+    }
+    @media (min-width: 1367px), (min-height: 967px) {
+      background: url($imgs-path + 'backgrounds/home-background-1920x1357.png') no-repeat;
+    }
+    @media (min-width: 1921px), (min-height: 1357px) {
+      background: url($imgs-path + 'backgrounds/home-background-2048x1448.png') no-repeat;
+    }
+    @media (min-width: 2049px), (min-height: 1449px) {
+      background: url($imgs-path + 'backgrounds/home-background-3508x2480.png') no-repeat;
+    }
   }
 }
