@@ -14,7 +14,6 @@ export class SetupRemoteGamePage {
   private neutral: {name: string, look: string};
   private player: {name: string, look: string};
   private enemies: Array<{name: string, look: string}>;
-  private PLAYER_COLORS: Array<string> = PLAYER_COLORS;
 
   private socket$: WebSocketSubject<Message>;
 
