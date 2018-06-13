@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {GameMap, Sector} from 'webkonquest-core';
+import {AppOptions} from "../../services/AppOptions";
 
 /**
  * Generated class for the GameMapComponent component.
@@ -16,8 +17,11 @@ export class GameMapComponent {
   @Input() map: GameMap;
   @Output('selectedSector') selectedSectorEmitter: EventEmitter<Sector> = new EventEmitter<Sector>();
   selectedSector: Sector;
+  private appOptions: AppOptions;
 
-  constructor() {}
+  constructor() {
+    this.appOptions = AppOptions.instance;
+  }
 
   selectSector(sector: Sector) {
     if (sector.planet == null) {

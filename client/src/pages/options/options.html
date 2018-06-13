@@ -9,7 +9,7 @@
 <ion-content>
   <ion-grid fixed>
     <ion-row>
-      <ion-col>
+      <ion-col col-12>
         <ion-list radio-group no-lines [(ngModel)]="appOptions.interactMode">
           <ion-list-header>
             Interact mode
@@ -23,6 +23,23 @@
           <ion-item>
             <ion-label>Double tap</ion-label>
             <ion-radio [value]="InteractMode.DoubleTap"></ion-radio>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col col-12>
+        <ion-list radio-group no-lines [(ngModel)]="appOptions.graphics">
+          <ion-list-header>
+            Graphics
+          </ion-list-header>
+
+          <ion-item>
+            <ion-label>2D theme</ion-label>
+            <ion-radio [value]="Graphics.Theme2D"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>3D theme</ion-label>
+            <ion-radio [value]="Graphics.Theme3D"></ion-radio>
           </ion-item>
         </ion-list>
       </ion-col>

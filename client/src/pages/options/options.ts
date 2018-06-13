@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {AppOptions, InteractMode} from "../../services/AppOptions";
+import {AppOptions, InteractMode, Graphics} from "../../services/AppOptions";
 
 @Component({
   selector: 'page-options',
@@ -8,6 +8,7 @@ import {AppOptions, InteractMode} from "../../services/AppOptions";
 })
 export class OptionsPage {
   InteractMode = InteractMode;
+  Graphics = Graphics;
   private appOptions: AppOptions;
 
   constructor(public navCtrl: NavController) {

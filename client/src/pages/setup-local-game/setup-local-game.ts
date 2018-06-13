@@ -3,16 +3,19 @@ import {NavController, NavParams} from 'ionic-angular';
 import {PlayPage} from '../play/play';
 import {PLAYER_COLORS} from '../../services/playerColors';
 import {LocalGame, LocalPlayer} from 'webkonquest-core';
+import {AppOptions} from "../../services/AppOptions";
 
 @Component({
   selector: 'page-setup-local-game',
   templateUrl: 'setup-local-game.html',
 })
 export class SetupLocalGamePage {
+  private appOptions: AppOptions;
   private game: LocalGame;
   private players: Array<{name: string, look: string, neutral: boolean}>;
 
   constructor(public navController: NavController, public navParams: NavParams) {
+    this.appOptions = AppOptions.instance;
     this.game = navParams.get('game');
     this.players = [];
     this.addNewPlayer(true,'Neutral');

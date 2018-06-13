@@ -3,13 +3,15 @@ import {NavController, NavParams} from 'ionic-angular';
 import {PlayPage} from '../play/play';
 import {PLAYER_COLORS} from '../../services/playerColors';
 import {LocalGame, LocalPlayer, Message} from 'webkonquest-core';
-import { WebSocketSubject } from 'rxjs/observable/dom/WebSocketSubject';
+import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
+import {AppOptions} from "../../services/AppOptions";
 
 @Component({
   selector: 'page-setup-remote-game',
   templateUrl: 'setup-remote-game.html',
 })
 export class SetupRemoteGamePage {
+  private appOptions: AppOptions;
   private game: LocalGame;
   private neutral: {name: string, look: string};
   private player: {name: string, look: string};
@@ -18,10 +20,11 @@ export class SetupRemoteGamePage {
   private socket$: WebSocketSubject<Message>;
 
   constructor(public navController: NavController, public navParams: NavParams) {
+    this.appOptions = AppOptions.instance;
     this.game = navParams.get('game');
     this.enemies = [];
     this.neutral = { name: 'Neutral', look: PLAYER_COLORS[0] };
-    this.player = { name: 'Player 0', look: PLAYER_COLORS[1] };
+    this.player = { name: 'You', look: PLAYER_COLORS[1] };
 
     this.socket$ = WebSocketSubject.create('ws://localhost:8080');
     this.socket$

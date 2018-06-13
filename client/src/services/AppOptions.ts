@@ -3,6 +3,11 @@ export enum InteractMode {
   DoubleTap,
 }
 
+export enum Graphics {
+  Theme2D = 'theme-2d',
+  Theme3D = 'theme-3d',
+}
+
 // TODO AppOptions dovrebbe tenere salvate le opzioni nel local storage
 // e ogni volta provare a ricaricarle da lì
 export class AppOptions {
@@ -23,4 +28,5 @@ export class AppOptions {
   // endregion
 
   interactMode: InteractMode = InteractMode.SingleTap;
+  graphics: Graphics = Graphics.Theme2D;
 }
