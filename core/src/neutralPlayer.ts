@@ -36,7 +36,7 @@ export class NeutralPlayer extends Player {
 
     // Go over each planet, adding its ships
     for (let planet of this.game.model.getPlanets()) {
-      log.debug(`Turn for planet ${planet}`)
+      log.debug(`Turn for planet ${planet}`);
       planet.turn(this.game.model.configs);
     }
 

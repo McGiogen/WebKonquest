@@ -116,7 +116,7 @@ export class GameMap {
       const sector = this.findRandomFreeSector();
       if (sector) {
         const planetName = this.planetNameGenerator.next().value;
-        Planet.createNeutralPlanet(planetName, neutral, sector.coordinate);
+        sector.planet = Planet.createNeutralPlanet(planetName, neutral, sector.coordinate);
       }
     }
   }
