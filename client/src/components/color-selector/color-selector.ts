@@ -11,24 +11,32 @@ import {PLAYER_COLORS} from "../../services/playerColors";
 })
 export class ImageSelectorComponent {
 
-  @Input() model: string;
+  @Input()
+  set model(model: string) {
+    this.index = PLAYER_COLORS.findIndex((color) => {
+      return color === model;
+    })
+  }
+
+  get model(): string {
+    return PLAYER_COLORS[this.index];
+  }
+
   @Output() modelChange = new EventEmitter<string>();
+
   private index: number = 0;
 
   constructor() {
-    this.model = PLAYER_COLORS[this.index];
-    this.modelChange.emit(this.model);
+    this.modelChange.emit(PLAYER_COLORS[this.index]);
   }
 
   selectBack() {
     this.index = (this.index - 1 + PLAYER_COLORS.length) % PLAYER_COLORS.length;
-    this.model = PLAYER_COLORS[this.index];
-    this.modelChange.emit(this.model);
+    this.modelChange.emit(PLAYER_COLORS[this.index]);
   }
 
   selectNext() {
     this.index = (this.index + 1) % PLAYER_COLORS.length;
-    this.model = PLAYER_COLORS[this.index];
-    this.modelChange.emit(this.model);
+    this.modelChange.emit(PLAYER_COLORS[this.index]);
   }
 }
