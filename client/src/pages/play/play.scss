@@ -1,6 +1,17 @@
 @import '../../theme/variables';
 
 page-play {
+  .color-container {
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    vertical-align: middle;
+
+    .theme-2d & {
+      padding: 5px;
+    }
+  }
+
   ion-content {
     background: url($imgs-path + 'backgrounds/play-background.png') no-repeat;
     background-size: cover;

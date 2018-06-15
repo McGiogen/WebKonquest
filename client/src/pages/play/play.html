@@ -1,8 +1,10 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Turn {{ game.model.turnCounter }} of {{ playerInTurn() }}
-
+    <ion-title [ngClass]="appOptions.graphics">
+      <span>Turn {{ game.model.turnCounter }} of {{ playerInTurn() }}</span>
+      <div class="color-container" [attr.title]="game.machine.currentState.look">
+        <div class="planet" [ngClass]="'planet-' + game.machine.currentState.look"></div>
+      </div>
     </ion-title>
   </ion-navbar>
 </ion-header>
