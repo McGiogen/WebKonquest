@@ -44,6 +44,12 @@ export class GameMachine {
     }
     this.currentState.onExit();
     const nextStateIndex = (this.states.indexOf(this.currentState) + 1) % this.states.length;
+
+    if (nextStateIndex > 0) {
+      log.info(`Round start`);
+      gameEmitter.emit(GameEvent.RoundStart);
+    }
+
     this.currentState = this.states[nextStateIndex];
     log.info(`Turn of ${this.currentState}`);
     this.currentState.onEntry();

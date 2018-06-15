@@ -26,5 +26,6 @@ export const GameEvent = {
   GameStart: 'game:start',
   PlayerTurnDone: 'game:player:done',
   PlayerTurnStart: 'game:player:start',
+  RoundStart: 'game:round:start',
   GameOver: 'game:over',
 };
