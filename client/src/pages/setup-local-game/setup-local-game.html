@@ -47,9 +47,15 @@
 
       <!-- Add new player -->
       <ion-col col-md-6 col-12 class="addPlayerBox">
-        <button ion-button icon-start full large color="dark" (click)="addNewPlayer()">
-          <ion-icon name="person-add"></ion-icon>
-          <span>Add player</span>
+        <button ion-button icon-start full large color="dark" (click)="addNewPlayer()"
+                [disabled]="players.length >= 8">
+          <span [hidden]="players.length >= 8">
+            <ion-icon name="person-add"></ion-icon>
+            <span>Add player</span>
+          </span>
+          <span [hidden]="players.length < 8">
+            8 Players is the maximum
+          </span>
         </button>
       </ion-col>
 
@@ -66,7 +72,7 @@
       </ion-col>
 
       <ion-col col-12>
-        <button ion-button (click)="startLocalGame($event)" [disabled]="players.length < 2">Play</button>
+        <button ion-button (click)="startLocalGame($event)" [disabled]="players.length < 2 || players.length > 8">Play</button>
       </ion-col>
 
     </ion-row>
