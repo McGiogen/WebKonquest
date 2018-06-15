@@ -1,3 +1,48 @@
 page-setup-local-game {
+  .playersHeader {
+    text-align: center;
+    padding: 15px;
+    background-color: #242424;
+    color: #999;
+  }
 
+  .playerBox {
+    padding: 3px;
+  }
+
+  .neutralPlayer {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #242424;
+    color: #999;
+
+    @media (max-width: 767px) {
+      & {
+        flex-wrap: wrap;
+      }
+    }
+
+    .neutralName, color-selector, .neutralPlanets {
+      display: flex;
+      margin-right: 20px
+    }
+  }
+
+  .playersTitle, .neutralName {
+    font-size: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .playersTitle {
+    text-align: center;
+  }
+
+  .addPlayerBox {
+    button {
+      height: 105px;
+    }
+  }
 }

@@ -16,29 +16,59 @@
 <ion-content padding [ngClass]="appOptions.graphics">
   <ion-grid fixed>
     <ion-row>
-      <ion-col col-md-6 col-12
+
+      <!-- PLAYERS -->
+      <ion-col col-12>
+        <div class="playersHeader">
+          <span class="playersTitle">Players</span>
+        </div>
+        <!--<ion-item class="neutralPlanets">-->
+          <!--<ion-label>How many planets?</ion-label>-->
+          <!--<ion-input type="number" min="1" step="1" placeholder="1"></ion-input>-->
+        <!--</ion-item>-->
+      </ion-col>
+
+      <!-- Players -->
+      <ion-col col-md-6 col-12 class="playerBox"
                *ngFor='let player of players; trackBy: index; let i = index'
       >
-        <form>
-          <ion-item>
-            <ion-label floating>{{player.neutral ? '&nbsp;' : 'Player ' + i}}</ion-label>
-            <ion-input type="text" [(ngModel)]="player.name" [readonly]="player.neutral" name="player{{i}}Name"></ion-input>
-            <button *ngIf="!player.neutral"
-                    ion-button clear color="danger" icon-only item-end
-                    (click)="removePlayer(i)">
-              <ion-icon name="close"></ion-icon>
-            </button>
-          </ion-item>
-          <color-selector
-            class="item-md" [ngClass]="{'item-neutral': player.neutral}"
-            [(model)]="this.players[i].look"
-          ></color-selector>
-        </form>
+        <ion-item>
+          <ion-label floating>{{'Player ' + (i + 1)}}</ion-label>
+          <ion-input type="text" [(ngModel)]="player.name" name="player{{i}}Name"></ion-input>
+          <button ion-button clear color="danger" icon-only item-end
+                  (click)="removePlayer(i)">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </ion-item>
+        <color-selector
+          class="item-md" [(model)]="this.players[i].look"
+        ></color-selector>
       </ion-col>
+
+      <!-- Add new player -->
+      <ion-col col-md-6 col-12 class="addPlayerBox">
+        <button ion-button icon-start full large color="dark" (click)="addNewPlayer()">
+          <ion-icon name="person-add"></ion-icon>
+          <span>Add player</span>
+        </button>
+      </ion-col>
+
+      <!-- NEUTRAL -->
       <ion-col col-12>
-        <button ion-button color="dark" (click)="addNewPlayer()">Add Player</button>
-        <button ion-button (click)="startLocalGame($event)" [disabled]="players.length < 3">Play</button>
+        <div class="neutralPlayer">
+          <div class="neutralName">{{neutral.name}}</div>
+          <color-selector [(model)]="neutral.look"></color-selector>
+          <ion-item class="neutralPlanets">
+            <ion-label>How many planets?</ion-label>
+            <ion-input type="number" min="1" step="1" placeholder="3"></ion-input>
+          </ion-item>
+        </div>
       </ion-col>
+
+      <ion-col col-12>
+        <button ion-button (click)="startLocalGame($event)" [disabled]="players.length < 2">Play</button>
+      </ion-col>
+
     </ion-row>
   </ion-grid>
 </ion-content>
