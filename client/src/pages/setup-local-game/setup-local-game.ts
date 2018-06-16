@@ -67,4 +67,8 @@ export class SetupLocalGamePage {
 
     this.navController.push(PlayPage, {game: this.game});
   }
+
+  focusInput(input): void {
+    input.setFocus();
+  }
 }

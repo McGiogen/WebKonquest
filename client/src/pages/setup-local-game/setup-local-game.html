@@ -64,9 +64,9 @@
         <div class="neutralPlayer">
           <div class="neutralName">{{neutral.name}}</div>
           <color-selector [(model)]="neutral.look"></color-selector>
-          <ion-item class="neutralPlanets">
+          <ion-item class="neutralPlanets" (click)="focusInput(input)">
             <ion-label>How many planets?</ion-label>
-            <ion-input type="number" min="1" step="1" placeholder="3"></ion-input>
+            <ion-input #input type="number" min="1" step="1" placeholder="3"></ion-input>
           </ion-item>
         </div>
       </ion-col>
