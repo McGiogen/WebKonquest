@@ -91,13 +91,7 @@ export class GameMap {
   }
 
   playerPlanetCount(player: Player): number {
-    let count = 0;
-    for (let planet of this.getPlanets()) {
-      if (planet.owner === player) {
-        count++;
-      }
-    }
-    return count;
+    return this.getPlanets().filter(planet => planet.owner === player).length;
   }
 
   clearMap(): void {
