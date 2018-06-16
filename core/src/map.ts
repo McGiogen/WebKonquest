@@ -68,8 +68,10 @@ export class GameMap {
   removePlayerPlanet(player: Player): boolean {
     for (let planet of this.getPlanets()) {
       if (planet.owner === player) {
-        // FIXME
-        // delete planet;
+        const sector = this.grid
+          .reduce((a, b) => a.concat(b))
+          .find(sector => sector.planet === planet);
+        sector.planet = null;
         return true;
       }
     }
