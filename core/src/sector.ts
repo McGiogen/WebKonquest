@@ -17,21 +17,4 @@ export class Sector {
     clone.planet = this.planet;
     return clone;
   }
-
-  // setPlanet(planet: Planet) {
-  // 	this.planet = planet;
-  //
-  // 	// connect
-  // 	// connect(m_planet, &Planet::update, this, &Sector::childPlanetUpdate);
-  //
-  // 	// emit update();
-  // }
-
-  // removePlanet() {
-    // this.planet = null;
-  // }
-
-  // childPlanetUpdate() {
-  // emit update();
-  // }
 }

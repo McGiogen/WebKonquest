@@ -140,10 +140,6 @@ export class GameMap {
     return this.grid[c.x][c.y];
   }
 
-  childSectorUpdate() {
-    // emit update();
-  }
-
   // TODO business logic -> sposta
   static * planetNameGenerator(): IterableIterator<string> {
     let charCode: number = 'A'.charCodeAt(0);
