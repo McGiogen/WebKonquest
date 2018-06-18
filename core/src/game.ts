@@ -174,7 +174,7 @@ export class GameModel {
   constructor(public neutral: NeutralPlayer, public configs: GameConfig) {
     this.turnCounter = 0;
     this.currentPlayer = null;
-    this.map = new GameMap(10, 10);
+    this.map = new GameMap(configs.mapHeight, configs.mapWidth);
     this.players = [];
   }
 
