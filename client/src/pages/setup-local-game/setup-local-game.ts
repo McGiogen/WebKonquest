@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {PlayPage} from '../play/play';
 import {PLAYER_COLORS} from '../../services/playerColors';
-import {LocalGame, LocalPlayer} from 'webkonquest-core';
+import {LocalGame, LocalPlayer, GameConfig} from 'webkonquest-core';
 import {AppOptions} from "../../services/AppOptions";
 
 @Component({
@@ -11,13 +11,11 @@ import {AppOptions} from "../../services/AppOptions";
 })
 export class SetupLocalGamePage {
   private appOptions: AppOptions;
-  private game: LocalGame;
   private neutral: {name: string, look: string};
   private players: Array<{name: string, look: string}>;
 
-  constructor(public navController: NavController, public navParams: NavParams) {
+  constructor(public navController: NavController) {
     this.appOptions = AppOptions.instance;
-    this.game = navParams.get('game');
     this.neutral = { name: 'Neutral', look: PLAYER_COLORS[0] };
     this.players = [];
     this.addNewPlayer();
@@ -45,10 +43,11 @@ export class SetupLocalGamePage {
       return;
     }
 
+    const game = new LocalGame(new GameConfig());
+
     // Neutral player
-    const neutral = this.game.model.neutral;
-    neutral.look = this.neutral.look;
-    // this.game.model.map.addNeutralPlanetSomewhere(neutral);
+    game.model.neutral.look = this.neutral.look;
+    // game.model.map.addNeutralPlanetSomewhere(game.model.neutral);
 
     // Adding some data to the game
     for (let i = 0; i < this.players.length; i++) {
@@ -56,16 +55,15 @@ export class SetupLocalGamePage {
 
       // Human player
       const name = playerData.name || `Player ${i + 1}`;
-      const player = new LocalPlayer(this.game, name);
+      const player = new LocalPlayer(game, name);
       player.look = playerData.look;
-      this.game.addPlayer(player);
-      // this.game.model.map.addPlayerPlanetSomewhere(player);
+      game.addPlayer(player);
+      // game.model.map.addPlayerPlanetSomewhere(player);
     }
 
-    this.game.model.map.clearMap();
-    this.game.model.map.populateMap(this.game.model.players, this.game.model.neutral, 3);
+    game.model.map.populateMap(game.model.players, game.model.neutral, game.model.configs.neutralPlanets);
 
-    this.navController.push(PlayPage, {game: this.game});
+    this.navController.push(PlayPage, {game});
   }
 
   focusInput(input): void {

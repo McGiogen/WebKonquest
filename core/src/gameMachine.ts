@@ -1,4 +1,4 @@
-import {gameEmitter, GameEvent} from "./event";
+import {GameEvent} from "./event";
 import {log} from "./logger";
 
 export class GameMachine {
@@ -19,15 +19,14 @@ export class GameMachine {
 
     log.info('New game starting.');
     this.currentState = this.initialState;
-    gameEmitter.on(GameEvent.PlayerTurnDone, this.next.bind(this));
 
     log.info(`Turn of ${this.currentState}.`);
     this.currentState.onEntry();
   }
 
   stop(): void {
+    this.initialState = this.currentState;
     this.currentState = null;
-    gameEmitter.emit(GameEvent.GameOver);
   }
 
   addState(state: GameMachineState) {
@@ -38,21 +37,23 @@ export class GameMachine {
     return this.currentState != null;
   }
 
-  private next() {
+  /**
+   * Start the turn of the next player. Return its index.
+   * Neutral should always be the first player, with index 0.
+   * @returns {number} Index of player
+   */
+  next(): number {
     if (!this.isRunning()) {
       return;
     }
     this.currentState.onExit();
     const nextStateIndex = (this.states.indexOf(this.currentState) + 1) % this.states.length;
 
-    if (nextStateIndex > 0) {
-      log.info(`Round start`);
-      gameEmitter.emit(GameEvent.RoundStart);
-    }
-
     this.currentState = this.states[nextStateIndex];
     log.info(`Turn of ${this.currentState}`);
     this.currentState.onEntry();
+
+    return nextStateIndex;
   }
 }
 

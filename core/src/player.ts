@@ -1,5 +1,5 @@
 import {Game} from "./game";
-import {gameEmitter, GameEvent} from "./event";
+import {GameEvent} from "./event";
 import {AttackFleet} from "./fleet";
 import {Planet} from "./planet";
 import {GameMachineState} from "./gameMachine";
@@ -45,7 +45,7 @@ export abstract class Player implements GameMachineState {
     log.debug(`Entering state for player ${this} (${this.constructor.name}).`);
     this.game.model.currentPlayer = this;
     if (this.isDead()) {
-      gameEmitter.emit(GameEvent.PlayerTurnDone);
+      this.game.eventEmitter.emit(GameEvent.PlayerTurnDone);
     } else {
       this.play();
     }

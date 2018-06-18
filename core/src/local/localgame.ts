@@ -2,6 +2,7 @@ import {Game} from "../game";
 import {Player} from "../player";
 import {GameConfig} from "../config";
 import {log} from "../logger";
+import {GameEvent} from "../event";
 
 export class LocalGame extends Game {
   constructor(gameConfig: GameConfig) {
@@ -13,13 +14,23 @@ export class LocalGame extends Game {
       this.buildMachine();
       log.debug('Starting machine');
       this.machine.start();
+      this.eventEmitter.on(GameEvent.PlayerTurnDone, this.next.bind(this));
       log.debug(`Machine state ${this.machine.isRunning()}`)
+    }
+  }
+
+  private next() {
+    const stateIndex = this.machine.next();
+    if (stateIndex > 0) {
+      log.info(`Round start`);
+      this.eventEmitter.emit(GameEvent.RoundStart);
     }
   }
 
   stop(): void {
     if (this.machine.isRunning()) {
       this.machine.stop();
+      this.eventEmitter.emit(GameEvent.GameOver);
       log.debug(`Machine state ${this.machine.isRunning()}`)
     }
   }

@@ -7,8 +7,7 @@ export { Player } from './player';
 export { LocalPlayer } from './local/localplayer'
 export { Planet } from './planet';
 export { Sector } from './sector';
-export { gameEmitter } from './event';
-export { GameEvent } from './event';
+export { GameEmitter, GameEvent } from './event';
 export {
   Request, RequestAction, AttackRequest, ConnectToGameRequest, EndTurnRequest, NewGameRequest,
   StartGameRequest

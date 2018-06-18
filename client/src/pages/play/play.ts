@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
-import {LocalGame, gameEmitter, GameEvent} from 'webkonquest-core';
+import {LocalGame, GameEvent} from 'webkonquest-core';
 import {LocalGameHelper} from './LocalGameHelper';
 import {AppOptions} from '../../services/AppOptions';
 import {GameoverPage} from '../gameover/gameover';
@@ -20,7 +20,7 @@ export class PlayPage {
     this.game = navParams.get('game');
     this.helper = new LocalGameHelper(this.game);
 
-    gameEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
+    this.game.eventEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
 
     this.game.start();
   }

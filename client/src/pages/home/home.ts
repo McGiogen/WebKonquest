@@ -17,8 +17,7 @@ export class HomePage {
   }
 
   setupLocalGame() {
-    const game = new LocalGame(new GameConfig());
-    this.navController.push(SetupLocalGamePage, {game});
+    this.navController.push(SetupLocalGamePage);
   }
 
   setupRemoteGame() {

@@ -1,6 +1,6 @@
 import {Game} from "../game";
 import {Player} from "../player";
-import {gameEmitter, GameEvent} from "../event";
+import {GameEvent} from "../event";
 import {log} from "../logger";
 
 export class LocalPlayer extends Player {
@@ -10,11 +10,11 @@ export class LocalPlayer extends Player {
 
   play(): void {
     log.debug(`${this}::play`);
-    gameEmitter.emit(GameEvent.PlayerTurnStart, this);
+    this.game.eventEmitter.emit(GameEvent.PlayerTurnStart, this);
   }
 
   done(): void {
     log.debug(`${this}::done`);
-    gameEmitter.emit(GameEvent.PlayerTurnDone, this);
+    this.game.eventEmitter.emit(GameEvent.PlayerTurnDone, this);
   }
 }

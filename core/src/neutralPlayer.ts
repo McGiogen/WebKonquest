@@ -1,6 +1,6 @@
 import {Player} from "./player";
 import {Game} from "./game";
-import {gameEmitter, GameEvent} from "./event";
+import {GameEvent} from "./event";
 import {log} from "./logger";
 
 export class NeutralPlayer extends Player {
@@ -43,6 +43,6 @@ export class NeutralPlayer extends Player {
     this.game.findWinner();
 
     // After all that mess... It's done
-    gameEmitter.emit(GameEvent.PlayerTurnDone);
+    this.game.eventEmitter.emit(GameEvent.PlayerTurnDone);
   }
 }

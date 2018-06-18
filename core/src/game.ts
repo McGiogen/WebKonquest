@@ -20,7 +20,7 @@ export abstract class Game {
   model: GameModel;
   machine: GameMachine;
 
-  constructor(public gameConfig: GameConfig) {
+  protected constructor(public gameConfig: GameConfig) {
     const neutral = new NeutralPlayer(this);
     this.model = new GameModel(neutral, gameConfig);
     this.machine = new GameMachine();

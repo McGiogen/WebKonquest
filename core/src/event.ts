@@ -2,10 +2,9 @@ import {Event} from "typescript.events";
 
 export class GameEmitter extends Event {}
 
-// TODO rimuovi e usa emitter dell'oggetto game
-export const gameEmitter = new GameEmitter();
-
 /**** HOW TO USE ****
+ *
+ * const gameEmitter = new GameEmitter();
  *
  * gameEmitter.on('event', (..params) => {
  *   console.log('event occured')
