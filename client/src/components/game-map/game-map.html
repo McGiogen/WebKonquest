@@ -1,24 +1,20 @@
 <div class="map-container">
   <div class="map-grid" [ngClass]="appOptions.graphics">
     <div *ngFor='let row of map.grid; trackBy: index;' class="map-grid-row">
-      <div
+      <button
         *ngFor='let sector of row; trackBy: index'
         class="map-grid-cell"
         (click)="selectSector(sector)"
         [ngClass]="{active: selectedSector === sector}"
-        [attr.tabindex]="sector.planet == null ? null : 0"
+        [attr.tabindex]="sector.planet == null ? -1 : 0"
+        [attr.title]="sector.planet == null ? null : 'Planet ' + sector.planet.name + ' of ' + sector.planet.owner.name"
       >
         <div
           class="planet"
           [ngClass]="sector.planet != null ? 'planet-' + sector.planet.owner.look : ''"
         ></div>
-        <span class="map-grid-cell-content">
-          {{ sector.planet == null ? '' : sector.planet.name }}
-          {{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}
-          <!-- <br>
-          {{ sector.planet == null ? '' : sector.planet.owner.name }} -->
-        </span>
-      </div>
+        <span class="map-grid-cell-content">{{ sector.planet == null ? '' : sector.planet.name }}<br>{{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}</span>
+      </button>
     </div>
   </div>
 </div>

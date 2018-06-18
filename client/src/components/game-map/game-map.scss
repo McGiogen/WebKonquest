@@ -45,13 +45,23 @@ game-map {
       &-cell {
         @include square-size(10%);
         box-shadow: inset $map-shadow;
+        display: block;
+        background-color: transparent;
+        padding: 0;
+        margin: 0;
+        cursor: default;
+        color: white;
 
-        &.active {
-          background-color: rgba(0, 0, 214, .4);
-        }
+        &[tabindex="0"] {
+          cursor: pointer;
 
-        &:hover {
-          background-color: rgba(0, 0, 214, .4);
+          &.active {
+            background-color: rgba(0, 0, 214, .4);
+          }
+
+          &:hover {
+            background-color: rgba(0, 0, 214, .4);
+          }
         }
 
         // Imposto lo stesso outline di ionic
@@ -65,6 +75,7 @@ game-map {
         &-content {
           position: absolute;
           bottom: 10%;
+          left: 0;
           width: 100%;
           text-align: center;
           font-size: 1em;
