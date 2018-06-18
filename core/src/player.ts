@@ -85,11 +85,6 @@ export abstract class Player implements GameMachineState {
     return false;
   }
 
-  // coloredName() const
-  // {
-  //   return QString("<font color=\"%1\">%2</font>").arg(m_color.name(), m_name);
-  // }
-
   /**
    * Reset the turn statistics.
    */
