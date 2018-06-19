@@ -21,10 +21,10 @@ export abstract class Game {
   machine: GameMachine;
 
   protected constructor(public gameConfig: GameConfig) {
+    this.eventEmitter = new GameEmitter();
+    this.machine = new GameMachine(this.eventEmitter);
     const neutral = new NeutralPlayer(this);
     this.model = new GameModel(neutral, gameConfig);
-    this.machine = new GameMachine();
-    this.eventEmitter = new GameEmitter();
 
     // finalState = new
     // gameMachine.addState(finalState)
