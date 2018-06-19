@@ -43,6 +43,6 @@ export class NeutralPlayer extends Player {
     this.game.findWinner();
 
     // After all that mess... It's done
-    this.game.eventEmitter.emit(GameEvent.PlayerTurnDone);
+    this.game.eventEmitter.emit(GameEvent.PlayerTurnDone, this);
   }
 }

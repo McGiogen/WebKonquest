@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController} from 'ionic-angular';
 import {PlayPage} from '../play/play';
 import {PLAYER_COLORS} from '../../services/playerColors';
 import {LocalGame, LocalPlayer, GameConfig} from 'webkonquest-core';
