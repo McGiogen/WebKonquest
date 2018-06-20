@@ -4,7 +4,8 @@
   "author": "McGiogen",
   "homepage": "https://github.com/McGiogen/WebKonquest",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
