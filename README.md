@@ -2,10 +2,10 @@
 KDE Konquest porting as a web app
 
 # Install dependencies
-First install yarn
+First install yarn and ionic
 
 ```
-npm install -g yarn
+npm install -g yarn ionic
 ```
 
 Then install all dependencies
