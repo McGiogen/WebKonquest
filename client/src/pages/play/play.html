@@ -11,7 +11,7 @@
 
 <ion-content padding>
   <ion-grid>
-    <ion-row>
+    <ion-row [hidden]="this.showTurnSwitch">
       <ion-col col-md-6 col-12>
         <div [hidden]="helper.planetWithFocus == null">
           Planet {{ helper.planetWithFocus?.name }}<br>
@@ -24,7 +24,8 @@
         <div class="attack-info">
           <span>Attack from {{ helper.attackSource ? helper.attackSource.name : '?' }}</span>
           <span [hidden]="helper.attackSource == null">to {{ helper.attackDestination ? helper.attackDestination.name : '?' }}</span>
-          <span [hidden]="helper.attackDestination == null">with <ion-input type="number" class="ion-input-inline ion-input-underline ion-input-centered" [(ngModel)]="helper.attackShipCount"></ion-input> ships</span>
+          <span [hidden]="helper.attackDestination == null">with <ion-input type="number" class="ion-input-inline
+                ion-input-underline ion-input-centered" [(ngModel)]="helper.attackShipCount"></ion-input> ships</span>
           <button ion-button color="danger" (click)="attack()" [hidden]="!helper.attackShipCount">Go!</button>
         </div>
         <hr>
@@ -33,7 +34,24 @@
         </div>
       </ion-col>
       <ion-col col-md-6 col-12>
-        <game-map [map]="game.model.map" (selectedSector)="mapSelectedSector($event)"></game-map>
+        <game-map
+          [map]="helper.map"
+          [currentPlayer]="helper.currentPlayer"
+          (selectedSector)="mapSelectedSector($event)"></game-map>
+      </ion-col>
+    </ion-row>
+    <ion-row [hidden]="!this.showTurnSwitch">
+      <ion-col col-12 class="turn-switch">
+        <h1 [ngClass]="appOptions.graphics">
+          <span>Turn {{ game.model.turnCounter }}</span>
+          <br><br>
+          <span>{{ playerInTurn() }}</span>
+          <div class="color-container" [attr.title]="game.machine.currentState.look">
+            <div class="planet" [ngClass]="'planet-' + game.machine.currentState.look"></div>
+          </div>
+          <br><br>
+          <button ion-button large (click)="this.showTurnSwitch = false">Start</button>
+        </h1>
       </ion-col>
     </ion-row>
   </ion-grid>

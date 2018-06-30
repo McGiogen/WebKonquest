@@ -13,7 +13,7 @@
           class="planet"
           [ngClass]="sector.planet != null ? 'planet-' + sector.planet.owner.look : ''"
         ></div>
-        <span class="map-grid-cell-content">{{ sector.planet == null ? '' : sector.planet.name }}<br>{{ sector.planet == null ? '' : sector.planet.fleet.shipCount }}</span>
+        <span class="map-grid-cell-content">{{ getPlanetName(sector.planet) }}<br>{{ getPlanetShips(sector.planet) }}</span>
       </button>
     </div>
   </div>

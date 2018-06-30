@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {PlayPage} from '../play/play';
 import {PLAYER_COLORS} from '../../services/playerColors';
-import {LocalGame, LocalPlayer, Message} from 'webkonquest-core';
+//import {LocalGame, LocalPlayer, Message} from 'webkonquest-core';
 import {WebSocketSubject} from 'rxjs/observable/dom/WebSocketSubject';
 import {AppOptions} from "../../services/AppOptions";
 
@@ -11,7 +11,7 @@ import {AppOptions} from "../../services/AppOptions";
   templateUrl: 'setup-remote-game.html',
 })
 export class SetupRemoteGamePage {
-  private appOptions: AppOptions;
+  /*private appOptions: AppOptions;
   private game: LocalGame;
   private neutral: {name: string, look: string};
   private player: {name: string, look: string};
@@ -84,5 +84,5 @@ export class SetupRemoteGamePage {
     }
 
     this.navController.push(PlayPage, {game: this.game});
-  }
+  }*/
 }

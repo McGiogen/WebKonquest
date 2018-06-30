@@ -14,7 +14,7 @@ export class Sector {
   // Crea una copia del settore in input
   clone(): Sector {
     const clone = new Sector(this.coordinate);
-    clone.planet = this.planet;
+    clone.planet = this.planet.clone();
     return clone;
   }
 }

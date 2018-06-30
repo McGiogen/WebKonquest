@@ -15,29 +15,37 @@ export class PlayPage {
   private helper: LocalGameHelper;
   private appOptions: AppOptions;
 
+  private showTurnSwitch: boolean;
+
   constructor(public navController: NavController, navParams: NavParams) {
     this.appOptions = AppOptions.instance;
     this.game = navParams.get('game');
     this.helper = new LocalGameHelper(this.game);
 
+    this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.changeTurn.bind(this));
     this.game.eventEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
 
-    this.game.start();
+    this.helper.startGame();
+    this.showTurnSwitch = true;
   }
 
   mapSelectedSector(sector) {
-    console.debug('Settore selezionato: ', sector);
-    if (sector) {
+    if (sector && sector.planet) {
+      console.debug('Pianeta selezionato: ', sector.planet);
       this.helper.selectPlanet(sector.planet);
     }
   }
 
+  changeTurn(): void {
+    this.showTurnSwitch = true;
+  }
+
   playerInTurn(): string {
     let curState = this.game.machine.currentState;
-    if (curState) {
-      return curState.toString();
+    if (!curState) {
+      return '';
     }
-    return '';
+    return curState.toString();
   }
 
   attack(): void {

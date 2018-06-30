@@ -12,10 +12,10 @@ import {NeutralPlayer} from "./neutralPlayer";
 export class GameMap {
   public grid: Array<Array<Sector>>;
   private planetNameGenerator: IterableIterator<string>;
+  private rowsCount: number;
+  private columnsCount: number;
 
-  constructor(private rowsCount: number, private columnsCount: number) {
-    this.resizeMap(rowsCount, columnsCount);
-
+  constructor() {
     this.planetNameGenerator = GameMap.planetNameGenerator();
   }
 
@@ -115,6 +115,18 @@ export class GameMap {
         sector.planet = Planet.createNeutralPlanet(planetName, neutral, sector.coordinate);
       }
     }
+  }
+
+  clone() {
+    const clone = new GameMap();
+    clone.resizeMap(this.rowsCount, this.columnsCount);
+    clone.grid.forEach((row:Array<Sector>, i) => {
+      row.forEach((sector:Sector, y) => {
+        const p = this.grid[i][y].planet;
+        sector.planet = p == null ? null : p.clone();
+      });
+    });
+    return clone;
   }
 
   static distance(p1: Planet, p2: Planet): number {

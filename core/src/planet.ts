@@ -12,7 +12,7 @@ import {log} from "./logger";
 export class Planet {
   readonly originalProductionRate: number;
   fleet: DefenseFleet;
-  private oldShips: number;
+  oldShips: number;
 
   private showCurrentShips: boolean;
   private justConquered: boolean;
@@ -63,6 +63,13 @@ export class Planet {
 
   toString() {
     return this.name;
+  }
+
+  clone() {
+    const clone = new Planet(this.name, this.owner, this.productionRate, this.killPercentage, this.coordinate);
+    clone.fleet = new DefenseFleet(clone, this.fleet.shipCount);
+    clone.oldShips = this.oldShips;
+    return clone;
   }
 
   static createPlayerPlanet(planetName: string, initialOwner: Player, coordinate: Coordinate) {

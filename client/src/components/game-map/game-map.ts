@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {GameMap, Sector} from 'webkonquest-core';
+import {GameMap, Sector, Planet, Player} from 'webkonquest-core';
 import {AppOptions} from "../../services/AppOptions";
 
 /**
@@ -15,6 +15,7 @@ import {AppOptions} from "../../services/AppOptions";
 export class GameMapComponent {
 
   @Input() map: GameMap;
+  @Input() currentPlayer: Player;
   @Output('selectedSector') selectedSectorEmitter: EventEmitter<Sector> = new EventEmitter<Sector>();
   selectedSector: Sector;
   private appOptions: AppOptions;
@@ -23,11 +24,27 @@ export class GameMapComponent {
     this.appOptions = AppOptions.instance;
   }
 
-  selectSector(sector: Sector) {
+  selectSector(sector: Sector): void {
     if (sector.planet == null) {
       return;
     }
     this.selectedSector = sector;
     this.selectedSectorEmitter.emit(sector);
+  }
+
+  getPlanetName(planet: Planet): string {
+    return planet == null ? '' : planet.name;
+  }
+
+  getPlanetShips(planet: Planet): string {
+    if (planet == null) {
+      return '';
+    }
+
+    if (planet.owner === this.currentPlayer) {
+      return planet.fleet.shipCount + '';
+    } else {
+      return planet.oldShips + '';
+    }
   }
 }

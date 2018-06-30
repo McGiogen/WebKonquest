@@ -1,19 +1,42 @@
-import {Game, Planet, Player, LocalPlayer} from 'webkonquest-core';
+import {Game, Planet, Player, LocalPlayer, GameEvent, GameMap} from 'webkonquest-core';
 import {AppOptions, InteractMode} from '../../services/AppOptions';
 
 export class LocalGameHelper {
   planetWithFocus: Planet;
   options: AppOptions;
 
+  currentPlayer: Player;
+
   attackSource: Planet;
   attackDestination: Planet;
   attackShipCount: number;
 
+  map: GameMap;
+
   constructor(private game: Game) {
     this.options = AppOptions.instance;
+    this.game.eventEmitter.on(GameEvent.RoundStart, this.changeRound.bind(this));
+    this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.changeTurn.bind(this));
   }
 
-  selectPlanet(planet: Planet): void {
+  startGame() {
+    this.game.start();
+  }
+
+  changeTurn() {
+    this.currentPlayer = this.game.machine.currentState as Player;
+  }
+
+  changeRound() {
+    console.debug('New turn');
+    this.map = this.game.model.map.clone();
+  }
+
+  selectPlanet(clonePlanet: Planet): void {
+    const planet = this.game.model.map.getPlanets().find((p: Planet) =>
+      p.name === clonePlanet.name
+    );
+
     if (this.options.interactMode === InteractMode.SingleTap) {
       // In single tap mode the planet selected is always used for the attack
       this.configureAttackPlanets(planet);
@@ -28,7 +51,7 @@ export class LocalGameHelper {
   }
 
   setShipCount(shipCount: number) {
-    this.configureAttackShipCount(shipCount);
+    this.attackShipCount = shipCount;
   }
 
   doAttack(): void {
@@ -36,18 +59,13 @@ export class LocalGameHelper {
       throw new Error('Impossibile iniziare l\'attacco: uno o più parametri mancanti');
     }
     console.log(`Start attack from ${this.attackSource.name} to ${this.attackDestination.name} with ${this.attackShipCount} ships.`, [this.attackSource, this.attackDestination, Number(this.attackShipCount)]);
-    this.game.attack(this.attackSource, this.attackDestination, Number(this.attackShipCount), false);
+    const success = this.game.attack(this.attackSource, this.attackDestination, Number(this.attackShipCount), false);
 
-    // Cleaning attack informations
-    this.attackSource = null;
-    this.attackDestination = null;
-    this.attackShipCount = null;
-  }
-
-  endTurn(): void {
-    let player = this.game.machine.currentState as Player;
-    if (player instanceof LocalPlayer) {
-      player.done();
+    if (success) {
+      const attackSourceCopy = this.map.getPlanets().find((p: Planet) =>
+        p.name === this.attackSource.name
+      );
+      attackSourceCopy.fleet.removeShips(this.attackShipCount);
 
       // Cleaning attack informations
       this.attackSource = null;
@@ -56,14 +74,28 @@ export class LocalGameHelper {
     }
   }
 
+  endTurn(): boolean {
+    let player = this.game.machine.currentState as Player;
+    if (player instanceof LocalPlayer) {
+      player.done();
+
+      // Cleaning attack informations
+      this.attackSource = null;
+      this.attackDestination = null;
+      this.attackShipCount = null;
+      return true;
+    }
+    return false;
+  }
+
   private configureAttackPlanets(target: Planet): void {
     if (!target) {
       return;
     }
-    let currentPlayer = this.game.machine.currentState as Player;
+
     if (this.attackSource == null) {
       // Il pianeta da cui parte l'attacco dev'essere di proprietà del giocatore
-      if (target.owner === currentPlayer) {
+      if (target.owner === this.currentPlayer) {
         this.attackSource = target;
       }
     } else {
@@ -72,9 +104,5 @@ export class LocalGameHelper {
         this.attackDestination = target;
       }
     }
-  }
-
-  private configureAttackShipCount(shipCount: number): void {
-    this.attackShipCount = shipCount;
   }
 }

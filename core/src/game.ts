@@ -123,7 +123,6 @@ export abstract class Game {
       // We got a winner
       // const winner = alives[0];
       this.stop();
-      // emit(finished());
     }
   }
 
@@ -174,7 +173,8 @@ export class GameModel {
   constructor(public neutral: NeutralPlayer, public configs: GameConfig) {
     this.turnCounter = 0;
     this.currentPlayer = null;
-    this.map = new GameMap(configs.mapHeight, configs.mapWidth);
+    this.map = new GameMap();
+    this.map.resizeMap(configs.mapHeight, configs.mapWidth);
     this.players = [];
   }
 

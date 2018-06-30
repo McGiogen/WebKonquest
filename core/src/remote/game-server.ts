@@ -1,4 +1,4 @@
-import {AttackMessage, ConnectToGameMessage, EndTurnMessage, Message, MessageAction, NewGameMessage} from './message';
+/*import {AttackMessage, ConnectToGameMessage, EndTurnMessage, Message, MessageAction, NewGameMessage} from './message';
 import {RemoteGame} from './remotegame';
 import {GameConfig} from '../config';
 import {Player} from '../player';
@@ -10,10 +10,10 @@ import {
   StartGameRequest
 } from './request';
 
-const games: Array<RemoteGame> = [];
+const games: Array<RemoteGame> = [];*/
 
 export class GameServer {
-  static getConnectionResponse(playerId: number): Response {
+  /*static getConnectionResponse(playerId: number): Response {
     return new ConnectToServerResponse(playerId);
   }
 
@@ -84,5 +84,6 @@ export class GameServer {
     const game = games.find(game => game.id === gameId);
     if (!game) throw new Error(`Game ${gameId} not exists.`);
     return game;
-  }
+  }*/
 }
+

@@ -25,9 +25,9 @@ export class GameMachine {
   }
 
   stop(): void {
-    this.initialState = this.currentState;
-    this.currentState = null;
     this.emitter.emit(GameEvent.GameOver);
+    this.initialState = this.currentState;
+    //this.currentState = null;
   }
 
   addState(state: GameMachineState) {
@@ -50,7 +50,7 @@ export class GameMachine {
     this.currentState.onExit();
     const nextStateIndex = (this.states.indexOf(this.currentState) + 1) % this.states.length;
 
-    if (nextStateIndex > 0) {
+    if (nextStateIndex === 1) {
       log.info(`Round start`);
       this.emitter.emit(GameEvent.RoundStart);
     }
