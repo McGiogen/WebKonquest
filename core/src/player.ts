@@ -11,8 +11,8 @@ export abstract class Player implements GameMachineState {
   public look: string;
 
   // Fleets to send at the end of this turn
-  protected newAttacks: Array<AttackFleet>;
-  protected standingOrders: Array<AttackFleet>;
+  newAttacks: Array<AttackFleet>;
+  standingOrders: Array<AttackFleet>;
 
   // Stats
   shipsBuilt: number;

@@ -25,9 +25,6 @@ export abstract class Game {
     this.machine = new GameMachine(this.eventEmitter);
     const neutral = new NeutralPlayer(this);
     this.model = new GameModel(neutral, gameConfig);
-
-    // finalState = new
-    // gameMachine.addState(finalState)
   }
 
   abstract start(): void;

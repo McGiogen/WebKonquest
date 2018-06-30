@@ -10,6 +10,7 @@ export { Planet } from './planet';
 export { Sector } from './sector';
 export { GameMap } from './map';
 export { GameEmitter, GameEvent } from './event';
+export { Fleet, AttackFleet, DefenseFleet } from './fleet';
 export {
   Request, RequestAction, AttackRequest, ConnectToGameRequest, EndTurnRequest, NewGameRequest,
   StartGameRequest

@@ -45,6 +45,9 @@ export class SetupLocalGamePage {
       return;
     }
 
+    if (this.neutral.planets) {
+      this.gameConfig.neutralPlanets = this.neutral.planets;
+    }
     const game = new LocalGame(this.gameConfig);
 
     // Neutral player
@@ -63,7 +66,7 @@ export class SetupLocalGamePage {
       // game.model.map.addPlayerPlanetSomewhere(player);
     }
 
-    game.model.map.populateMap(game.model.players, game.model.neutral, this.neutral.planets);
+    game.model.map.populateMap(game.model.players, game.model.neutral, this.gameConfig.neutralPlanets);
 
     this.navController.push(PlayPage, {game});
   }

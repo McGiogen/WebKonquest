@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
-import {LocalGame, GameEvent} from 'webkonquest-core';
+import {LocalGame, GameEvent, AttackFleet} from 'webkonquest-core';
 import {LocalGameHelper} from './LocalGameHelper';
 import {AppOptions} from '../../services/AppOptions';
 import {GameoverPage} from '../gameover/gameover';
@@ -50,6 +50,10 @@ export class PlayPage {
 
   attack(): void {
     this.helper.doAttack();
+  }
+
+  cancelAttack(attack: AttackFleet): void {
+    this.helper.cancelAttack(attack);
   }
 
   endTurn(): void {

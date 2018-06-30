@@ -12,33 +12,83 @@
 <ion-content padding>
   <ion-grid>
     <ion-row [hidden]="this.showTurnSwitch">
+
       <ion-col col-md-6 col-12>
-        <div [hidden]="helper.planetWithFocus == null">
-          Planet {{ helper.planetWithFocus?.name }}<br>
-          Coordinate: {{ helper.planetWithFocus?.coordinate.x }},{{ helper.planetWithFocus?.coordinate.y }}<br>
-          Kill percentage: {{ helper.planetWithFocus?.killPercentage | percent }}<br>
-          Production rate: {{ helper.planetWithFocus?.productionRate }}<br>
-          Owner: {{ helper.planetWithFocus?.owner?.name }}<br>
-        </div>
-        <hr [hidden]="helper.planetWithFocus == null">
-        <div class="attack-info">
-          <span>Attack from {{ helper.attackSource ? helper.attackSource.name : '?' }}</span>
-          <span [hidden]="helper.attackSource == null">to {{ helper.attackDestination ? helper.attackDestination.name : '?' }}</span>
-          <span [hidden]="helper.attackDestination == null">with <ion-input type="number" class="ion-input-inline
-                ion-input-underline ion-input-centered" [(ngModel)]="helper.attackShipCount"></ion-input> ships</span>
-          <button ion-button color="danger" (click)="attack()" [hidden]="!helper.attackShipCount">Go!</button>
-        </div>
+
+        <ion-item margin-bottom>
+          <ion-grid item-content>
+            <ion-row>
+              <ion-col col-12>
+
+                <div [hidden]="helper.planetWithFocus == null">
+                  Planet {{ helper.planetWithFocus?.name }}<br>
+                  Coordinate: {{ helper.planetWithFocus?.coordinate.x }},{{ helper.planetWithFocus?.coordinate.y }}<br>
+                  Kill percentage: {{ helper.planetWithFocus?.killPercentage | percent }}<br>
+                  Production rate: {{ helper.planetWithFocus?.productionRate }}<br>
+                  Owner: {{ helper.planetWithFocus?.owner?.name }}<br>
+                </div>
+                <hr [hidden]="helper.planetWithFocus == null">
+
+                <div class="attack-info">
+                  <span>Attack from {{ helper.attackSource ? helper.attackSource.name : '_' }}</span>
+                  <span>to {{ helper.attackDestination ? helper.attackDestination.name : '_' }}</span>
+                  <span>with
+                    <ion-input type="number" class="ion-input-inline
+                    ion-input-underline ion-input-centered" [(ngModel)]="helper.attackShipCount"></ion-input>
+                    ships</span>
+                  <button ion-button color="danger" (click)="attack()"
+                          [disabled]="helper.attackSource == null || helper.attackDestination == null || helper.attackShipCount == null">
+                    Send
+                  </button>
+                </div>
+
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <ion-list no-lines>
+
+          <ion-item-group>
+            <ion-item-divider color="dark">
+              Planned attacks ({{ game.machine.currentState.newAttacks.length }})
+            </ion-item-divider>
+            <ion-item
+              *ngFor='let attack of game.machine.currentState.newAttacks; trackBy: index'>
+              <button ion-button clear color="danger" icon-only item-start
+                      (click)="cancelAttack(attack)">
+                <ion-icon name="close"></ion-icon>
+              </button>
+              <span>
+                From {{ attack.source.name }} to {{ attack.destination.name }} with {{ attack.shipCount }} ships, arrive at turn {{ attack.arrivalTurn }}
+              </span>
+            </ion-item>
+          </ion-item-group>
+
+        </ion-list>
+        <ion-list no-lines>
+
+          <ion-item-divider color="dark" [hidden]="game.model.turnCounter === 1">
+            Attacks in progress ({{ game.machine.currentState.attackList.length }})
+          </ion-item-divider>
+          <ion-item
+            *ngFor='let attack of game.machine.currentState.attackList; trackBy: index'>
+            From {{ attack.source.name }} to {{ attack.destination.name }} with {{ attack.shipCount }} ships, arrive at turn {{ attack.arrivalTurn }}
+          </ion-item>
+
+        </ion-list>
         <hr>
         <div>
           <button ion-button (click)="endTurn()">End turn</button>
         </div>
       </ion-col>
+
       <ion-col col-md-6 col-12>
         <game-map
           [map]="helper.map"
           [currentPlayer]="helper.currentPlayer"
           (selectedSector)="mapSelectedSector($event)"></game-map>
       </ion-col>
+
     </ion-row>
     <ion-row [hidden]="!this.showTurnSwitch">
       <ion-col col-12 class="turn-switch">

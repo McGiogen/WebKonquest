@@ -1,4 +1,4 @@
-import {Game, Planet, Player, LocalPlayer, GameEvent, GameMap} from 'webkonquest-core';
+import {Game, Planet, Player, LocalPlayer, GameEvent, GameMap, AttackFleet} from 'webkonquest-core';
 import {AppOptions, InteractMode} from '../../services/AppOptions';
 
 export class LocalGameHelper {
@@ -28,7 +28,6 @@ export class LocalGameHelper {
   }
 
   changeRound() {
-    console.debug('New turn');
     this.map = this.game.model.map.clone();
   }
 
@@ -72,6 +71,15 @@ export class LocalGameHelper {
       this.attackDestination = null;
       this.attackShipCount = null;
     }
+  }
+
+  cancelAttack(attack: AttackFleet): void {
+    const attackSourceCopy = this.map.getPlanets().find((p: Planet) =>
+      p.name === attack.source.name
+    );
+    attackSourceCopy.fleet.addShips(attack.shipCount);
+
+    this.currentPlayer.cancelNewAttack(attack);
   }
 
   endTurn(): boolean {
