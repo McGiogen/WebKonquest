@@ -11,12 +11,14 @@ import {AppOptions} from "../../services/AppOptions";
 })
 export class SetupLocalGamePage {
   private appOptions: AppOptions;
-  private neutral: {name: string, look: string};
+  private neutral: {name: string, look: string, planets: number};
   private players: Array<{name: string, look: string}>;
+  private gameConfig: GameConfig;
 
   constructor(public navController: NavController) {
     this.appOptions = AppOptions.instance;
-    this.neutral = { name: 'Neutral', look: PLAYER_COLORS[0] };
+    this.gameConfig = new GameConfig();
+    this.neutral = { name: 'Neutral', look: PLAYER_COLORS[0], planets: null };
     this.players = [];
     this.addNewPlayer();
     this.addNewPlayer();
@@ -43,7 +45,7 @@ export class SetupLocalGamePage {
       return;
     }
 
-    const game = new LocalGame(new GameConfig());
+    const game = new LocalGame(this.gameConfig);
 
     // Neutral player
     game.model.neutral.look = this.neutral.look;
@@ -61,7 +63,7 @@ export class SetupLocalGamePage {
       // game.model.map.addPlayerPlanetSomewhere(player);
     }
 
-    game.model.map.populateMap(game.model.players, game.model.neutral, game.model.configs.neutralPlanets);
+    game.model.map.populateMap(game.model.players, game.model.neutral, this.neutral.planets);
 
     this.navController.push(PlayPage, {game});
   }
