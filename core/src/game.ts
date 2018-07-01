@@ -35,6 +35,8 @@ export abstract class Game {
     return this.machine.isRunning();
   }
 
+  // TODO: Inserisci gli attacchi in una nuova variabile "newFights". Ci vogliono i dati da mostrare all'utente...
+  // TODO: Alla fine di ogni round, sposta gli attacchi della variabile "newFights" in "fightsList"
   doFleetArrival(fleet: AttackFleet): boolean {
     // First, sanity check
     if (fleet.arrivalTurn !== this.model.turnCounter) {

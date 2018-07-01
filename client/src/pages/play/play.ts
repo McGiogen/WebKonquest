@@ -15,7 +15,7 @@ export class PlayPage {
   private helper: LocalGameHelper;
   private appOptions: AppOptions;
 
-  private showTurnSwitch: boolean;
+  view: string; // 'change-round', 'change-turn', 'game'
 
   constructor(public navController: NavController, navParams: NavParams) {
     this.appOptions = AppOptions.instance;
@@ -23,10 +23,11 @@ export class PlayPage {
     this.helper = new LocalGameHelper(this.game);
 
     this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.changeTurn.bind(this));
+    this.game.eventEmitter.on(GameEvent.RoundStart, this.changeRound.bind(this));
     this.game.eventEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
 
     this.helper.startGame();
-    this.showTurnSwitch = true;
+    this.view = 'change-round';
   }
 
   mapSelectedSector(sector) {
@@ -37,7 +38,13 @@ export class PlayPage {
   }
 
   changeTurn(): void {
-    this.showTurnSwitch = true;
+    if (this.view !== 'change-round') {
+      this.view = 'change-turn';
+    }
+  }
+
+  changeRound(): void {
+    this.view = 'change-round';
   }
 
   playerInTurn(): string {

@@ -11,7 +11,8 @@
 
 <ion-content padding>
   <ion-grid>
-    <ion-row [hidden]="this.showTurnSwitch">
+    <!-- GAME VIEW -->
+    <ion-row [hidden]="view !== 'game'">
 
       <ion-col col-md-6 col-12>
 
@@ -90,8 +91,10 @@
       </ion-col>
 
     </ion-row>
-    <ion-row [hidden]="!this.showTurnSwitch">
-      <ion-col col-12 class="turn-switch">
+
+    <!-- CHANGE TURN VIEW -->
+    <ion-row [hidden]="view !== 'change-turn'">
+      <ion-col col-12 class="change-turn">
         <h1 [ngClass]="appOptions.graphics">
           <span>Turn {{ game.model.turnCounter }}</span>
           <br><br>
@@ -100,8 +103,23 @@
             <div class="planet" [ngClass]="'planet-' + game.machine.currentState.look"></div>
           </div>
           <br><br>
-          <button ion-button large (click)="this.showTurnSwitch = false">Start</button>
+          <button ion-button large (click)="view = 'game'">Start</button>
         </h1>
+      </ion-col>
+    </ion-row>
+
+    <!-- CHANGE ROUND VIEW -->
+    <ion-row [hidden]="view !== 'change-round'">
+      <ion-col col-12 class="change-round">
+        <h1 [ngClass]="appOptions.graphics">
+          Fights!
+        </h1>
+        <div>
+        ...
+        </div>
+        <div>
+          <button ion-button large (click)="view = 'change-turn'">Next round</button>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>
