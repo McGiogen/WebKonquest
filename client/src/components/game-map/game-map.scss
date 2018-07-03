@@ -25,8 +25,10 @@ game-map {
      insieme ai vari margini/padding dei contenitori.
      */
     @include square-size(100%);
-    max-width: calc(100vh - (56px + (26px * 2)));
-    max-height: calc(100vh - (56px + (26px * 2)));
+    @media (min-width: 768px) {
+      max-width: calc(100vh - (56px + (26px * 2)));
+      max-height: calc(100vh - (56px + (26px * 2)));
+    }
 
     .map-grid {
       position: absolute;
