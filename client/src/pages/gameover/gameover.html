@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar hideBackButton>
     <ion-title>Game Over</ion-title>
   </ion-navbar>
 
@@ -14,6 +14,15 @@
 
 
 <ion-content padding>
-  Someone won the contest!
-  <button ion-button (click)="goToHome()"></button>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col col-12>
+
+        <h1>{{ winner?.name }} is the new Emperor of the Galaxy!</h1>
+        <br><br>
+        <button ion-button large (click)="goToHome()">Home</button>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

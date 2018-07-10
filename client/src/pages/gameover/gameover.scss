@@ -1,3 +1,9 @@
-page-gameover {
+@import '../../theme/variables';
 
+page-gameover {
+  ion-content {
+    background: url($imgs-path + 'backgrounds/play-background.png') no-repeat;
+    background-size: cover;
+    text-align: center;
+  }
 }

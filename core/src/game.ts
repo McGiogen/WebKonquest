@@ -14,6 +14,7 @@ import {GameMachine} from "./gameMachine";
 import {GameConfig} from "./config";
 import {GameEmitter} from "./event";
 import {log} from "./logger";
+import {Fight} from "./log/fight";
 
 export abstract class Game {
   eventEmitter: GameEmitter;
@@ -35,8 +36,6 @@ export abstract class Game {
     return this.machine.isRunning();
   }
 
-  // TODO: Inserisci gli attacchi in una nuova variabile "newFights". Ci vogliono i dati da mostrare all'utente...
-  // TODO: Alla fine di ogni round, sposta gli attacchi della variabile "newFights" in "fightsList"
   doFleetArrival(fleet: AttackFleet): boolean {
     // First, sanity check
     if (fleet.arrivalTurn !== this.model.turnCounter) {
@@ -47,6 +46,7 @@ export abstract class Game {
     // if the planet and fleet owner are the same, then merge the fleets
     // otherwise attack.
     if (fleet.owner === fleet.destination.owner) {
+      this.model.newFights.push(new Fight(fleet, fleet.destination.fleet, this.model.turnCounter));
       fleet.destination.fleet.absorb(fleet);
       // if (!fleet.owner.isAiPlayer()) {
       log.info(`Reinforcements (${fleet.shipCount} ships) have arrived for planet ${fleet.destination}.`)
@@ -57,6 +57,9 @@ export abstract class Game {
       const attackerPlanet: Planet = attacker.source;
       const defenderPlanet: Planet = attacker.destination;
       const defender: DefenseFleet = defenderPlanet.fleet;
+      const fight: Fight = new Fight(attacker, defender, this.model.turnCounter);
+
+      this.model.newFights.push(fight);
 
       let haveVictor = false;
       let planetHolds = true;
@@ -95,9 +98,11 @@ export abstract class Game {
       }
 
       if (planetHolds) {
+        fight.setWinner(defenderPlanet.owner, defender.shipCount);
         defenderPlanet.owner.enemyFleetsDestroyed++;
         log.info(`Planet ${defenderPlanet} has held against an attack from ${attacker.owner}`);
       } else {
+        fight.setWinner(attacker.owner, attacker.shipCount);
         attacker.owner.enemyFleetsDestroyed++;
         defenderPlanet.conquer(attacker);
 
@@ -120,7 +125,7 @@ export abstract class Game {
 
     if (alives.length <= 1) {
       // We got a winner
-      // const winner = alives[0];
+      this.model.winner = alives[0];
       this.stop();
     }
   }
@@ -143,6 +148,8 @@ export abstract class Game {
 
   newTurn(): void {
     this.model.turnCounter++;
+    this.model.fightsList.concat(this.model.newFights);
+    this.model.newFights = [];
   }
 }
 
@@ -169,12 +176,17 @@ export class GameModel {
 
   currentPlayer: Player;
 
+  public newFights: Array<Fight>;
+  public fightsList: Array<Fight>;
+  public winner: Player;
+
   constructor(public neutral: NeutralPlayer, public configs: GameConfig) {
     this.turnCounter = 0;
     this.currentPlayer = null;
     this.map = new GameMap();
     this.map.resizeMap(configs.mapHeight, configs.mapWidth);
     this.players = [];
+    this.fightsList = [];
   }
 
   getPlanets(): Array<Planet> {

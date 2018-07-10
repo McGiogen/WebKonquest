@@ -11,6 +11,7 @@ export { Sector } from './sector';
 export { GameMap } from './map';
 export { GameEmitter, GameEvent } from './event';
 export { Fleet, AttackFleet, DefenseFleet } from './fleet';
+export { Fight } from './log/fight';
 export {
   Request, RequestAction, AttackRequest, ConnectToGameRequest, EndTurnRequest, NewGameRequest,
   StartGameRequest

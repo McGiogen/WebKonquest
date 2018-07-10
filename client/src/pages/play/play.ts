@@ -89,12 +89,12 @@ export class PlayPage {
   }
 
   endGame(): void {
-    this.navController.push(GameoverPage);
+    this.navController.push(GameoverPage, { game: this.game });
   }
 
   backConfirm(ev: UIEvent): void {
     const alert = this.alertCtrl.create({
-      title: 'Confirm',
+      title: 'Confirm exit',
       message: 'Do you want to exit?',
       buttons: [{
         text: 'Cancel',

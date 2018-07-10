@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { Player } from 'webkonquest-core';
 
 /**
  * Generated class for the GameoverPage page.
@@ -13,12 +14,10 @@ import { NavController, NavParams } from 'ionic-angular';
   templateUrl: 'gameover.html',
 })
 export class GameoverPage {
+  private winner: Player;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad GameoverPage');
+    this.winner = navParams.get('game').model.winner;
   }
 
   goToHome() {
