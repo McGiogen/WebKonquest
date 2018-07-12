@@ -1,5 +1,6 @@
 import {NgModule, ErrorHandler} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {IonicApp, IonicModule, IonicErrorHandler} from 'ionic-angular';
 import {MyApp} from './app.component';
 
@@ -11,8 +12,8 @@ import {GameoverPage} from '../pages/gameover/gameover';
 import {SetupLocalGamePage} from '../pages/setup-local-game/setup-local-game';
 import {SetupRemoteGamePage} from '../pages/setup-remote-game/setup-remote-game';
 
-import {StatusBar} from '@ionic-native/status-bar';
-import {SplashScreen} from '@ionic-native/splash-screen';
+//import {StatusBar} from '@ionic-native/status-bar';
+//import {SplashScreen} from '@ionic-native/splash-screen';
 import {ComponentsModule} from "../components/components.module";
 
 @NgModule({
@@ -28,6 +29,8 @@ import {ComponentsModule} from "../components/components.module";
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     IonicModule.forRoot(MyApp),
     ComponentsModule
   ],
@@ -43,8 +46,8 @@ import {ComponentsModule} from "../components/components.module";
     HomePage
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
+    //StatusBar,
+    //SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
