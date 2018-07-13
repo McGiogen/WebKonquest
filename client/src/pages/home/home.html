@@ -8,8 +8,12 @@
   <ion-grid fixed>
     <ion-row>
       <ion-col col-12>
-        <button ion-button large (click)="setupLocalGame($event)">Local game</button>
-        <button ion-button large (click)="setupRemoteGame($event)">Online game</button>
+        <button ion-button large icon-start (click)="setupLocalGame($event)">
+          <ion-icon name="laptop"></ion-icon>Local game
+        </button>
+        <button ion-button large icon-start color="secondary" (click)="setupRemoteGame($event)">
+          <ion-icon name="globe"></ion-icon>Online game
+        </button>
       </ion-col>
       <ion-col col-12>
         <button ion-button large color="dark" (click)="openAppOptions($event)">Options</button>
