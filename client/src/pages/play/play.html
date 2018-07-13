@@ -31,16 +31,31 @@
                 <hr [hidden]="helper.planetWithFocus == null">
 
                 <div class="attack-info">
-                  <span>Attack from {{ helper.attackSource ? helper.attackSource.name : '_' }}</span>
-                  <span>to {{ helper.attackDestination ? helper.attackDestination.name : '_' }}</span>
-                  <span>with
-                    <ion-input type="number" class="ion-input-inline
-                    ion-input-underline ion-input-centered" [(ngModel)]="helper.attackShipCount"></ion-input>
-                    ships</span>
-                  <button ion-button color="danger" (click)="attack()"
-                          [disabled]="helper.attackSource == null || helper.attackDestination == null || helper.attackShipCount == null">
-                    Send
-                  </button>
+                  <form [formGroup]="attackForm" (ngSubmit)="attack()">
+                    <label>Attack from
+                        <ion-input type="text" formControlName="source" clearOnEdit="true"
+                        class="ion-input-inline ion-input-underline ion-input-centered"
+                        [(ngModel)]="attackSource" (ngModelChange)="helper.setSourcePlanet($event)"
+                        (click)="$event.target.select()"></ion-input>
+                    </label>
+                    <label>to 
+                        <ion-input type="text" formControlName="destination" clearOnEdit="true"
+                        class="ion-input-inline ion-input-underline ion-input-centered"
+                        [(ngModel)]="attackTarget" (ngModelChange)="helper.setDestinationPlanet($event)"
+                        (click)="$event.target.select()"></ion-input>
+                    </label>
+                    <label>with
+                      <ion-input type="text" formControlName="shipcount" clearOnEdit="true"
+                        class="ion-input-inline ion-input-underline ion-input-centered"
+                        [(ngModel)]="helper.attackShipCount"></ion-input>
+                      ships</label>
+                    <button ion-button margin-left color="danger" type="submit">
+                      Send
+                    </button>
+                  </form>
+                </div>
+                <div *ngIf="attackFormSubmitted && (!attackForm.valid || attackFormError)" class="attackFormError">
+                  Attack's data missing or incorrect
                 </div>
 
               </ion-col>
@@ -119,12 +134,13 @@
           Emperor of the Galaxy?<br>
           <br>
           <small>
-            Every turn you choose how many ships sail<br>
-            from what planet to what planet:<br>
-            start a war or send reinforcements.<br>
-            Neutral planets and their wealth are waiting you<br>
+            Every turn you choose how many ships sail
+            from what planet to what planet:
+            start a fight or send reinforcements.<br>
+            Neutral planets and their wealth are waiting you
             to join the fight!<br>
           </small>
+          <br>
         </h1>
         <div [hidden]="game.model.turnCounter <= 1">
           <div *ngFor='let fight of game.model.newFights; trackBy: index'>

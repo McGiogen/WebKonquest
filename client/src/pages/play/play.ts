@@ -4,6 +4,7 @@ import {LocalGame, GameEvent, AttackFleet} from 'webkonquest-core';
 import {LocalGameHelper} from './LocalGameHelper';
 import {AppOptions} from '../../services/AppOptions';
 import {GameoverPage} from '../gameover/gameover';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'page-play',
@@ -18,9 +19,13 @@ export class PlayPage {
   private appOptions: AppOptions;
   private alertShown: boolean;
 
-  view: string;
+  view: string; // 'change-round', 'change-turn', 'game'
+  attackForm: FormGroup;
 
-  // 'change-round', 'change-turn', 'game'
+  attackFormError: boolean;
+  attackFormSubmitted: boolean;
+  attackSource: string;
+  attackTarget: string;
 
   constructor(public navController: NavController, navParams: NavParams, public platform: Platform, public alertCtrl: AlertController) {
     this.appOptions = AppOptions.instance;
@@ -35,6 +40,9 @@ export class PlayPage {
     this.view = 'change-round';
     this.alertShown = false;
 
+    this.attackFormError = false;
+    this.attackFormSubmitted = false;
+
     // Customizing back button to ask for a Confirm
     platform.ready().then(() => {
       platform.registerBackButtonAction((ev) => {
@@ -42,6 +50,14 @@ export class PlayPage {
           this.backConfirm(ev);
         }
       }, 0)
+    });
+  }
+
+  ngOnInit() {
+    this.attackForm = new FormGroup({
+      source: new FormControl('', [Validators.maxLength(1), Validators.pattern('[a-zA-Z]'), Validators.required]),
+      destination: new FormControl('', [Validators.maxLength(1), Validators.pattern('[a-zA-Z]'), Validators.required]),
+      shipcount: new FormControl('', [Validators.pattern('[0-9]*'), Validators.required])
     });
   }
 
@@ -54,7 +70,9 @@ export class PlayPage {
   mapSelectedSector(sector) {
     if (sector && sector.planet) {
       console.debug('Pianeta selezionato: ', sector.planet);
-      this.helper.selectPlanet(sector.planet);
+      this.helper.selectPlanet(sector.planet.name);
+      this.attackSource = this.helper.attackSource ? this.helper.attackSource.name : null;
+      this.attackTarget = this.helper.attackDestination ? this.helper.attackDestination.name : null;
     }
   }
 
@@ -77,7 +95,17 @@ export class PlayPage {
   }
 
   attack(): void {
-    this.helper.doAttack();
+    this.attackFormSubmitted = true;
+    if (this.attackForm.valid) {
+      const result = this.helper.doAttack();
+      if (result) {
+        this.attackForm.reset();
+        this.attackFormError = false;
+        this.attackFormSubmitted = false;
+      } else {
+        this.attackFormError = true;
+      }
+    }
   }
 
   cancelAttack(attack: AttackFleet): void {
