@@ -31,10 +31,35 @@ export class LocalGameHelper {
     this.map = this.game.model.map.clone();
   }
 
-  selectPlanet(clonePlanet: Planet): void {
+  setSourcePlanet(planetName: string): void {
+    if (!planetName) {
+      this.attackSource = null;
+      return;
+    }
+
+    planetName = planetName.toUpperCase();
+    this.attackSource = this.game.model.map.getPlanets().find((p: Planet) =>
+      p.name === planetName
+    )
+  }
+
+  setDestinationPlanet(planetName: string): void {
+    if (!planetName) {
+      this.attackDestination = null;
+      return;
+    }
+
+    planetName = planetName.toUpperCase();
+    this.attackDestination = this.game.model.map.getPlanets().find((p: Planet) =>
+      p.name === planetName
+    )
+  }
+
+  selectPlanet(planetName: string): void {
+    planetName = planetName.toUpperCase();
     const planet = this.game.model.map.getPlanets().find((p: Planet) =>
-      p.name === clonePlanet.name
-    );
+      p.name === planetName
+    )
 
     if (this.options.interactMode === InteractMode.SingleTap) {
       // In single tap mode the planet selected is always used for the attack
@@ -53,9 +78,10 @@ export class LocalGameHelper {
     this.attackShipCount = shipCount;
   }
 
-  doAttack(): void {
-    if (!this.attackSource || !this.attackDestination || !this.attackShipCount) {
-      throw new Error('Impossibile iniziare l\'attacco: uno o più parametri mancanti');
+  doAttack(): boolean {
+    if (!this.attackSource || !this.attackDestination || !this.attackShipCount || this.attackSource.owner !== this.currentPlayer) {
+      console.debug('Impossibile iniziare l\'attacco: uno o più parametri mancanti');
+      return false;
     }
     console.log(`Start attack from ${this.attackSource.name} to ${this.attackDestination.name} with ${this.attackShipCount} ships.`, [this.attackSource, this.attackDestination, Number(this.attackShipCount)]);
     const success = this.game.attack(this.attackSource, this.attackDestination, Number(this.attackShipCount), false);
@@ -71,6 +97,7 @@ export class LocalGameHelper {
       this.attackDestination = null;
       this.attackShipCount = null;
     }
+    return success;
   }
 
   cancelAttack(attack: AttackFleet): void {

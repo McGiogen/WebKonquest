@@ -4,10 +4,10 @@
   "author": "McGiogen",
   "homepage": "https://github.com/McGiogen/WebKonquest",
   "license": "MIT",
-  "main": "src/server.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "yarn run build && node ./dist/server.js"
+    "start": "yarn run build && node ./dist/index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
