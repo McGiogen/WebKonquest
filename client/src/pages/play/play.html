@@ -1,9 +1,9 @@
 <ion-header>
   <ion-navbar>
     <ion-title [ngClass]="appOptions.graphics">
-      <span>Turn {{ game.model.turnCounter }} of {{ playerInTurn() }}</span>
-      <div class="color-container" [attr.title]="game.machine.currentState.look">
-        <div class="planet" [ngClass]="'planet-' + game.machine.currentState.look"></div>
+      <span>Turn {{ helper.turnCounter }} of {{ helper.turnPlayer.name }}</span>
+      <div class="color-container" [attr.title]="helper.turnPlayer.look">
+        <div class="planet" [ngClass]="'planet-' + helper.turnPlayer.look"></div>
       </div>
     </ion-title>
   </ion-navbar>
@@ -36,18 +36,18 @@
                         <ion-input type="text" formControlName="source" clearOnEdit="true"
                         class="ion-input-inline ion-input-underline ion-input-centered"
                         [(ngModel)]="attackSource" (ngModelChange)="helper.setSourcePlanet($event)"
-                        (click)="$event.target.select()"></ion-input>
+                        (click)="$event?.target?.select && $event?.target?.select()"></ion-input>
                     </label>
-                    <label>to 
+                    <label>to
                         <ion-input type="text" formControlName="destination" clearOnEdit="true"
                         class="ion-input-inline ion-input-underline ion-input-centered"
                         [(ngModel)]="attackTarget" (ngModelChange)="helper.setDestinationPlanet($event)"
-                        (click)="$event.target.select()"></ion-input>
+                        (click)="$event?.target?.select && $event?.target?.select()"></ion-input>
                     </label>
                     <label>with
                       <ion-input type="text" formControlName="shipcount" clearOnEdit="true"
                         class="ion-input-inline ion-input-underline ion-input-centered"
-                        [(ngModel)]="helper.attackShipCount"></ion-input>
+                        [(ngModel)]="helper.attack.ships"></ion-input>
                       ships</label>
                     <button ion-button margin-left color="danger" type="submit">
                       Send
@@ -66,10 +66,10 @@
 
           <ion-item-group>
             <ion-item-divider color="dark">
-              Planned attacks ({{ game.machine.currentState.newAttacks.length }})
+              Planned attacks ({{ helper.newAttacks?.length }})
             </ion-item-divider>
             <ion-item
-              *ngFor='let attack of game.machine.currentState.newAttacks; trackBy: index'>
+              *ngFor='let attack of helper.newAttacks; trackBy: index'>
               <button ion-button clear color="danger" icon-only item-start
                       (click)="cancelAttack(attack)">
                 <ion-icon name="close"></ion-icon>
@@ -83,11 +83,11 @@
         </ion-list>
         <ion-list no-lines>
 
-          <ion-item-divider color="dark" [hidden]="game.model.turnCounter === 1">
-            Attacks in progress ({{ game.machine.currentState.attackList.length }})
+          <ion-item-divider color="dark" [hidden]="helper.turnCounter === 1">
+            Attacks in progress ({{ helper.attacksList?.length }})
           </ion-item-divider>
           <ion-item
-            *ngFor='let attack of game.machine.currentState.attackList; trackBy: index'>
+            *ngFor='let attack of helper.attacksList; trackBy: index'>
             From {{ attack.source.name }} to {{ attack.destination.name }} with {{ attack.shipCount }} ships, arrive at turn {{ attack.arrivalTurn }}
           </ion-item>
 
@@ -111,11 +111,11 @@
     <ion-row [hidden]="view !== 'change-turn'">
       <ion-col col-12 class="change-turn">
         <h1 [ngClass]="appOptions.graphics">
-          <span>Turn {{ game.model.turnCounter }}</span>
+          <span>Turn {{ helper.turnCounter }}</span>
           <br><br>
-          <span>{{ playerInTurn() }}</span>
-          <div class="color-container" [attr.title]="game.machine.currentState.look">
-            <div class="planet" [ngClass]="'planet-' + game.machine.currentState.look"></div>
+          <span>{{ helper.turnPlayer.name }}</span>
+          <div class="color-container" [attr.title]="helper.turnPlayer.look">
+            <div class="planet" [ngClass]="'planet-' + helper.turnPlayer.look"></div>
           </div>
           <br><br>
           <button ion-button large (click)="view = 'game'">Play</button>
@@ -126,10 +126,10 @@
     <!-- CHANGE ROUND VIEW -->
     <ion-row [hidden]="view !== 'change-round'">
       <ion-col col-12 class="change-round">
-        <h1 [hidden]="game.model.turnCounter <= 1">
-          {{ game.model.newFights.length === 0 ? 'Dead calm' : 'Fights!' }}
+        <h1 [hidden]="helper.turnCounter <= 1">
+          {{ helper.newFights?.length > 0 ? 'Fights!' : 'Dead calm' }}
         </h1>
-        <h1 [hidden]="game.model.turnCounter > 1">
+        <h1 [hidden]="helper.turnCounter > 1">
           Who will be the next<br>
           Emperor of the Galaxy?<br>
           <br>
@@ -142,13 +142,13 @@
           </small>
           <br>
         </h1>
-        <div [hidden]="game.model.turnCounter <= 1">
-          <div *ngFor='let fight of game.model.newFights; trackBy: index'>
+        <div [hidden]="helper.turnCounter <= 1">
+          <div *ngFor='let fight of helper.newFights; trackBy: index'>
             - {{ fight }}
           </div>
         </div>
         <div margin-top>
-          <button ion-button large (click)="view = 'change-turn'">{{ game.model.turnCounter <= 1 ? 'Start the game' : 'Next round'}}</button>
+          <button ion-button large (click)="view = 'change-turn'">{{ helper.turnCounter <= 1 ? 'Start the game' : 'Next round'}}</button>
         </div>
       </ion-col>
     </ion-row>

@@ -1,10 +1,11 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Platform, AlertController, Navbar} from 'ionic-angular';
-import {LocalGame, GameEvent, AttackFleet} from 'webkonquest-core';
+import {LocalGame, AttackFleet} from 'webkonquest-core';
 import {LocalGameHelper} from './LocalGameHelper';
 import {AppOptions} from '../../services/AppOptions';
 import {GameoverPage} from '../gameover/gameover';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { GameHelper } from './GameHelper';
 
 @Component({
   selector: 'page-play',
@@ -15,26 +16,24 @@ export class PlayPage {
   private goBack: (ev: UIEvent) => void;
 
   private game: LocalGame;
-  private helper: LocalGameHelper;
+  private helper: GameHelper;
   private appOptions: AppOptions;
   private alertShown: boolean;
 
-  view: string; // 'change-round', 'change-turn', 'game'
-  attackForm: FormGroup;
+  public view: string; // 'change-round', 'change-turn', 'game'
+  public attackForm: FormGroup;
 
-  attackFormError: boolean;
-  attackFormSubmitted: boolean;
-  attackSource: string;
-  attackTarget: string;
+  public attackFormError: boolean;
+  public attackFormSubmitted: boolean;
+  public attackSource: string;
+  public attackTarget: string;
 
   constructor(public navController: NavController, navParams: NavParams, public platform: Platform, public alertCtrl: AlertController) {
     this.appOptions = AppOptions.instance;
-    this.game = navParams.get('game');
-    this.helper = new LocalGameHelper(this.game);
-
-    this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.changeTurn.bind(this));
-    this.game.eventEmitter.on(GameEvent.RoundStart, this.changeRound.bind(this));
-    this.game.eventEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
+    if (navParams.get('game')) {
+      const game = navParams.get('game');
+      this.helper = new LocalGameHelper(game, this);
+    }
 
     this.helper.startGame();
     this.view = 'change-round';
@@ -71,8 +70,8 @@ export class PlayPage {
     if (sector && sector.planet) {
       console.debug('Pianeta selezionato: ', sector.planet);
       this.helper.selectPlanet(sector.planet.name);
-      this.attackSource = this.helper.attackSource ? this.helper.attackSource.name : null;
-      this.attackTarget = this.helper.attackDestination ? this.helper.attackDestination.name : null;
+      this.attackSource = this.helper.attack.source ? this.helper.attack.source.name : null;
+      this.attackTarget = this.helper.attack.destination ? this.helper.attack.destination.name : null;
     }
   }
 
@@ -80,18 +79,15 @@ export class PlayPage {
     if (this.view !== 'change-round') {
       this.view = 'change-turn';
     }
+
+    this.attackFormError = false;
+    this.attackFormSubmitted = false;
+    this.attackSource = null;
+    this.attackTarget = null;
   }
 
   changeRound(): void {
     this.view = 'change-round';
-  }
-
-  playerInTurn(): string {
-    let curState = this.game.machine.currentState;
-    if (!curState) {
-      return '';
-    }
-    return curState.toString();
   }
 
   attack(): void {
