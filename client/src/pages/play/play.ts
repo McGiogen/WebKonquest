@@ -1,11 +1,14 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Platform, AlertController, Navbar} from 'ionic-angular';
-import {LocalGame, AttackFleet} from 'webkonquest-core';
-import {LocalGameHelper} from './LocalGameHelper';
+import {AttackFleet, LocalGame} from 'webkonquest-core';
+import {LocalGameHelper} from './helper/LocalGameHelper';
 import {AppOptions} from '../../services/AppOptions';
 import {GameoverPage} from '../gameover/gameover';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { GameHelper } from './GameHelper';
+import { GameHelper } from './helper/GameHelper';
+import { RemoteGameHelper } from './helper/RemoteGameHelper';
+import { SetupGame } from '../setup-game/SetupGameData';
+import { GameServerService } from './helper/gameserver.service';
 
 @Component({
   selector: 'page-play',
@@ -15,7 +18,6 @@ export class PlayPage {
   @ViewChild(Navbar) navBar: Navbar;
   private goBack: (ev: UIEvent) => void;
 
-  private game: LocalGame;
   private helper: GameHelper;
   private appOptions: AppOptions;
   private alertShown: boolean;
@@ -28,14 +30,16 @@ export class PlayPage {
   public attackSource: string;
   public attackTarget: string;
 
-  constructor(public navController: NavController, navParams: NavParams, public platform: Platform, public alertCtrl: AlertController) {
+  constructor(public navController: NavController, navParams: NavParams, public platform: Platform, public alertCtrl: AlertController, service: GameServerService) {
     this.appOptions = AppOptions.instance;
-    if (navParams.get('game')) {
-      const game = navParams.get('game');
-      this.helper = new LocalGameHelper(game, this);
+    const setupGame: SetupGame = navParams.get('setupGame');
+    if (setupGame.local) {
+      this.helper = new LocalGameHelper(this);
+    } else {
+      this.helper = new RemoteGameHelper(this, service);
     }
 
-    this.helper.startGame();
+    this.helper.startGame(setupGame);
     this.view = 'change-round';
     this.alertShown = false;
 
@@ -66,7 +70,7 @@ export class PlayPage {
     this.navBar.backButtonClick = this.backConfirm.bind(this);
   }
 
-  mapSelectedSector(sector) {
+  mapSelectedSector(sector): void {
     if (sector && sector.planet) {
       console.debug('Pianeta selezionato: ', sector.planet);
       this.helper.selectPlanet(sector.planet.name);
@@ -113,7 +117,7 @@ export class PlayPage {
   }
 
   endGame(): void {
-    this.navController.push(GameoverPage, { game: this.game });
+    this.navController.push(GameoverPage, { winner: this.helper.winner });
   }
 
   backConfirm(ev: UIEvent): void {

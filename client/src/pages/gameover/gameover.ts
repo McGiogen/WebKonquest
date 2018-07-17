@@ -14,10 +14,11 @@ import { Player } from 'webkonquest-core';
   templateUrl: 'gameover.html',
 })
 export class GameoverPage {
-  private winner: Player;
+  // Winner player's name
+  private winner: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.winner = navParams.get('game').model.winner;
+    this.winner = navParams.get('winner');
   }
 
   goToHome() {

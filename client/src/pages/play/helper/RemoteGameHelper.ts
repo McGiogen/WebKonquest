@@ -1,9 +1,12 @@
-import {Game, Planet, Player, LocalPlayer, GameEvent, GameMap, AttackFleet, Fight} from 'webkonquest-core';
-import {AppOptions, InteractMode} from '../../services/AppOptions';
+import {Planet, Player, LocalPlayer, GameMap, AttackFleet, Fight} from 'webkonquest-core';
+import {AppOptions, InteractMode} from '../../../services/AppOptions';
+import { PlayPage } from '../play';
 import { GameHelper } from './GameHelper';
-import { PlayPage } from './play';
+import { SetupGame, SetupPlayer } from '../../setup-game/SetupGameData';
+import { GameServerService } from './gameserver.service';
+import { Subscription } from 'rxjs/Subscription';
 
-export class LocalGameHelper implements GameHelper {
+export class RemoteGameHelper implements GameHelper {
   options: AppOptions;
 
   currentPlayer: Player;
@@ -11,34 +14,47 @@ export class LocalGameHelper implements GameHelper {
   attack: {focus: Planet, source: Planet, destination: Planet, ships: number };
 
   turnCounter: number;
-  turnPlayer: { name: string, look: string };
+  turnPlayer: SetupPlayer;
+  winner: SetupPlayer;
 
   newAttacks: Array<AttackFleet>;
   attacksList: Array<AttackFleet>;
   newFights: Array<Fight>;
 
   map: GameMap;
+  private gameId: number;
+  socketSubscription: Subscription;
 
-  constructor(private game: Game, private page: PlayPage) {
+  constructor(private page: PlayPage, private service: GameServerService) {
     this.options = AppOptions.instance;
 
     this.turnPlayer = { name: null, look: null };
-    this.attack = { focus: null, source: null, destination: null, ships: null};
+    this.attack = { focus: null, source: null, destination: null, ships: null };
+
+    this.socketSubscription = this.service.socket.subscribe(this.onServerMessage.bind(this));
   }
 
-  startGame() {
-    this.game.eventEmitter.on(GameEvent.RoundStart, this.changeRound.bind(this));
-    this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.changeTurn.bind(this));
+  onServerMessage(message: { type: string, data: any }): void {
+    console.log('[RemoteGameHelper::onServerMessage]', message);
 
-    this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.page.changeTurn.bind(this.page));
-    this.game.eventEmitter.on(GameEvent.RoundStart, this.page.changeRound.bind(this.page));
-    this.game.eventEmitter.on(GameEvent.GameOver, this.page.endGame.bind(this.page));
-
-    this.game.start();
+    switch(message.type) {
+      case 'start-game': {
+        this.gameId = message.data.gameId;
+        break;
+      }
+    }
   }
 
-  changeTurn() {
-    this.currentPlayer = this.game.machine.currentState as Player;
+  startGame(setup: SetupGame): void {
+    // this.game.eventEmitter.on(GameEvent.RoundStart, this.changeRound.bind(this));
+    // this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.changeTurn.bind(this));
+    // this.game.eventEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
+
+    this.service.send('start-game', setup);
+  }
+
+  changeTurn(currentPlayer: Player): void {
+    this.currentPlayer = currentPlayer;
     this.turnPlayer = {
       name: this.currentPlayer.name,
       look: this.currentPlayer.look
@@ -47,10 +63,14 @@ export class LocalGameHelper implements GameHelper {
     this.attacksList = this.currentPlayer.attackList;
   }
 
-  changeRound() {
-    this.map = this.game.model.map.clone();
-    this.turnCounter = this.game.model.turnCounter;
-    this.newFights = this.game.model.newFights;
+  changeRound(map: GameMap, turnCounter: number, newFights: Array<Fight>): void {
+    this.map = map.clone();
+    this.turnCounter = turnCounter;
+    this.newFights = newFights;
+  }
+
+  endGame(): void {
+    this.page.endGame();
   }
 
   setSourcePlanet(planetName: string): void {
@@ -60,7 +80,7 @@ export class LocalGameHelper implements GameHelper {
     }
 
     planetName = planetName.toUpperCase();
-    this.attack.source = this.game.model.map.getPlanets().find((p: Planet) =>
+    this.attack.source = this.map.getPlanets().find((p: Planet) =>
       p.name === planetName
     )
   }
@@ -72,13 +92,13 @@ export class LocalGameHelper implements GameHelper {
     }
 
     planetName = planetName.toUpperCase();
-    this.attack.destination = this.game.model.map.getPlanets().find((p: Planet) =>
+    this.attack.destination = this.map.getPlanets().find((p: Planet) =>
       p.name === planetName
     )
   }
 
   selectPlanet(planetName: string): void {
-    planetName = planetName.toUpperCase();
+    /*planetName = planetName.toUpperCase();
     const planet = this.game.model.map.getPlanets().find((p: Planet) =>
       p.name === planetName
     )
@@ -93,10 +113,10 @@ export class LocalGameHelper implements GameHelper {
       } else {
         this.configureAttackPlanets(planet);
       }
-    }
+    }*/
   }
 
-  setShipCount(shipCount: number) {
+  setShipCount(shipCount: number): void {
     this.attack.ships = shipCount;
   }
 
@@ -109,7 +129,7 @@ export class LocalGameHelper implements GameHelper {
       `Start attack from ${this.attack.source.name} to ${this.attack.destination.name} with ${this.attack.ships} ships.`,
       [this.attack.source, this.attack.destination, Number(this.attack.ships)]
     );
-    const success = this.game.attack(this.attack.source, this.attack.destination, Number(this.attack.ships), false);
+    const success = false //this.game.attack(this.attack.source, this.attack.destination, Number(this.attack.ships), false);
 
     if (success) {
       const attackSourceCopy = this.map.getPlanets().find((p: Planet) =>
@@ -134,14 +154,14 @@ export class LocalGameHelper implements GameHelper {
   }
 
   endTurn(): boolean {
-    let player = this.game.machine.currentState as Player;
+    /*let player = this.game.machine.currentState as Player;
     if (player instanceof LocalPlayer) {
       player.done();
 
       // Cleaning attack informations
       this.attack = { focus: null, source: null, destination: null, ships: null};
       return true;
-    }
+    }*/
     return false;
   }
 

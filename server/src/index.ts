@@ -7,46 +7,51 @@ import * as http from 'http';
 import * as bodyParser from 'body-parser';
 import * as logger from 'morgan';
 import * as methodOverride from 'method-override';
-import * as cors from 'cors';
+//import * as cors from 'cors';
 import * as WebSocket from 'ws';
-//import {GameServer, GameConfig, LocalGame, Request} from 'webkonquest-core';
+import {GameServer} from './gameserver';
 
 const app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(methodOverride());
-app.use(cors());
-app.use(express.static(path.join(__dirname, 'public'), {'index': 'index.html'}));
-
-
-app.get('/api/version', (req, res) => {
-  res.json({ 'version': '0.0.1' });
-});
+//app.use(cors());
+app.use(express.static(path.join(__dirname, 'public'), {index: 'index.html'}));
 
 const server = http.createServer(app);
+const gameServer = new GameServer();
 
-/*const wss = new WebSocket.Server({ server });
+app.get('/api/version', (req, res) => {
+  res.json({ 'version': '1.0.0' });
+});
+
+/*app.get('/api/newgame', (req, res) => {
+  res.json({ id: this.gameServer.newGame() });
+});*/
+
+const wss = new WebSocket.Server({
+  server,
+  path: '/api/socket'
+});
 
 wss.on('connection', ws => {
-  const playerId = Math.random();
-  console.log('New client connected. Id ' + playerId);
 
   // connection is up, handling request events
   ws.on('message', (json: string) => {
-    const message = JSON.parse(json) as Request;
+    const message = JSON.parse(json);
     console.log('Message received.', message);
 
-    const response = GameServer.handleMessage();
-    if (response) {
+    const response = gameServer.handleMessage(message);
+
+    if (response != null) {
+      console.log('Message sent.', response);
       ws.send(JSON.stringify(response));
     }
   });
 
   // send immediatly a feedback to the incoming connection with player identifier
-  const response = GameServer.getConnectionResponse(playerId);
-  ws.send(JSON.stringify(response));
-});*/
-
+  ws.send(JSON.stringify('Hello from server!'));
+});
 
 //start our server
 server.listen(process.env.PORT || 8080, () => {

@@ -1,5 +1,7 @@
 import {Planet, Player, GameMap, AttackFleet} from 'webkonquest-core';
-import {AppOptions} from '../../services/AppOptions';
+import {AppOptions} from '../../../services/AppOptions';
+import { SetupGame } from '../../setup-game/SetupGameData';
+import { Injectable } from '@angular/core';
 
 export interface GameHelper {
   options: AppOptions;
@@ -10,17 +12,14 @@ export interface GameHelper {
 
   turnCounter: number;
   turnPlayer: { name: string, look: string };
+  winner: { name: string, look: string };
 
   newAttacks: Array<AttackFleet>;
   attacksList: Array<AttackFleet>;
 
   map: GameMap;
 
-  startGame();
-
-  changeTurn();
-
-  changeRound();
+  startGame(setup: SetupGame);
 
   setSourcePlanet(planetName: string): void;
 
