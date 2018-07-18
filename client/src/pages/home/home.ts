@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {LocalGame, GameConfig} from 'webkonquest-core';
 import {OptionsPage} from '../options/options';
 import {AboutPage} from '../about/about';
-import {SetupLocalGamePage} from '../setup-local-game/setup-local-game';
-import {SetupRemoteGamePage} from '../setup-remote-game/setup-remote-game';
+import {SetupGamePage} from '../setup-game/setup-game';
+import { GameServerService } from '../play/helper/gameserver.service';
 
 @Component({
   selector: 'page-home',
@@ -12,17 +11,16 @@ import {SetupRemoteGamePage} from '../setup-remote-game/setup-remote-game';
 })
 export class HomePage {
 
-  constructor(public navController: NavController) {
+  constructor(public navController: NavController/*, private service: GameServerService*/) {
 
   }
 
   setupLocalGame() {
-    this.navController.push(SetupLocalGamePage);
+    this.navController.push(SetupGamePage, {local: true});
   }
 
   setupRemoteGame() {
-    const game = new LocalGame(new GameConfig());
-    this.navController.push(SetupRemoteGamePage, {game});
+    this.navController.push(SetupGamePage, {local: false});
   }
 
   openAppOptions() {

@@ -1,5 +1,3 @@
-import {MessageAction} from "./remote/message";
-
 export { Game } from './game';
 export { LocalGame } from './local/localgame';
 export { GameServer } from './remote/game-server';

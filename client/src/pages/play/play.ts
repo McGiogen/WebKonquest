@@ -1,10 +1,14 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Platform, AlertController, Navbar} from 'ionic-angular';
-import {LocalGame, GameEvent, AttackFleet} from 'webkonquest-core';
-import {LocalGameHelper} from './LocalGameHelper';
+import {AttackFleet, LocalGame} from 'webkonquest-core';
+import {LocalGameHelper} from './helper/LocalGameHelper';
 import {AppOptions} from '../../services/AppOptions';
 import {GameoverPage} from '../gameover/gameover';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { GameHelper } from './helper/GameHelper';
+import { RemoteGameHelper } from './helper/RemoteGameHelper';
+import { SetupGame } from '../setup-game/SetupGameData';
+import { GameServerService } from './helper/gameserver.service';
 
 @Component({
   selector: 'page-play',
@@ -14,29 +18,28 @@ export class PlayPage {
   @ViewChild(Navbar) navBar: Navbar;
   private goBack: (ev: UIEvent) => void;
 
-  private game: LocalGame;
-  private helper: LocalGameHelper;
+  private helper: GameHelper;
   private appOptions: AppOptions;
   private alertShown: boolean;
 
-  view: string; // 'change-round', 'change-turn', 'game'
-  attackForm: FormGroup;
+  public view: string; // 'change-round', 'change-turn', 'game'
+  public attackForm: FormGroup;
 
-  attackFormError: boolean;
-  attackFormSubmitted: boolean;
-  attackSource: string;
-  attackTarget: string;
+  public attackFormError: boolean;
+  public attackFormSubmitted: boolean;
+  public attackSource: string;
+  public attackTarget: string;
 
-  constructor(public navController: NavController, navParams: NavParams, public platform: Platform, public alertCtrl: AlertController) {
+  constructor(public navController: NavController, navParams: NavParams, public platform: Platform, public alertCtrl: AlertController, service: GameServerService) {
     this.appOptions = AppOptions.instance;
-    this.game = navParams.get('game');
-    this.helper = new LocalGameHelper(this.game);
+    const setupGame: SetupGame = navParams.get('setupGame');
+    if (setupGame.local) {
+      this.helper = new LocalGameHelper(this);
+    } else {
+      this.helper = new RemoteGameHelper(this, service);
+    }
 
-    this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.changeTurn.bind(this));
-    this.game.eventEmitter.on(GameEvent.RoundStart, this.changeRound.bind(this));
-    this.game.eventEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
-
-    this.helper.startGame();
+    this.helper.startGame(setupGame);
     this.view = 'change-round';
     this.alertShown = false;
 
@@ -67,12 +70,12 @@ export class PlayPage {
     this.navBar.backButtonClick = this.backConfirm.bind(this);
   }
 
-  mapSelectedSector(sector) {
+  mapSelectedSector(sector): void {
     if (sector && sector.planet) {
       console.debug('Pianeta selezionato: ', sector.planet);
       this.helper.selectPlanet(sector.planet.name);
-      this.attackSource = this.helper.attackSource ? this.helper.attackSource.name : null;
-      this.attackTarget = this.helper.attackDestination ? this.helper.attackDestination.name : null;
+      this.attackSource = this.helper.attack.source ? this.helper.attack.source.name : null;
+      this.attackTarget = this.helper.attack.destination ? this.helper.attack.destination.name : null;
     }
   }
 
@@ -80,31 +83,33 @@ export class PlayPage {
     if (this.view !== 'change-round') {
       this.view = 'change-turn';
     }
+
+    this.attackFormError = false;
+    this.attackFormSubmitted = false;
+    this.attackSource = null;
+    this.attackTarget = null;
   }
 
   changeRound(): void {
     this.view = 'change-round';
   }
 
-  playerInTurn(): string {
-    let curState = this.game.machine.currentState;
-    if (!curState) {
-      return '';
-    }
-    return curState.toString();
-  }
-
   attack(): void {
     this.attackFormSubmitted = true;
+    let success = false;
     if (this.attackForm.valid) {
-      const result = this.helper.doAttack();
-      if (result) {
-        this.attackForm.reset();
-        this.attackFormError = false;
-        this.attackFormSubmitted = false;
-      } else {
-        this.attackFormError = true;
-      }
+      success = this.helper.doAttack();
+    }
+    this.attackFormError = !success;
+  }
+
+  attackCompleted(success: boolean): void {
+    if (success) {
+      this.attackForm.reset();
+      this.attackFormError = false;
+      this.attackFormSubmitted = false;
+    } else {
+      this.attackFormError = true;
     }
   }
 
@@ -117,7 +122,7 @@ export class PlayPage {
   }
 
   endGame(): void {
-    this.navController.push(GameoverPage, { game: this.game });
+    this.navController.push(GameoverPage, { winner: this.helper.winner });
   }
 
   backConfirm(ev: UIEvent): void {
@@ -139,5 +144,15 @@ export class PlayPage {
     alert.present().then(()=>{
       this.alertShown = true;
     });
+  }
+
+  fightToString(fight) {
+    if (fight.attacker.name === fight.defender.name) {
+      return `Reinforcements (${fight.attackerShips} ships) have arrived for planet ${fight.defenderPlanet.name}. ${fight.winnerShips} ships ready to fight.`;
+    }
+    if (fight.winner.name === fight.defender.name) {
+      return `Planet ${fight.defenderPlanet.name} has held against an attack from ${fight.attacker.name}. ${fight.winnerShips} survivors.`;
+    }
+    return `Planet ${fight.defenderPlanet.name} has fallen to ${fight.attacker.name}. ${fight.winnerShips} survivors.`;
   }
 }

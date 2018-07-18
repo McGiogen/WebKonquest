@@ -30,16 +30,4 @@ export class Fight {
     this.winner = winner;
     this.winnerShips = winnerShips;
   }
-
-  public toString() {
-    if (this.attacker === this.defender) {
-      return `Reinforcements (${this.attackerShips} ships) have arrived for planet ${this.defenderPlanet}. ${this.winnerShips} ships ready to fight.`;
-    }
-    if (this.winner === this.defender) {
-      return `Planet ${this.defenderPlanet} has held against an attack from ${this.attacker}. ${this.winnerShips} survivors.`;
-    }
-    return `Planet ${this.defenderPlanet} has fallen to ${this.attacker}. ${this.winnerShips} survivors.`;
-  }
-
-
 }

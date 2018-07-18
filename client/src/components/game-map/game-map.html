@@ -1,6 +1,6 @@
 <div class="map-container">
   <div class="map-grid" [ngClass]="appOptions.graphics">
-    <div *ngFor='let row of map.grid; trackBy: index;' class="map-grid-row">
+    <div *ngFor='let row of map?.grid; trackBy: index;' class="map-grid-row">
       <button
         *ngFor='let sector of row; trackBy: index'
         class="map-grid-cell"
@@ -13,7 +13,7 @@
           class="planet"
           [ngClass]="sector.planet != null ? 'planet-' + sector.planet.owner.look : ''"
         ></div>
-        <span class="map-grid-cell-content">{{ getPlanetName(sector.planet) }}<br>{{ getPlanetShips(sector.planet) }}</span>
+        <span class="map-grid-cell-content">{{ sector.planet?.name }}<br>{{ getPlanetShips(sector.planet) }}</span>
       </button>
     </div>
   </div>

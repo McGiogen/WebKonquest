@@ -32,16 +32,12 @@ export class GameMapComponent {
     this.selectedSectorEmitter.emit(sector);
   }
 
-  getPlanetName(planet: Planet): string {
-    return planet == null ? '' : planet.name;
-  }
-
   getPlanetShips(planet: Planet): string {
     if (planet == null) {
       return '';
     }
 
-    if (planet.owner === this.currentPlayer) {
+    if (this.currentPlayer && planet.owner.name === this.currentPlayer.name) {
       return planet.fleet.shipCount + '';
     } else {
       return planet.oldShips + '';
