@@ -58,11 +58,17 @@ export class RemoteGameHelper implements GameHelper {
         break;
       }
       case 'end-game': {
-        this.endGame();
+        this.endGame(
+          message.data.winner
+        );
         break;
       }
       case 'attack': {
-        this.attackResponse(message.data.success);
+        this.attackResponse(
+          message.data.attack,
+          message.data.success,
+          message.data.map,
+        );
         break;
       }
     }
@@ -96,7 +102,8 @@ export class RemoteGameHelper implements GameHelper {
     this.page.changeRound();
   }
 
-  endGame(): void {
+  endGame(winner: Player): void {
+    this.winner = winner;
     this.page.endGame();
   }
 
@@ -148,7 +155,7 @@ export class RemoteGameHelper implements GameHelper {
   }
 
   doAttack(): boolean {
-    if (!this.attack.source || !this.attack.destination || !this.attack.ships || this.attack.source.owner !== this.currentPlayer) {
+    if (!this.attack.source || !this.attack.destination || !this.attack.ships || this.attack.source.owner.name !== this.currentPlayer.name) {
       console.debug('Impossibile iniziare l\'attacco: uno o più parametri mancanti');
       return false;
     }
@@ -159,43 +166,56 @@ export class RemoteGameHelper implements GameHelper {
     );
     this.service.send('attack', {
       gameId: this.gameId,
-      attack: { source, destination, ships },
+      attack: { source, destination, shipCount: ships },
     });
   }
 
-  attackResponse(success: boolean): void {
+  attackResponse(attack: AttackFleet, success: boolean, map: GameMap): void {
     if (success) {
       const attackSourceCopy = this.getMapPlanets(this.map).find((p: Planet) =>
         p.name === this.attack.source.name
       );
-      attackSourceCopy.fleet.removeShips(this.attack.ships);
+      attackSourceCopy.fleet.shipCount -= Number(attack.shipCount);
+      this.newAttacks.push(attack);
 
       // Cleaning attack informations
       this.attack = { focus: null, source: null, destination: null, ships: null};
+      this.map = map;
     }
-    this.attackResponse(success);
+    this.page.attackCompleted(success);
   }
 
   cancelAttack(attack: AttackFleet): void {
     const attackSourceCopy = this.getMapPlanets(this.map).find((p: Planet) =>
       p.name === attack.source.name
     );
-    attackSourceCopy.fleet.addShips(attack.shipCount);
+    attackSourceCopy.fleet.shipCount += Number(attack.shipCount);
 
-    this.currentPlayer.cancelNewAttack(attack);
-    this.newAttacks = this.currentPlayer.newAttacks;
+    const { source, destination, shipCount } = attack;
+    const newAttack = this.newAttacks.find(a =>
+      a.source.name === attack.source.name
+        && a.destination.name === attack.destination.name
+        && Number(a.shipCount) === Number(attack.shipCount)
+    );
+    if (newAttack) {
+      const newAttackIndex = this.newAttacks.indexOf(newAttack);
+      this.newAttacks.splice(newAttackIndex, 1);
+    }
+
+    this.service.send('cancel-attack', {
+      gameId: this.gameId,
+      attack: { source, destination, shipCount },
+    });
   }
 
   endTurn(): boolean {
-    /*let player = this.game.machine.currentState as Player;
-    if (player instanceof LocalPlayer) {
-      player.done();
+    this.service.send('end-turn', {
+      gameId: this.gameId,
+    });
 
-      // Cleaning attack informations
-      this.attack = { focus: null, source: null, destination: null, ships: null};
-      return true;
-    }*/
-    return false;
+    // Cleaning attack informations
+    this.attack = { focus: null, source: null, destination: null, ships: null};
+    return true;
   }
 
   private configureAttackPlanets(target: Planet): void {
@@ -218,8 +238,8 @@ export class RemoteGameHelper implements GameHelper {
 
   private getMapPlanets(map: GameMap) {
     return map.grid
-    .reduce((a, b) => a.concat(b))
-    .filter(sector => sector.planet != null)
-    .map(sector => sector.planet);
+      .reduce((a, b) => a.concat(b))
+      .filter(sector => sector.planet != null)
+      .map(sector => sector.planet);
   }
 }

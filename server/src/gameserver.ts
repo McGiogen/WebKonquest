@@ -1,4 +1,5 @@
-import { LocalGame, GameConfig, LocalPlayer, Player, GameEvent, Sector, DefenseFleet, AttackFleet, Planet } from "webkonquest-core";
+import { LocalGame, GameConfig, LocalPlayer, Player, GameEvent, Sector, DefenseFleet, AttackFleet, Planet, Fight } from "webkonquest-core";
+import { truncate } from "fs";
 
 interface Map<T> {
     [id: number]: T;
@@ -11,7 +12,7 @@ export class GameServer {
   public handleMessage(msg: { type: string, data: any }, ws: any): { type: string, data: any } {
     switch (msg.type) {
       case 'start-game': {
-        msg.data.gameId = Math.random();
+        msg.data.gameId = Math.round(Math.random() * 10000);
         this.ws[msg.data.gameId] = ws;
         const data = this.startGame(msg.data);
 
@@ -22,7 +23,7 @@ export class GameServer {
       }
 
       case 'attack': {
-        const data = this.playerAttack(msg);
+        const data = this.playerAttack(msg.data);
 
         return {
           type: msg.type,
@@ -30,8 +31,14 @@ export class GameServer {
         };
       }
 
-      /*case 'end-turn':
-        return this.endTurn(msg);*/
+      case 'cancel-attack': {
+        this.cancelPlayerAttack(msg.data);
+        break;
+      }
+
+      case 'end-turn': {
+        return this.playerEndTurn(msg.data);
+      }
 
       default:
         console.warn('Received request not recognized.', msg);
@@ -74,16 +81,16 @@ export class GameServer {
     game.start();
 
     // Converting circular structure to non-circular
-    const map = this.getMapToSend(game);
+    const map = GameServer.getMapToSend(game);
 
     return { gameId, map };
   }
 
   public changeRound(gameId: number) {
     const game = this.getGame(gameId);
-    const map = this.getMapToSend(game);
+    const map = GameServer.getMapToSend(game);
     const turnCounter = game.model.turnCounter;
-    const newFights = game.model.newFights;
+    const newFights = GameServer.getNewFightsToSend(game);
 
     this.getWs(gameId).send(JSON.stringify({
       type: 'change-round',
@@ -96,27 +103,18 @@ export class GameServer {
   }
 
   public changeTurn(gameId: number) {
-    const currentPlayer = this.getCurrentPlayerToSend(this.getGame(gameId));
-    /*const turnPlayer = {
-      name: currentPlayer.name,
-      look: currentPlayer.look
-    }
-    const newAttacks = currentPlayer.newAttacks;
-    const attacksList = currentPlayer.attackList;*/
+    const currentPlayer = GameServer.getCurrentPlayerToSend(this.getGame(gameId));
 
     this.getWs(gameId).send(JSON.stringify({
       type: 'change-turn',
       data: {
         currentPlayer,
-        /*turnPlayer,
-        newAttacks,
-        attacksList,*/
       }
     }));
   }
 
   public endGame(gameId: number) {
-    const winner = this.getGame(gameId).model.winner
+    const winner = GameServer.withoutPlayerCircularity(this.getGame(gameId).model.winner);
 
     this.getWs(gameId).send(JSON.stringify({
       type: 'end-game',
@@ -132,9 +130,32 @@ export class GameServer {
     const game = this.getGame(data.gameId);
     if (!game.isRunning()) throw new Error(`Game ${data.gameId} is not running.`);
 
+    const source = game.model.map.getPlanets().find(p => p.name === data.attack.source.name);
+    const destination = game.model.map.getPlanets().find(p => p.name === data.attack.destination.name);
+
     console.log('Received attack request.', data);
-    const success = game.attack(data.attack.source, data.attack.destination, data.attack.ships, false);
-    return { success };
+    const success = game.attack(source, destination, Number(data.attack.shipCount), false);
+    let attack = data.attack;
+    if (success) {
+      const index = game.model.currentPlayer.newAttacks.length - 1;
+      attack = GameServer.withoutAttackFleetCircularity(game.model.currentPlayer.newAttacks[index]);
+    }
+    const map = GameServer.getMapToSend(game);
+    return { success, map, attack };
+  }
+
+  public cancelPlayerAttack(data: any): any {
+    const game = this.getGame(data.gameId);
+    if (!game.isRunning()) throw new Error(`Game ${data.gameId} is not running.`);
+
+    const currentPlayer = game.machine.currentState as Player;
+    const attack = currentPlayer.newAttacks
+      .find(a =>
+        a.source.name === data.attack.source.name
+          && a.destination.name === data.attack.destination.name
+          && Number(a.shipCount) === Number(data.attack.shipCount)
+      );
+    currentPlayer.cancelNewAttack(attack);
   }
 
   public playerEndTurn(data: any): any {
@@ -160,54 +181,81 @@ export class GameServer {
     return ws;
   }
 
-  private getMapToSend(game: LocalGame): any {
+  private static getMapToSend(game: LocalGame): any {
     const map = game.model.map.clone();
     map.grid.forEach((row:Array<Sector>, i) => {
       row.forEach((sector:Sector, y) => {
         const p = map.grid[i][y].planet;
         if (p) {
-          p.owner = <Player>{
-            name: p.owner.name,
-            look: p.owner.look,
-          }
-          p.fleet = <DefenseFleet>{
-            shipCount: p.fleet.shipCount
-          }
+          map.grid[i][y].planet = GameServer.withoutPlanetCircularity(p);
         }
       });
     });
     return map;
   }
 
-  private getCurrentPlayerToSend(game: LocalGame): any {
+  private static getCurrentPlayerToSend(game: LocalGame): any {
     const p = game.machine.currentState as Player
-    return this.withoutPlayerCircularity(p);
+    return GameServer.withoutPlayerCircularity(p);
   }
 
-  private withoutPlayerCircularity(p: Player): Player {
-    return <Player>{
-      name: p.name,
-      look: p.look,
-      newAttacks: p.newAttacks.map(this.withoutAttackFleetCircularity),
-      attackList: p.attackList.map(this.withoutAttackFleetCircularity),
-      standingOrders: p.standingOrders.map(this.withoutAttackFleetCircularity),
-    };
+  private static getNewFightsToSend(game: LocalGame) {
+    return game.model.newFights.map(fight => {
+      const { attackerShips, defenderShips, turn, winnerShips } = fight;
+      return <Fight>{
+        turn,
+        attacker: GameServer.withoutPlayerCircularity(fight.attacker),
+        attackerPlanet: GameServer.withoutPlanetCircularity(fight.attackerPlanet),
+        attackerShips,
+        winner: GameServer.withoutPlayerCircularity(fight.winner),
+        defender: GameServer.withoutPlayerCircularity(fight.defender),
+        defenderPlanet: GameServer.withoutPlanetCircularity(fight.defenderPlanet),
+        defenderShips,
+        winnerShips,
+      };
+    })
   }
 
-  private withoutAttackFleetCircularity(fleet: AttackFleet): AttackFleet {
-    return <AttackFleet>{
-      owner: this.withoutPlayerCircularity(fleet.owner),
-      source: this.withoutPlanetCircularity(fleet.source),
-      destination: this.withoutPlanetCircularity(fleet.destination),
-      shipCount: fleet.shipCount,
-    };
-  }
-
-  private withoutPlanetCircularity(planet: Planet): any {
-    planet.owner = this.withoutPlayerCircularity(planet.owner);
-    planet.fleet = <DefenseFleet>{
-      shipCount: planet.fleet.shipCount
+  private static withoutPlayerCircularity(p: Player, attacks: boolean = true): Player {
+    if (attacks) {
+      return <Player>{
+        name: p.name,
+        look: p.look,
+        newAttacks: p.newAttacks.map(GameServer.withoutAttackFleetCircularity),
+        attackList: p.attackList.map(GameServer.withoutAttackFleetCircularity),
+        standingOrders: p.standingOrders.map(GameServer.withoutAttackFleetCircularity),
+      };
+    } else {
+      return <Player>{
+        name: p.name,
+        look: p.look,
+      };
     }
-    return planet;
+  }
+
+  private static withoutAttackFleetCircularity(fleet: AttackFleet): AttackFleet {
+    return <AttackFleet>{
+      owner: GameServer.withoutPlayerCircularity(fleet.owner, false),
+      source: GameServer.withoutPlanetCircularity(fleet.source),
+      destination: GameServer.withoutPlanetCircularity(fleet.destination),
+      shipCount: fleet.shipCount,
+      arrivalTurn: fleet.arrivalTurn,
+    };
+  }
+
+  private static withoutPlanetCircularity(planet: Planet): any {
+    const { coordinate, killPercentage, name, productionRate, oldShips, originalProductionRate } = planet;
+    return <Planet>{
+      owner: GameServer.withoutPlayerCircularity(planet.owner, false),
+      fleet: {
+        shipCount: planet.fleet.shipCount,
+      },
+      coordinate,
+      killPercentage,
+      name,
+      productionRate,
+      oldShips,
+      originalProductionRate
+    };
   }
 }

@@ -41,11 +41,15 @@ wss.on('connection', ws => {
     const message = JSON.parse(json);
     console.log('Message received.', message);
 
-    const response = gameServer.handleMessage(message, ws);
+    try {
+      const response = gameServer.handleMessage(message, ws);
 
-    if (response != null) {
-      console.log('Message sent.', response);
-      ws.send(JSON.stringify(response));
+      if (response != null) {
+        console.log('Message sent.', response);
+        ws.send(JSON.stringify(response));
+      }
+    } catch (ex) {
+      console.error(ex);
     }
   });
 

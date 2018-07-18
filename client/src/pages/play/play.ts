@@ -96,9 +96,11 @@ export class PlayPage {
 
   attack(): void {
     this.attackFormSubmitted = true;
+    let success = false;
     if (this.attackForm.valid) {
-      this.helper.doAttack();
+      success = this.helper.doAttack();
     }
+    this.attackFormError = !success;
   }
 
   attackCompleted(success: boolean): void {
@@ -142,5 +144,15 @@ export class PlayPage {
     alert.present().then(()=>{
       this.alertShown = true;
     });
+  }
+
+  fightToString(fight) {
+    if (fight.attacker.name === fight.defender.name) {
+      return `Reinforcements (${fight.attackerShips} ships) have arrived for planet ${fight.defenderPlanet.name}. ${fight.winnerShips} ships ready to fight.`;
+    }
+    if (fight.winner.name === fight.defender.name) {
+      return `Planet ${fight.defenderPlanet.name} has held against an attack from ${fight.attacker.name}. ${fight.winnerShips} survivors.`;
+    }
+    return `Planet ${fight.defenderPlanet.name} has fallen to ${fight.attacker.name}. ${fight.winnerShips} survivors.`;
   }
 }

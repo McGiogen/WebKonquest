@@ -144,7 +144,7 @@
         </h1>
         <div [hidden]="helper.turnCounter <= 1">
           <div *ngFor='let fight of helper.newFights; trackBy: index'>
-            - {{ fight }}
+            - {{ fightToString(fight) }}
           </div>
         </div>
         <div margin-top>
