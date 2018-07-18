@@ -152,7 +152,6 @@ export class GameMap {
     return this.grid[c.x][c.y];
   }
 
-  // TODO business logic -> sposta
   static * planetNameGenerator(): IterableIterator<string> {
     let charCode: number = 'A'.charCodeAt(0);
 

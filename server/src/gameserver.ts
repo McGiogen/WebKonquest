@@ -1,4 +1,4 @@
-import { LocalGame, GameConfig, LocalPlayer, Player, GameEvent } from "webkonquest-core";
+import { LocalGame, GameConfig, LocalPlayer, Player, GameEvent, Sector, DefenseFleet } from "webkonquest-core";
 
 interface Map<T> {
     [id: number]: T;
@@ -9,11 +9,31 @@ export class GameServer {
 
   public handleMessage(msg: { type: string, data: any }): { type: string, data: any } {
     switch (msg.type) {
-      case 'start-game':
+      case 'start-game': {
+        const gameId = this.startGame(msg.data);
+        const map = this.games[gameId].model.map.clone();
+
+        // Converting circular structure to non-circular
+        map.grid.forEach((row:Array<Sector>, i) => {
+          row.forEach((sector:Sector, y) => {
+            const p = map.grid[i][y].planet;
+            if (p) {
+              p.owner = <Player>{
+                name: p.owner.name,
+                look: p.owner.look,
+              }
+              p.fleet = <DefenseFleet>{
+                shipCount: p.fleet.shipCount
+              }
+            }
+          });
+        });
+
         return {
           type: 'start-game',
-          data: this.startGame(msg.data),
-        };
+          data: { gameId, map },
+        }
+      }
 
       /*case 'attack':
         return this.attack(msg);

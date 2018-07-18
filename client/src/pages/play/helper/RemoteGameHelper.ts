@@ -40,6 +40,25 @@ export class RemoteGameHelper implements GameHelper {
     switch(message.type) {
       case 'start-game': {
         this.gameId = message.data.gameId;
+        this.map = message.data.map
+        break;
+      }
+      case 'change-round': {
+        this.changeRound(
+          message.data.map,
+          message.data.turnCounter,
+          [],
+        );
+        break;
+      }
+      case 'change-turn': {
+        this.changeTurn(
+          message.data.currentPlayer,
+        );
+        break;
+      }
+      case 'end-game': {
+        this.endGame();
         break;
       }
     }
