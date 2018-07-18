@@ -41,7 +41,7 @@ wss.on('connection', ws => {
     const message = JSON.parse(json);
     console.log('Message received.', message);
 
-    const response = gameServer.handleMessage(message);
+    const response = gameServer.handleMessage(message, ws);
 
     if (response != null) {
       console.log('Message sent.', response);

@@ -47,7 +47,7 @@ export class RemoteGameHelper implements GameHelper {
         this.changeRound(
           message.data.map,
           message.data.turnCounter,
-          [],
+          message.data.newFights,
         );
         break;
       }
@@ -59,6 +59,10 @@ export class RemoteGameHelper implements GameHelper {
       }
       case 'end-game': {
         this.endGame();
+        break;
+      }
+      case 'attack': {
+        this.attackResponse(message.data.success);
         break;
       }
     }
@@ -80,12 +84,16 @@ export class RemoteGameHelper implements GameHelper {
     }
     this.newAttacks = this.currentPlayer.newAttacks;
     this.attacksList = this.currentPlayer.attackList;
+
+    this.page.changeTurn();
   }
 
-  changeRound(map: GameMap, turnCounter: number, newFights: Array<Fight>): void {
-    this.map = map.clone();
+  changeRound(map: any, turnCounter: number, newFights: Array<Fight>): void {
+    this.map = map;
     this.turnCounter = turnCounter;
     this.newFights = newFights;
+
+    this.page.changeRound();
   }
 
   endGame(): void {
@@ -99,7 +107,7 @@ export class RemoteGameHelper implements GameHelper {
     }
 
     planetName = planetName.toUpperCase();
-    this.attack.source = this.map.getPlanets().find((p: Planet) =>
+    this.attack.source = this.getMapPlanets(this.map).find((p: Planet) =>
       p.name === planetName
     )
   }
@@ -111,14 +119,14 @@ export class RemoteGameHelper implements GameHelper {
     }
 
     planetName = planetName.toUpperCase();
-    this.attack.destination = this.map.getPlanets().find((p: Planet) =>
+    this.attack.destination = this.getMapPlanets(this.map).find((p: Planet) =>
       p.name === planetName
     )
   }
 
   selectPlanet(planetName: string): void {
-    /*planetName = planetName.toUpperCase();
-    const planet = this.game.model.map.getPlanets().find((p: Planet) =>
+    planetName = planetName.toUpperCase();
+    const planet = this.getMapPlanets(this.map).find((p: Planet) =>
       p.name === planetName
     )
 
@@ -132,11 +140,11 @@ export class RemoteGameHelper implements GameHelper {
       } else {
         this.configureAttackPlanets(planet);
       }
-    }*/
+    }
   }
 
   setShipCount(shipCount: number): void {
-    this.attack.ships = shipCount;
+    this.attack.ships = Number(shipCount);
   }
 
   doAttack(): boolean {
@@ -144,14 +152,20 @@ export class RemoteGameHelper implements GameHelper {
       console.debug('Impossibile iniziare l\'attacco: uno o più parametri mancanti');
       return false;
     }
+    const { source, destination, ships } = this.attack;
     console.log(
       `Start attack from ${this.attack.source.name} to ${this.attack.destination.name} with ${this.attack.ships} ships.`,
-      [this.attack.source, this.attack.destination, Number(this.attack.ships)]
+      [source, destination, ships]
     );
-    const success = false //this.game.attack(this.attack.source, this.attack.destination, Number(this.attack.ships), false);
+    this.service.send('attack', {
+      gameId: this.gameId,
+      attack: { source, destination, ships },
+    });
+  }
 
+  attackResponse(success: boolean): void {
     if (success) {
-      const attackSourceCopy = this.map.getPlanets().find((p: Planet) =>
+      const attackSourceCopy = this.getMapPlanets(this.map).find((p: Planet) =>
         p.name === this.attack.source.name
       );
       attackSourceCopy.fleet.removeShips(this.attack.ships);
@@ -159,11 +173,11 @@ export class RemoteGameHelper implements GameHelper {
       // Cleaning attack informations
       this.attack = { focus: null, source: null, destination: null, ships: null};
     }
-    return success;
+    this.attackResponse(success);
   }
 
   cancelAttack(attack: AttackFleet): void {
-    const attackSourceCopy = this.map.getPlanets().find((p: Planet) =>
+    const attackSourceCopy = this.getMapPlanets(this.map).find((p: Planet) =>
       p.name === attack.source.name
     );
     attackSourceCopy.fleet.addShips(attack.shipCount);
@@ -191,7 +205,7 @@ export class RemoteGameHelper implements GameHelper {
 
     if (this.attack.source == null) {
       // Il pianeta da cui parte l'attacco dev'essere di proprietà del giocatore
-      if (target.owner === this.currentPlayer) {
+      if (target.owner.name === this.currentPlayer.name) {
         this.attack.source = target;
       }
     } else {
@@ -200,5 +214,12 @@ export class RemoteGameHelper implements GameHelper {
         this.attack.destination = target;
       }
     }
+  }
+
+  private getMapPlanets(map: GameMap) {
+    return map.grid
+    .reduce((a, b) => a.concat(b))
+    .filter(sector => sector.planet != null)
+    .map(sector => sector.planet);
   }
 }

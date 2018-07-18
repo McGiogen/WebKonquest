@@ -97,14 +97,17 @@ export class PlayPage {
   attack(): void {
     this.attackFormSubmitted = true;
     if (this.attackForm.valid) {
-      const result = this.helper.doAttack();
-      if (result) {
-        this.attackForm.reset();
-        this.attackFormError = false;
-        this.attackFormSubmitted = false;
-      } else {
-        this.attackFormError = true;
-      }
+      this.helper.doAttack();
+    }
+  }
+
+  attackCompleted(success: boolean): void {
+    if (success) {
+      this.attackForm.reset();
+      this.attackFormError = false;
+      this.attackFormSubmitted = false;
+    } else {
+      this.attackFormError = true;
     }
   }
 

@@ -1,4 +1,4 @@
-import { LocalGame, GameConfig, LocalPlayer, Player, GameEvent, Sector, DefenseFleet } from "webkonquest-core";
+import { LocalGame, GameConfig, LocalPlayer, Player, GameEvent, Sector, DefenseFleet, AttackFleet, Planet } from "webkonquest-core";
 
 interface Map<T> {
     [id: number]: T;
@@ -6,39 +6,31 @@ interface Map<T> {
 
 export class GameServer {
   games: Map<LocalGame> = {};
+  ws: Map<any> = {};
 
-  public handleMessage(msg: { type: string, data: any }): { type: string, data: any } {
+  public handleMessage(msg: { type: string, data: any }, ws: any): { type: string, data: any } {
     switch (msg.type) {
       case 'start-game': {
-        const gameId = this.startGame(msg.data);
-        const map = this.games[gameId].model.map.clone();
-
-        // Converting circular structure to non-circular
-        map.grid.forEach((row:Array<Sector>, i) => {
-          row.forEach((sector:Sector, y) => {
-            const p = map.grid[i][y].planet;
-            if (p) {
-              p.owner = <Player>{
-                name: p.owner.name,
-                look: p.owner.look,
-              }
-              p.fleet = <DefenseFleet>{
-                shipCount: p.fleet.shipCount
-              }
-            }
-          });
-        });
+        msg.data.gameId = Math.random();
+        this.ws[msg.data.gameId] = ws;
+        const data = this.startGame(msg.data);
 
         return {
-          type: 'start-game',
-          data: { gameId, map },
-        }
+          type: msg.type,
+          data,
+        };
       }
 
-      /*case 'attack':
-        return this.attack(msg);
+      case 'attack': {
+        const data = this.playerAttack(msg);
 
-      case 'end-turn':
+        return {
+          type: msg.type,
+          data,
+        };
+      }
+
+      /*case 'end-turn':
         return this.endTurn(msg);*/
 
       default:
@@ -46,8 +38,9 @@ export class GameServer {
     }
   }
 
-  public startGame(data: any): number {
-    const gameId = Math.random();
+  public startGame(data): { gameId: number, map: any } {
+    const gameId = data.gameId;
+    console.log('Received start game request.', data);
     const gameConfig = new GameConfig();
 
     if (data.neutral.planets) {
@@ -73,25 +66,82 @@ export class GameServer {
 
     game.model.map.populateMap(game.model.players, game.model.neutral, gameConfig.neutralPlanets);
 
-    console.debug('Received start game request.', data);
+    game.eventEmitter.on(GameEvent.RoundStart, () => this.changeRound(gameId));
+    game.eventEmitter.on(GameEvent.PlayerTurnStart, () => this.changeTurn(gameId));
+    game.eventEmitter.on(GameEvent.GameOver, () => this.endGame(gameId));
+
+    console.log(`Starting game ${gameId}.`, data);
     game.start();
 
-    return gameId;
+    // Converting circular structure to non-circular
+    const map = this.getMapToSend(game);
+
+    return { gameId, map };
   }
 
-  public playerAttack(msg: any): any {
-    const game = this.getGame(msg.gameId);
-    if (!game.isRunning()) throw new Error(`Game ${msg.gameId} is not running.`);
+  public changeRound(gameId: number) {
+    const game = this.getGame(gameId);
+    const map = this.getMapToSend(game);
+    const turnCounter = game.model.turnCounter;
+    const newFights = game.model.newFights;
 
-    console.debug('Received attack request.', msg);
-    game.attack(msg.attackSource, msg.attackDestination, msg.attackShipCount, false);
+    this.getWs(gameId).send(JSON.stringify({
+      type: 'change-round',
+      data: {
+        map,
+        turnCounter,
+        newFights,
+      }
+    }));
   }
 
-  public playerEndTurn(msg: any): any {
-    const game = this.getGame(msg.gameId);
-    if (!game.isRunning()) throw new Error(`Game ${msg.gameId} is not running.`);
+  public changeTurn(gameId: number) {
+    const currentPlayer = this.getCurrentPlayerToSend(this.getGame(gameId));
+    /*const turnPlayer = {
+      name: currentPlayer.name,
+      look: currentPlayer.look
+    }
+    const newAttacks = currentPlayer.newAttacks;
+    const attacksList = currentPlayer.attackList;*/
 
-    console.debug('Received end turn request.', msg);
+    this.getWs(gameId).send(JSON.stringify({
+      type: 'change-turn',
+      data: {
+        currentPlayer,
+        /*turnPlayer,
+        newAttacks,
+        attacksList,*/
+      }
+    }));
+  }
+
+  public endGame(gameId: number) {
+    const winner = this.getGame(gameId).model.winner
+
+    this.getWs(gameId).send(JSON.stringify({
+      type: 'end-game',
+      data: {
+        winner
+      }
+    }));
+
+    // TODO clean game data
+  }
+
+  public playerAttack(data: any): any {
+    const game = this.getGame(data.gameId);
+    if (!game.isRunning()) throw new Error(`Game ${data.gameId} is not running.`);
+
+    console.log('Received attack request.', data);
+    const success = game.attack(data.attack.source, data.attack.destination, data.attack.ships, false);
+    return { success };
+  }
+
+  public playerEndTurn(data: any): any {
+    const game = this.getGame(data.gameId);
+    if (!game.isRunning()) throw new Error(`Game ${data.gameId} is not running.`);
+
+    console.log('Received end turn request.', data);
     let player = game.machine.currentState as Player;
     if (player instanceof LocalPlayer) {
       player.done();
@@ -102,5 +152,62 @@ export class GameServer {
     const game = this.games[gameId];
     if (!game) throw new Error(`Game ${gameId} not exists.`);
     return game;
+  }
+
+  public getWs(gameId: number): any {
+    const ws = this.ws[gameId];
+    if (!ws) throw new Error(`WebSocket of game ${gameId} not exists.`);
+    return ws;
+  }
+
+  private getMapToSend(game: LocalGame): any {
+    const map = game.model.map.clone();
+    map.grid.forEach((row:Array<Sector>, i) => {
+      row.forEach((sector:Sector, y) => {
+        const p = map.grid[i][y].planet;
+        if (p) {
+          p.owner = <Player>{
+            name: p.owner.name,
+            look: p.owner.look,
+          }
+          p.fleet = <DefenseFleet>{
+            shipCount: p.fleet.shipCount
+          }
+        }
+      });
+    });
+    return map;
+  }
+
+  private getCurrentPlayerToSend(game: LocalGame): any {
+    const p = game.machine.currentState as Player
+    return this.withoutPlayerCircularity(p);
+  }
+
+  private withoutPlayerCircularity(p: Player): Player {
+    return <Player>{
+      name: p.name,
+      look: p.look,
+      newAttacks: p.newAttacks.map(this.withoutAttackFleetCircularity),
+      attackList: p.attackList.map(this.withoutAttackFleetCircularity),
+      standingOrders: p.standingOrders.map(this.withoutAttackFleetCircularity),
+    };
+  }
+
+  private withoutAttackFleetCircularity(fleet: AttackFleet): AttackFleet {
+    return <AttackFleet>{
+      owner: this.withoutPlayerCircularity(fleet.owner),
+      source: this.withoutPlanetCircularity(fleet.source),
+      destination: this.withoutPlanetCircularity(fleet.destination),
+      shipCount: fleet.shipCount,
+    };
+  }
+
+  private withoutPlanetCircularity(planet: Planet): any {
+    planet.owner = this.withoutPlayerCircularity(planet.owner);
+    planet.fleet = <DefenseFleet>{
+      shipCount: planet.fleet.shipCount
+    }
+    return planet;
   }
 }
