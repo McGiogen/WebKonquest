@@ -8,7 +8,7 @@ export class GameServerService {
   public socket: WebSocketSubject<any>;
 
   constructor() {
-    this.socket = WebSocketSubject.create(GameServerService.getWsUrl('api/socket'));
+    this.socket = WebSocketSubject.create(GameServerService.getWsUrl('/api/socket'));
   }
 
   public subscribe(next?: (value: any) => void, error?: (error: any) => void, complete?: () => void): Subscription {
@@ -38,6 +38,6 @@ export class GameServerService {
 
   private static getWsUrl(s: string): string {
     let l = window.location;
-    return ((l.protocol === "https:") ? "wss:///" : "ws:///") + l.host + l.pathname + s;
+    return ((l.protocol === "https:") ? "wss:///" : "ws:///") + l.host + s;
   }
 }
