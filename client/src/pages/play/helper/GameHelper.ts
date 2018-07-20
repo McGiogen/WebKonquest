@@ -1,7 +1,6 @@
 import {Planet, Player, GameMap, AttackFleet} from 'webkonquest-core';
 import {AppOptions} from '../../../services/AppOptions';
 import { SetupGame } from '../../setup-game/SetupGameData';
-import { Injectable } from '@angular/core';
 
 export interface GameHelper {
   options: AppOptions;

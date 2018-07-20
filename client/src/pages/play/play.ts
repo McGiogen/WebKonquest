@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Platform, AlertController, Navbar} from 'ionic-angular';
-import {AttackFleet, LocalGame} from 'webkonquest-core';
+import {AttackFleet} from 'webkonquest-core';
 import {LocalGameHelper} from './helper/LocalGameHelper';
 import {AppOptions} from '../../services/AppOptions';
 import {GameoverPage} from '../gameover/gameover';
@@ -94,6 +94,14 @@ export class PlayPage {
     this.view = 'change-round';
   }
 
+  onStartTurn(): void {
+    if (this.helper.winner) {
+      this.navController.push(GameoverPage, { winner: this.helper.winner });
+    } else {
+      this.view = 'change-turn'
+    }
+  }
+
   attack(): void {
     this.attackFormSubmitted = true;
     let success = false;
@@ -119,10 +127,6 @@ export class PlayPage {
 
   endTurn(): void {
     this.helper.endTurn();
-  }
-
-  endGame(): void {
-    this.navController.push(GameoverPage, { winner: this.helper.winner });
   }
 
   backConfirm(ev: UIEvent): void {

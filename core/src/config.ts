@@ -7,7 +7,7 @@ export class GameConfig {
   productionAfterConquere: boolean = true;
   neutralsShowShips: boolean = false;
   neutralsShowStats: boolean = false;
-  neutralsProduction: number = 6;
+  neutralsProduction: number = 2;
 
   constructor() {};
 }

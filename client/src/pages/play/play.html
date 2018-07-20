@@ -11,6 +11,53 @@
 
 <ion-content padding>
   <ion-grid>
+
+    <!-- CHANGE ROUND VIEW -->
+    <ion-row [hidden]="view !== 'change-round'">
+      <ion-col col-12 class="change-round">
+        <h1 [hidden]="helper.turnCounter <= 1">
+          {{ helper.newFights?.length > 0 ? 'Fights!' : 'Dead calm' }}
+        </h1>
+        <h1 [hidden]="helper.turnCounter > 1">
+          Who will be the next<br>
+          Emperor of the Galaxy?<br>
+          <br>
+          <small>
+            Every turn you choose how many ships sail
+            from what planet to what planet:
+            start a fight or send reinforcements.<br>
+            Neutral planets and their wealth are waiting you
+            to join the fight!<br>
+          </small>
+          <br>
+        </h1>
+        <div [hidden]="helper.turnCounter <= 1">
+          <div *ngFor='let fight of helper.newFights; trackBy: index'>
+            - {{ fightToString(fight) }}
+          </div>
+        </div>
+        <div margin-top>
+          <button ion-button large (click)="onStartTurn()">{{ helper.turnCounter <= 1 ? 'Start the game' : 'Continue'}}</button>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <!-- CHANGE TURN VIEW -->
+    <ion-row [hidden]="view !== 'change-turn'">
+      <ion-col col-12 class="change-turn">
+        <h1 [ngClass]="appOptions.graphics">
+          <span>Turn {{ helper.turnCounter }}</span>
+          <br><br>
+          <span>{{ helper.turnPlayer.name }}</span>
+          <div class="color-container" [attr.title]="helper.turnPlayer.look">
+            <div class="planet" [ngClass]="'planet-' + helper.turnPlayer.look"></div>
+          </div>
+          <br><br>
+          <button ion-button large (click)="view = 'game'">Play</button>
+        </h1>
+      </ion-col>
+    </ion-row>
+
     <!-- GAME VIEW -->
     <ion-row [hidden]="view !== 'game'">
 
@@ -21,14 +68,12 @@
             <ion-row>
               <ion-col col-12>
 
-                <div [hidden]="helper.planetWithFocus == null">
-                  Planet {{ helper.planetWithFocus?.name }}<br>
-                  Coordinate: {{ helper.planetWithFocus?.coordinate.x }},{{ helper.planetWithFocus?.coordinate.y }}<br>
-                  Kill percentage: {{ helper.planetWithFocus?.killPercentage | percent }}<br>
-                  Production rate: {{ helper.planetWithFocus?.productionRate }}<br>
-                  Owner: {{ helper.planetWithFocus?.owner?.name }}<br>
-                </div>
-                <hr [hidden]="helper.planetWithFocus == null">
+                <div [hidden]="helper.attack.focus == null">
+                  Info Planet {{ helper.attack.focus?.name }} of {{ helper.attack.focus?.owner?.name }}<br>
+                  Kill percentage: {{ helper.attack.focus?.killPercentage | percent }}<br>
+                  Production rate: {{ helper.attack.focus?.productionRate }}<br>
+              </div>
+                <hr [hidden]="helper.attack.focus == null">
 
                 <div class="attack-info">
                   <form [formGroup]="attackForm" (ngSubmit)="attack()">
@@ -107,50 +152,5 @@
 
     </ion-row>
 
-    <!-- CHANGE TURN VIEW -->
-    <ion-row [hidden]="view !== 'change-turn'">
-      <ion-col col-12 class="change-turn">
-        <h1 [ngClass]="appOptions.graphics">
-          <span>Turn {{ helper.turnCounter }}</span>
-          <br><br>
-          <span>{{ helper.turnPlayer.name }}</span>
-          <div class="color-container" [attr.title]="helper.turnPlayer.look">
-            <div class="planet" [ngClass]="'planet-' + helper.turnPlayer.look"></div>
-          </div>
-          <br><br>
-          <button ion-button large (click)="view = 'game'">Play</button>
-        </h1>
-      </ion-col>
-    </ion-row>
-
-    <!-- CHANGE ROUND VIEW -->
-    <ion-row [hidden]="view !== 'change-round'">
-      <ion-col col-12 class="change-round">
-        <h1 [hidden]="helper.turnCounter <= 1">
-          {{ helper.newFights?.length > 0 ? 'Fights!' : 'Dead calm' }}
-        </h1>
-        <h1 [hidden]="helper.turnCounter > 1">
-          Who will be the next<br>
-          Emperor of the Galaxy?<br>
-          <br>
-          <small>
-            Every turn you choose how many ships sail
-            from what planet to what planet:
-            start a fight or send reinforcements.<br>
-            Neutral planets and their wealth are waiting you
-            to join the fight!<br>
-          </small>
-          <br>
-        </h1>
-        <div [hidden]="helper.turnCounter <= 1">
-          <div *ngFor='let fight of helper.newFights; trackBy: index'>
-            - {{ fightToString(fight) }}
-          </div>
-        </div>
-        <div margin-top>
-          <button ion-button large (click)="view = 'change-turn'">{{ helper.turnCounter <= 1 ? 'Start the game' : 'Next round'}}</button>
-        </div>
-      </ion-col>
-    </ion-row>
   </ion-grid>
 </ion-content>

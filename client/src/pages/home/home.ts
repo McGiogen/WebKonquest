@@ -3,7 +3,6 @@ import {NavController} from 'ionic-angular';
 import {OptionsPage} from '../options/options';
 import {AboutPage} from '../about/about';
 import {SetupGamePage} from '../setup-game/setup-game';
-import { GameServerService } from '../play/helper/gameserver.service';
 
 @Component({
   selector: 'page-home',
@@ -11,8 +10,22 @@ import { GameServerService } from '../play/helper/gameserver.service';
 })
 export class HomePage {
 
-  constructor(public navController: NavController/*, private service: GameServerService*/) {
+  public isOnline: boolean;
 
+  constructor(public navController: NavController) {
+    this.isOnline = navigator.onLine;
+
+    window.addEventListener('online', () => {
+      this.isOnline = navigator.onLine;
+    });
+
+    window.addEventListener('offline', () => {
+      this.isOnline = navigator.onLine;
+    })
+  }
+
+  ionViewDidEnter() {
+    this.isOnline = navigator.onLine;
   }
 
   setupLocalGame() {
