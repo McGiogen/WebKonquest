@@ -1,4 +1,4 @@
-import {Planet, Player, LocalPlayer, GameMap, AttackFleet, Fight} from 'webkonquest-core';
+import {Planet, Player, GameMap, AttackFleet, Fight} from 'webkonquest-core';
 import {AppOptions, InteractMode} from '../../../services/AppOptions';
 import { PlayPage } from '../play';
 import { GameHelper } from './GameHelper';
@@ -75,10 +75,6 @@ export class RemoteGameHelper implements GameHelper {
   }
 
   startGame(setup: SetupGame): void {
-    // this.game.eventEmitter.on(GameEvent.RoundStart, this.changeRound.bind(this));
-    // this.game.eventEmitter.on(GameEvent.PlayerTurnStart, this.changeTurn.bind(this));
-    // this.game.eventEmitter.on(GameEvent.GameOver, this.endGame.bind(this));
-
     this.service.send('start-game', setup);
   }
 
@@ -104,7 +100,6 @@ export class RemoteGameHelper implements GameHelper {
 
   endGame(winner: Player): void {
     this.winner = winner;
-    this.page.endGame();
   }
 
   setSourcePlanet(planetName: string): void {

@@ -11,7 +11,9 @@
         <button ion-button large icon-start (click)="setupLocalGame($event)">
           <ion-icon name="laptop"></ion-icon>Local game
         </button>
-        <button ion-button large icon-start color="secondary" (click)="setupRemoteGame($event)">
+        <button ion-button large icon-start color="secondary"
+          (click)="setupRemoteGame($event)"
+          [disabled]="!isOnline">
           <ion-icon name="globe"></ion-icon>Online game
         </button>
       </ion-col>

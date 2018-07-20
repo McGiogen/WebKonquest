@@ -1,4 +1,4 @@
-import {Game, Planet, Player, LocalPlayer, GameEvent, GameMap, AttackFleet, Fight, GameConfig, LocalGame} from 'webkonquest-core';
+import {Planet, Player, LocalPlayer, GameEvent, GameMap, AttackFleet, Fight, GameConfig, LocalGame} from 'webkonquest-core';
 import {AppOptions, InteractMode} from '../../../services/AppOptions';
 import { GameHelper } from './GameHelper';
 import { PlayPage } from '../play';
@@ -83,7 +83,6 @@ export class LocalGameHelper implements GameHelper {
 
   endGame(): void {
     this.winner = this.game.model.winner;
-    this.page.endGame();
   }
 
   setSourcePlanet(planetName: string): void {
