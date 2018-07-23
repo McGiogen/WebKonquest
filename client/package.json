@@ -1,7 +1,7 @@
 {
   "name": "webkonquest-client",
   "description": "Konquest web version",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "McGiogen",
   "homepage": "https://github.com/McGiogen/WebKonquest",
   "license": "MIT",
