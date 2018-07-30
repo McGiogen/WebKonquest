@@ -7,7 +7,7 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class GameoverPage {
   // Winner player's name
-  private winner: string;
+  winner: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.winner = navParams.get('winner');

@@ -9,7 +9,7 @@ import {AppOptions, InteractMode, Graphics} from "../../services/AppOptions";
 export class OptionsPage {
   InteractMode = InteractMode;
   Graphics = Graphics;
-  private appOptions: AppOptions;
+  appOptions: AppOptions;
 
   constructor(public navCtrl: NavController) {
     this.appOptions = AppOptions.instance;

@@ -19,8 +19,8 @@ export class PlayPage {
   private goBack: (ev: UIEvent) => void;
 
   private helper: GameHelper;
-  private appOptions: AppOptions;
   private alertShown: boolean;
+  public appOptions: AppOptions;
 
   public view: string; // 'change-round', 'change-turn', 'game'
   public attackForm: FormGroup;

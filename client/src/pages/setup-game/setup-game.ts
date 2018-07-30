@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {PlayPage} from '../play/play';
 import {PLAYER_COLORS} from '../../services/playerColors';
-import {AppOptions} from "../../services/AppOptions";
+import {AppOptions} from '../../services/AppOptions';
 import { SetupNeutral, SetupPlayer, SetupGame } from './SetupGameData';
 import { GameConfig } from 'webkonquest-core';
 
@@ -11,11 +11,11 @@ import { GameConfig } from 'webkonquest-core';
   templateUrl: 'setup-game.html',
 })
 export class SetupGamePage {
-  private appOptions: AppOptions;
   private neutral: SetupNeutral;
   private players: Array<SetupPlayer>;
   private local: boolean;
   gameConfig: GameConfig;
+  appOptions: AppOptions;
 
   constructor(public navController: NavController, private navParams: NavParams) {
   }
