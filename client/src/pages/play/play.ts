@@ -40,7 +40,7 @@ export class PlayPage {
     }
 
     this.helper.startGame(setupGame);
-    this.view = 'change-round';
+    this.setView('change-round');
     this.alertShown = false;
 
     this.attackFormError = false;
@@ -81,7 +81,7 @@ export class PlayPage {
 
   changeTurn(): void {
     if (this.view !== 'change-round') {
-      this.view = 'change-turn';
+      this.setView('change-turn');
     }
 
     this.attackFormError = false;
@@ -91,14 +91,14 @@ export class PlayPage {
   }
 
   changeRound(): void {
-    this.view = 'change-round';
+    this.setView('change-round');
   }
 
   onStartTurn(): void {
     if (this.helper.winner) {
       this.navController.push(GameoverPage, { winner: this.helper.winner });
     } else {
-      this.view = 'change-turn'
+      this.setView('change-turn');
     }
   }
 
@@ -127,6 +127,10 @@ export class PlayPage {
 
   endTurn(): void {
     this.helper.endTurn();
+  }
+
+  setView(view: string): void {
+    this.view = view;
   }
 
   backConfirm(ev: UIEvent): void {
