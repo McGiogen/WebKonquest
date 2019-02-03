@@ -1,56 +1,36 @@
-import {NgModule, ErrorHandler} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
+
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import {HttpClientModule} from '@angular/common/http';
-import {ReactiveFormsModule, FormsModule} from '@angular/forms';
-import {IonicApp, IonicModule, IonicErrorHandler} from 'ionic-angular';
-import {MyApp} from './app.component';
-
-import {PlayPage} from '../pages/play/play';
-import {AboutPage} from '../pages/about/about';
-import {HomePage} from '../pages/home/home';
-import {OptionsPage} from '../pages/options/options';
-import {GameoverPage} from '../pages/gameover/gameover';
-import {SetupGamePage} from '../pages/setup-game/setup-game';
-
-//import {StatusBar} from '@ionic-native/status-bar';
-//import {SplashScreen} from '@ionic-native/splash-screen';
-import {ComponentsModule} from "../components/components.module";
-import { GameServerService } from '../pages/play/helper/gameserver.service';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ComponentsModule} from './components/components.module';
 
 @NgModule({
   declarations: [
-    MyApp,
-    PlayPage,
-    AboutPage,
-    OptionsPage,
-    GameoverPage,
-    SetupGamePage,
-    HomePage
+    AppComponent,
   ],
+  entryComponents: [],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule.forRoot(MyApp),
-    ComponentsModule
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    PlayPage,
-    AboutPage,
-    OptionsPage,
-    GameoverPage,
-    SetupGamePage,
-    HomePage
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    ComponentsModule,
   ],
   providers: [
-    //StatusBar,
-    //SplashScreen,
-    GameServerService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ]
+    StatusBar,
+    SplashScreen,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

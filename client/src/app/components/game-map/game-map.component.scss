@@ -1,0 +1,91 @@
+// Faccio in modo che il div sia sempre quadrato
+// Sto attento alla compatibilità con almeno Chrome e Firefox
+// Reference: https://stackoverflow.com/a/19068538/3687018
+@mixin square-size($size) {
+  position: relative;
+  width: $size;
+
+  &:after {
+    content: " ";
+    display: block;
+    padding-bottom: 100%;
+  }
+}
+
+$map-shadow: 0 0 3px rgba(204, 204, 204, 0.7);
+
+.map-container {
+  /** Creazione del contenitore della mappa in modo che sia responsive
+   Grazie a width: 100% mi assicuro che la mappa non sia mai più larga delle dimensioni del browser.
+   Ma ciò non basta, voglio anche che la mappa sia sempre tutta visibile all'interno dello schermo.
+   Per questo imposto che la larghezza e l'altezza della mappa non possano mai superare l'altezza del browser.
+   Solo in questo modo la mappa sarà sempre tutta visibile.
+   Uso la funzione calc per togliere dall'altezza del viewport l'header e il footer dell'applicazione
+   insieme ai vari margini/padding dei contenitori.
+   */
+  @include square-size(100%);
+  @media (min-width: 768px) {
+    max-width: calc(100vh - (56px + (26px * 2)));
+    max-height: calc(100vh - (56px + (26px * 2)));
+  }
+
+  .map-grid {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-shadow: $map-shadow;
+
+    &-row {
+      display: flex;
+      flex-flow: row nowrap;
+    }
+
+    // Faccio in modo che il div sia sempre quadrato
+    // Reference: https://stackoverflow.com/a/19068538/3687018
+    // Il contenuto deve poi essere in position: absolute
+    &-cell {
+      @include square-size(10%);
+      box-shadow: inset $map-shadow;
+      display: block;
+      background-color: transparent;
+      padding: 0;
+      margin: 0;
+      cursor: default;
+      color: white;
+
+      &[tabindex="0"] {
+        cursor: pointer;
+
+        &.active {
+          background-color: rgba(0, 0, 214, .4);
+        }
+
+        &:hover {
+          background-color: rgba(0, 0, 214, .4);
+        }
+      }
+
+      // Imposto lo stesso outline di ionic
+      .focus-outline &:focus {
+        border-color: #51a7e8;
+        outline: 2px solid #51a7e8;
+        -webkit-box-shadow: 0 0 8px 1px #51a7e8;
+        box-shadow: 0 0 8px 1px #51a7e8;
+      }
+
+      &-content {
+        position: absolute;
+        bottom: 10%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 1em;
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      }
+
+      .planet {
+        position: absolute;
+      }
+    }
+  }
+}

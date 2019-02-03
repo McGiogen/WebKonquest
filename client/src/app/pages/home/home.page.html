@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>WebKonquest</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button size="large"
+                    routerLink="/setup-game"
+                    [queryParams]="{local: true}"
+        >
+          <ion-icon name="laptop" slot="start"></ion-icon>Local game
+        </ion-button>
+        <ion-button size="large" color="secondary"
+                    routerLink="/setup-game"
+                    [queryParams]="{local: false}"
+                    [disabled]="!isOnline"
+        >
+          <ion-icon name="globe" slot="start"></ion-icon>Online game
+        </ion-button>
+      </ion-col>
+      <ion-col size="12">
+        <ion-button size="large" color="dark" routerLink="/options">Options</ion-button>
+      </ion-col>
+      <ion-col size="12">
+        <ion-button size="large" color="dark" routerLink="/about">About</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

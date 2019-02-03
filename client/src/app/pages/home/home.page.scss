@@ -1,0 +1,32 @@
+@import '../../../theme/variables';
+
+$home-background: $imgs-path + 'backgrounds/home-background';
+$bg-xs: $home-background + '-848x600.png';
+$bg-sm: $home-background + '-1366x966.png';
+$bg-lg: $home-background + '-2048x1448.png';
+$bg-md: $home-background + '-1920x1357.png';
+$bg-xl: $home-background + '-3508x2480.png';
+
+:host {
+  ion-content {
+    --background: transparent;
+    text-align: center;
+  }
+
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  background-image: url($bg-xs);
+  @media (min-width: 849px), (min-height: 601px) {
+    background-image: url($bg-sm), url($bg-xs);
+  }
+  @media (min-width: 1367px), (min-height: 967px) {
+    background-image: url($bg-md), url($bg-sm), url($bg-xs);
+  }
+  @media (min-width: 1921px), (min-height: 1357px) {
+    background-image: url($bg-lg), url($bg-md), url($bg-sm), url($bg-xs);
+  }
+  @media (min-width: 2049px), (min-height: 1449px) {
+    background-image: url($bg-xl), url($bg-lg), url($bg-md), url($bg-sm), url($bg-xs);
+  }
+}

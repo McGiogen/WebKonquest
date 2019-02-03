@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Setup {{ local ? 'local' : 'online' }} game</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding [ngClass]="appOptions.graphics">
+  <ion-grid fixed>
+    <ion-row>
+
+      <!-- PLAYERS -->
+      <ion-col size="12">
+        <div class="playersHeader">
+          <span class="playersTitle">Players</span>
+        </div>
+      </ion-col>
+
+      <!-- Players -->
+      <ion-col size-md="6" size="12" class="playerBox"
+               *ngFor='let player of players; trackBy: index; let i = index'
+      >
+        <ion-item>
+
+          <ion-label position="floating">{{'Player ' + (i + 1)}}</ion-label>
+          <ion-input type="text" [(ngModel)]="player.name" name="player{{i}}Name"></ion-input>
+          <ion-button fill="clear" color="danger" slot="end"
+                  (click)="removePlayer(i)">
+            <ion-icon name="close" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <app-color-selector
+          class="item-md" [(model)]="this.players[i].look"
+        ></app-color-selector>
+      </ion-col>
+
+      <!-- Add new player -->
+      <ion-col size-md="6" size="12" class="addPlayerBox">
+        <ion-button expand="full" size="large" color="dark" (click)="addNewPlayer()"
+                [disabled]="players.length >= 8">
+          <span [hidden]="players.length >= 8">
+            <ion-icon name="person-add" slot="start"></ion-icon>
+            <span>Add player</span>
+          </span>
+          <span [hidden]="players.length < 8">
+            8 Players is the maximum
+          </span>
+        </ion-button>
+      </ion-col>
+
+      <!-- NEUTRAL -->
+      <ion-col size="12">
+        <div class="neutralPlayer">
+          <div class="neutralName">{{neutral.name}}</div>
+          <app-color-selector [(model)]="neutral.look"></app-color-selector>
+          <ion-item class="neutralPlanets" (click)="focusInput(input)">
+            <ion-label>How many planets?</ion-label>
+            <ion-input #input type="number" min="1" step="1" [placeholder]="'Default (' + this.gameConfig.neutralPlanets + ')'" [(ngModel)]="neutral.planets"></ion-input>
+          </ion-item>
+        </div>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-button (click)="startLocalGame($event)" [disabled]="players.length < 2 || players.length > 8">Play</ion-button>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+</ion-content>

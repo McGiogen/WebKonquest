@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Options
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ion-list no-lines [(ngModel)]="appOptions.interactMode">
+          <ion-radio-group>
+            <ion-list-header><ion-label>
+              Interact mode
+            </ion-label></ion-list-header>
+
+            <ion-item>
+              <ion-label>Single tap</ion-label>
+              <ion-radio [value]="InteractMode.SingleTap" slot="start"></ion-radio>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Double tap</ion-label>
+              <ion-radio [value]="InteractMode.DoubleTap" slot="start"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+      </ion-col>
+      <ion-col size="12">
+        <ion-list no-lines [(ngModel)]="appOptions.graphics">
+          <ion-radio-group>
+            <ion-list-header><ion-label>
+              Graphics
+            </ion-label></ion-list-header>
+
+            <ion-item>
+              <ion-label>2D theme</ion-label>
+              <ion-radio [value]="Graphics.Theme2D" slot="start"></ion-radio>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>3D theme</ion-label>
+              <ion-radio [value]="Graphics.Theme3D" slot="start"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
