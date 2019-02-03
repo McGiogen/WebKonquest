@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'page-about',
   templateUrl: 'about.page.html',
-  styles: ['about.page.scss'],
+  styleUrls: ['about.page.scss'],
 })
 export class AboutPage {
 

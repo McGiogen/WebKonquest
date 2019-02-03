@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { Subscription } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GameServerService {
 
   public socket: WebSocketSubject<any>;

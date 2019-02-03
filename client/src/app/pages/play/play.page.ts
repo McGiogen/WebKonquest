@@ -9,11 +9,12 @@ import { GameHelper } from './helper/GameHelper';
 import { RemoteGameHelper } from './helper/RemoteGameHelper';
 import { SetupGame } from '../setup-game/SetupGameData';
 import { GameServerService } from './helper/gameserver.service';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'page-play',
   templateUrl: 'play.page.html',
-  styles: ['play.page.scss'],
+  styleUrls: ['play.page.scss'],
 })
 export class PlayPage {
   // @ViewChild(Navbar) navBar: Navbar;
@@ -31,9 +32,15 @@ export class PlayPage {
   public attackSource: string;
   public attackTarget: string;
 
-  constructor(public navController: NavController, navParams: NavParams, public platform: Platform, public alertCtrl: AlertController, service: GameServerService) {
+  constructor(
+    public router: Router,
+    public activatedRoute: ActivatedRoute,
+    public platform: Platform,
+    public alertCtrl: AlertController,
+    service: GameServerService,
+  ) {
     this.appOptions = AppOptions.instance;
-    const setupGame: SetupGame = navParams.get('setupGame');
+    const setupGame: SetupGame = activatedRoute.snapshot.paramMap.get('setupGame');
     if (setupGame.local) {
       this.helper = new LocalGameHelper(this);
     } else {
@@ -48,13 +55,13 @@ export class PlayPage {
     this.attackFormSubmitted = false;
 
     // Customizing back button to ask for a Confirm
-    platform.ready().then(() => {
-      /*platform.registerBackButtonAction((ev) => {
+    /*platform.ready().then(() => {
+      platform.registerBackButtonAction((ev) => {
         if (this.alertShown === false) {
           this.backConfirm(ev);
         }
-      }, 0)*/
-    });
+      }, 0)
+    });*/
   }
 
   ngOnInit() {
@@ -98,6 +105,7 @@ export class PlayPage {
   onStartTurn(): void {
     if (this.helper.winner) {
       //this.navController.push(GameoverPage, { winner: this.helper.winner });
+      this.router.navigate(['/gameover', { winner: this.helper.winner }]);
     } else {
       this.setView('change-turn');
     }

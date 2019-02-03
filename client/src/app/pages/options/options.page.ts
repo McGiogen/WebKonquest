@@ -4,7 +4,7 @@ import {AppOptions, InteractMode, Graphics} from '../../services/AppOptions';
 @Component({
   selector: 'page-options',
   templateUrl: 'options.page.html',
-  styles: ['options.page.scss'],
+  styleUrls: ['options.page.scss'],
 })
 export class OptionsPage {
   InteractMode = InteractMode;

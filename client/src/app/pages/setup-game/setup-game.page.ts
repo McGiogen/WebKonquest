@@ -8,7 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 @Component({
   selector: 'page-setup-game',
   templateUrl: 'setup-game.page.html',
-  styles: ['setup-game.page.scss'],
+  styleUrls: ['setup-game.page.scss'],
 })
 export class SetupGamePage {
   neutral: SetupNeutral;
@@ -56,7 +56,7 @@ export class SetupGamePage {
       local: this.local,
     };
 
-    this.router.navigate(['/play'], {queryParams: {setupGame}});
+    this.router.navigate(['/play', {setupGame}]);
   }
 
   focusInput(input): void {

@@ -5,7 +5,7 @@ import {AppOptions} from '../../services/AppOptions';
 @Component({
   selector: 'app-game-map',
   templateUrl: 'game-map.component.html',
-  styles: ['game-map.component.scss'],
+  styleUrls: ['game-map.component.scss'],
 })
 export class GameMapComponent {
 

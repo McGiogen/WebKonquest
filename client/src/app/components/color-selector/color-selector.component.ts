@@ -8,7 +8,7 @@ import {PLAYER_COLORS} from '../../services/playerColors';
 @Component({
   selector: 'app-color-selector',
   templateUrl: 'color-selector.component.html',
-  styles: ['color-selector.component.scss'],
+  styleUrls: ['color-selector.component.scss'],
 })
 export class ColorSelectorComponent {
 

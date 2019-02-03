@@ -37,7 +37,7 @@ ion-content {
 }
 
 .attackFormError {
-  color: map-get($colors, danger);
+  color: var(--ion-color-danger);
   text-transform: uppercase;
   font-size: .9em;
 }

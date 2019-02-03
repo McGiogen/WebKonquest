@@ -4,7 +4,7 @@ import { NavController, NavParams } from '@ionic/angular';
 @Component({
   selector: 'page-gameover',
   templateUrl: 'gameover.page.html',
-  styles: ['gameover.page.scss'],
+  styleUrls: ['gameover.page.scss'],
 })
 export class GameoverPage {
   // Winner player's name
