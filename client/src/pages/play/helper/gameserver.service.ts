@@ -38,6 +38,6 @@ export class GameServerService {
 
   private static getWsUrl(s: string): string {
     let l = window.location;
-    return ((l.protocol === "https:") ? "wss:///" : "ws:///") + l.host + s;
+    return (l.protocol === 'https:' ? 'wss:///' : 'ws:///') + l.host + s;
   }
 }
