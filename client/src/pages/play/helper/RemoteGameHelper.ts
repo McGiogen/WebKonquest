@@ -163,6 +163,7 @@ export class RemoteGameHelper implements GameHelper {
       gameId: this.gameId,
       attack: { source, destination, shipCount: ships },
     });
+    return true;
   }
 
   attackResponse(attack: AttackFleet, success: boolean, map: GameMap): void {

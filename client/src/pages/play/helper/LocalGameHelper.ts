@@ -153,6 +153,7 @@ export class LocalGameHelper implements GameHelper {
       this.attack = { focus: null, source: null, destination: null, ships: null};
     }
     this.page.attackCompleted(success);
+    return success;
   }
 
   cancelAttack(attack: AttackFleet): void {
