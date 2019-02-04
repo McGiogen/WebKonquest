@@ -1,30 +1,27 @@
-import {Component, ViewChild} from '@angular/core';
-import {NavController, NavParams, Platform, AlertController} from '@ionic/angular';
+import {Component, OnInit} from '@angular/core';
+import {Platform, AlertController} from '@ionic/angular';
 import {AttackFleet} from 'webkonquest-core';
 import {LocalGameHelper} from './helper/LocalGameHelper';
 import {AppOptions} from '../../services/AppOptions';
-import {GameoverPage} from '../gameover/gameover.page';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { GameHelper } from './helper/GameHelper';
 import { RemoteGameHelper } from './helper/RemoteGameHelper';
 import { SetupGame } from '../setup-game/SetupGameData';
 import { GameServerService } from './helper/gameserver.service';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
+import { TempStorageService } from 'src/app/services/temp-storage.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'page-play',
   templateUrl: 'play.page.html',
   styleUrls: ['play.page.scss'],
 })
-export class PlayPage {
-  // @ViewChild(Navbar) navBar: Navbar;
-  private goBack: (ev: UIEvent) => void;
-
-  private helper: GameHelper;
+export class PlayPage implements OnInit {
   private alertShown: boolean;
-  public appOptions: AppOptions;
+  public helper: GameHelper;
 
-  public view: string; // 'change-round', 'change-turn', 'game'
+  public view: 'change-round' | 'change-turn' | 'game';
   public attackForm: FormGroup;
 
   public attackFormError: boolean;
@@ -37,14 +34,20 @@ export class PlayPage {
     public activatedRoute: ActivatedRoute,
     public platform: Platform,
     public alertCtrl: AlertController,
-    service: GameServerService,
+    public service: GameServerService,
+    public tempStorage: TempStorageService,
+    private location: Location,
+    public appOptions: AppOptions,
   ) {
-    this.appOptions = AppOptions.instance;
-    const setupGame: SetupGame = activatedRoute.snapshot.paramMap.get('setupGame');
+    const setupGame: SetupGame = tempStorage.setupGame;
+    if (!setupGame) {
+      router.navigate(['']);
+    }
+
     if (setupGame.local) {
-      this.helper = new LocalGameHelper(this);
+      this.helper = new LocalGameHelper(this, appOptions);
     } else {
-      this.helper = new RemoteGameHelper(this, service);
+      this.helper = new RemoteGameHelper(this, service, appOptions);
     }
 
     this.helper.startGame(setupGame);
@@ -53,15 +56,6 @@ export class PlayPage {
 
     this.attackFormError = false;
     this.attackFormSubmitted = false;
-
-    // Customizing back button to ask for a Confirm
-    /*platform.ready().then(() => {
-      platform.registerBackButtonAction((ev) => {
-        if (this.alertShown === false) {
-          this.backConfirm(ev);
-        }
-      }, 0)
-    });*/
   }
 
   ngOnInit() {
@@ -70,12 +64,6 @@ export class PlayPage {
       destination: new FormControl('', [Validators.maxLength(1), Validators.pattern('[a-zA-Z]'), Validators.required]),
       shipcount: new FormControl('', [Validators.pattern('[0-9]*'), Validators.required])
     });
-  }
-
-  // Customizing back button to ask for a Confirm
-  ionViewDidLoad(): void {
-    //this.goBack = this.navBar.backButtonClick.bind(this.navBar);
-    //this.navBar.backButtonClick = this.backConfirm.bind(this);
   }
 
   mapSelectedSector(sector): void {
@@ -104,8 +92,7 @@ export class PlayPage {
 
   onStartTurn(): void {
     if (this.helper.winner) {
-      //this.navController.push(GameoverPage, { winner: this.helper.winner });
-      this.router.navigate(['/gameover', { winner: this.helper.winner }]);
+      this.router.navigate(['/gameover'], { queryParams: { winner: this.helper.winner.name }});
     } else {
       this.setView('change-turn');
     }
@@ -138,23 +125,33 @@ export class PlayPage {
     this.helper.endTurn();
   }
 
-  setView(view: string): void {
+  setView(view: 'change-round' | 'change-turn' | 'game'): void {
     this.view = view;
   }
 
-  backConfirm(ev: UIEvent): void {
+  onBackClick(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.alertShown === false) {
+      this.backConfirm();
+    }
+  }
+
+  backConfirm(): void {
     this.alertCtrl.create({
       header: 'Confirm exit',
       message: 'Do you want to exit?',
       buttons: [{
         text: 'Cancel',
         role: 'cancel',
-        handler: () => {}
+        handler: () => {
+          this.alertShown = false;
+        }
       }, {
         text: 'Yes',
         handler: () => {
           this.alertShown = false;
-          this.goBack(ev);
+          this.location.back();
         }
       }]
     })

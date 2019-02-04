@@ -1,5 +1,14 @@
 @import '../../../theme/variables';
 
+:host {
+  background: url($imgs-path + 'backgrounds/play-background.png') no-repeat;
+  background-size: cover;
+}
+
+ion-content {
+  --background: transparent;
+}
+
 .color-container {
   width: 36px;
   height: 36px;
@@ -11,20 +20,16 @@
   }
 }
 
-ion-content {
-  background: url($imgs-path + 'backgrounds/play-background.png') no-repeat;
-  background-size: cover;
-}
-
 .attack-info {
   line-height: 44px;
   vertical-align: middle;
 
   ion-input {
+    --padding-top: 3px;
+    --padding-bottom: 3px;
     line-height: 1em;
-    > input {
-      text-transform: uppercase;
-    }
+    text-transform: uppercase;
+    text-align: center;
   }
 
   button {

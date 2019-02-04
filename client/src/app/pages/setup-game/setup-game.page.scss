@@ -23,7 +23,7 @@
     }
   }
 
-  .neutralName, color-selector, .neutralPlanets {
+  .neutralName, app-color-selector, .neutralPlanets {
     display: flex;
     margin-right: 20px;
   }
@@ -40,7 +40,7 @@
 }
 
 .addPlayerBox {
-  button {
+  ion-button {
     height: 105px;
   }
 }

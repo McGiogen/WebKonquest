@@ -5,8 +5,6 @@ import { PlayPage } from '../play.page';
 import { SetupGame, SetupPlayer } from '../../setup-game/SetupGameData';
 
 export class LocalGameHelper implements GameHelper {
-  options: AppOptions;
-
   currentPlayer: Player;
 
   attack: {focus: Planet, source: Planet, destination: Planet, ships: number };
@@ -20,11 +18,9 @@ export class LocalGameHelper implements GameHelper {
   newFights: Array<Fight>;
 
   map: GameMap;
-  private game: LocalGame
+  private game: LocalGame;
 
-  constructor(private page: PlayPage) {
-    this.options = AppOptions.instance;
-
+  constructor(private page: PlayPage, public options: AppOptions) {
     this.turnPlayer = { name: null, look: null };
     this.attack = { focus: null, source: null, destination: null, ships: null};
   }
@@ -66,7 +62,7 @@ export class LocalGameHelper implements GameHelper {
     this.turnPlayer = {
       name: this.currentPlayer.name,
       look: this.currentPlayer.look
-    }
+    };
     this.newAttacks = this.currentPlayer.newAttacks;
     this.attacksList = this.currentPlayer.attackList;
 
@@ -94,7 +90,7 @@ export class LocalGameHelper implements GameHelper {
     planetName = planetName.toUpperCase();
     this.attack.source = this.game.model.map.getPlanets().find((p: Planet) =>
       p.name === planetName
-    )
+    );
   }
 
   setDestinationPlanet(planetName: string): void {
@@ -106,14 +102,14 @@ export class LocalGameHelper implements GameHelper {
     planetName = planetName.toUpperCase();
     this.attack.destination = this.game.model.map.getPlanets().find((p: Planet) =>
       p.name === planetName
-    )
+    );
   }
 
   selectPlanet(planetName: string): void {
     planetName = planetName.toUpperCase();
     const planet = this.game.model.map.getPlanets().find((p: Planet) =>
       p.name === planetName
-    )
+    );
 
     if (this.options.interactMode === InteractMode.SingleTap) {
       // In single tap mode the planet selected is always used for the attack
@@ -167,7 +163,7 @@ export class LocalGameHelper implements GameHelper {
   }
 
   endTurn(): boolean {
-    let player = this.game.machine.currentState as Player;
+    const player = this.game.machine.currentState as Player;
     if (player instanceof LocalPlayer) {
       player.done();
 

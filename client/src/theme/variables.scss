@@ -82,6 +82,8 @@
   --ion-toolbar-border-color: #222;
   --ion-text-color: #fff;
   --ion-item-background: #242424;
+  --ion-item-background-activated: #2f2f2f;
+  --ion-border-color: #fff;
 }
 
 .item.item-radio-checked {
@@ -90,8 +92,16 @@
   }
 }
 
+.alert-sub-title.sc-ion-alert-md, .alert-title.sc-ion-alert-md {
+  --ion-text-color: #000;
+}
+
 ion-list-header {
   --ion-text-color: #757575;
+}
+
+ion-item-divider {
+  --ion-background-color: var(--ion-item-background);
 }
 
 // Custom Variables

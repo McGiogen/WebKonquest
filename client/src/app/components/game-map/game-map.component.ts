@@ -11,20 +11,17 @@ export class GameMapComponent {
 
   @Input() map: GameMap;
   @Input() currentPlayer: Player;
-  @Output('selectedSector') selectedSectorEmitter: EventEmitter<Sector> = new EventEmitter<Sector>();
-  selectedSector: Sector;
-  appOptions: AppOptions;
+  @Output() selectedSector = new EventEmitter<Sector>();
+  selectedSectorValue: Sector;
 
-  constructor() {
-    this.appOptions = AppOptions.instance;
-  }
+  constructor(public appOptions: AppOptions) { }
 
   selectSector(sector: Sector): void {
     if (sector.planet == null) {
       return;
     }
-    this.selectedSector = sector;
-    this.selectedSectorEmitter.emit(sector);
+    this.selectedSectorValue = sector;
+    this.selectedSector.emit(sector);
   }
 
   getPlanetShips(planet: Planet): string {

@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 export enum InteractMode {
   SingleTap = 'single-tap',
   DoubleTap = 'double-tap',
@@ -8,24 +10,11 @@ export enum Graphics {
   Theme3D = 'theme-3d',
 }
 
+@Injectable({ providedIn: 'root' })
 export class AppOptions {
-  // region Singleton
-  private static _instance: AppOptions = new AppOptions();
 
-  private constructor() {
-    if (AppOptions._instance) {
-      throw new Error("Error: Instantiation failed: Use AppOptions.getInstance() instead of new.");
-    }
-    AppOptions._instance = this;
-  }
+  private constructor() { }
 
-  static get instance(): AppOptions
-  {
-    return AppOptions._instance;
-  }
-  // endregion
-
-  // region options
   private _interactMode: InteractMode;
   private _graphics: Graphics;
 
@@ -54,6 +43,4 @@ export class AppOptions {
     this._graphics = g;
     localStorage.setItem('graphics', g);
   }
-
-  // endregion
 }

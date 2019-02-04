@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'page-gameover',
@@ -10,11 +11,7 @@ export class GameoverPage {
   // Winner player's name
   winner: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.winner = navParams.get('winner');
-  }
-
-  goToHome() {
-    //this.navCtrl.goToRoot({});
+  constructor(public activatedRoute: ActivatedRoute) {
+    this.winner = activatedRoute.snapshot.queryParamMap.get('winner');
   }
 }

@@ -7,8 +7,6 @@ import { GameServerService } from './gameserver.service';
 import { Subscription } from 'rxjs';
 
 export class RemoteGameHelper implements GameHelper {
-  options: AppOptions;
-
   currentPlayer: Player;
 
   attack: {focus: Planet, source: Planet, destination: Planet, ships: number };
@@ -25,9 +23,7 @@ export class RemoteGameHelper implements GameHelper {
   private gameId: number;
   socketSubscription: Subscription;
 
-  constructor(private page: PlayPage, private service: GameServerService) {
-    this.options = AppOptions.instance;
-
+  constructor(private page: PlayPage, private service: GameServerService, public options: AppOptions) {
     this.turnPlayer = { name: null, look: null };
     this.attack = { focus: null, source: null, destination: null, ships: null };
 
@@ -37,7 +33,7 @@ export class RemoteGameHelper implements GameHelper {
   onServerMessage(message: { type: string, data: any }): void {
     console.log('[RemoteGameHelper::onServerMessage]', message);
 
-    switch(message.type) {
+    switch (message.type) {
       case 'start-game': {
         this.gameId = message.data.gameId;
         this.map = message.data.map;
@@ -82,8 +78,8 @@ export class RemoteGameHelper implements GameHelper {
     this.currentPlayer = currentPlayer;
     this.turnPlayer = {
       name: this.currentPlayer.name,
-      look: this.currentPlayer.look
-    }
+      look: this.currentPlayer.look,
+    };
     this.newAttacks = this.currentPlayer.newAttacks;
     this.attacksList = this.currentPlayer.attackList;
 
@@ -111,7 +107,7 @@ export class RemoteGameHelper implements GameHelper {
     planetName = planetName.toUpperCase();
     this.attack.source = this.getMapPlanets(this.map).find((p: Planet) =>
       p.name === planetName
-    )
+    );
   }
 
   setDestinationPlanet(planetName: string): void {
@@ -123,14 +119,14 @@ export class RemoteGameHelper implements GameHelper {
     planetName = planetName.toUpperCase();
     this.attack.destination = this.getMapPlanets(this.map).find((p: Planet) =>
       p.name === planetName
-    )
+    );
   }
 
   selectPlanet(planetName: string): void {
     planetName = planetName.toUpperCase();
     const planet = this.getMapPlanets(this.map).find((p: Planet) =>
       p.name === planetName
-    )
+    );
 
     if (this.options.interactMode === InteractMode.SingleTap) {
       // In single tap mode the planet selected is always used for the attack

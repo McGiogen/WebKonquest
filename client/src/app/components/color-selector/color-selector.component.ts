@@ -16,7 +16,7 @@ export class ColorSelectorComponent {
   set model(model: string) {
     this.index = PLAYER_COLORS.findIndex((color) => {
       return color === model;
-    })
+    });
   }
 
   get model(): string {

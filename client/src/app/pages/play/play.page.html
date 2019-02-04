@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-button (click)="onBackClick($event)">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title [ngClass]="appOptions.graphics">
       <span>Turn {{ helper.turnCounter }} of {{ helper.turnPlayer.name }}</span>
@@ -66,49 +68,45 @@
 
       <ion-col size-md="6" size="12">
 
-        <ion-grid item-content margin-bottom>
-          <ion-row>
-            <ion-col size="12">
+        <ion-list lines="none" margin-bottom>
 
-              <div [hidden]="helper.attack.focus == null">
-                Info Planet {{ helper.attack.focus?.name }} of {{ helper.attack.focus?.owner?.name }}<br>
-                Kill percentage: {{ helper.attack.focus?.killPercentage | percent }}<br>
-                Production rate: {{ helper.attack.focus?.productionRate }}<br>
-            </div>
-              <hr [hidden]="helper.attack.focus == null">
+          <ion-item [hidden]="helper.attack.focus == null">
+            Info Planet {{ helper.attack.focus?.name }} of {{ helper.attack.focus?.owner?.name }}<br>
+            Kill percentage: {{ helper.attack.focus?.killPercentage | percent }}<br>
+            Production rate: {{ helper.attack.focus?.productionRate }}<br>
+          </ion-item>
+          <ion-item-divider [hidden]="helper.attack.focus == null"></ion-item-divider>
 
-              <div class="attack-info">
-                <form [formGroup]="attackForm" (ngSubmit)="attack()">
-                  <label>Attack from
-                      <ion-input type="text" formControlName="source" clearOnEdit="true"
-                      class="ion-input-inline ion-input-underline ion-input-centered"
-                      [(ngModel)]="attackSource" (ngModelChange)="helper.setSourcePlanet($event)"
-                      (click)="$event?.target?.select && $event?.target?.select()"></ion-input>
-                  </label>
-                  <label>to
-                      <ion-input type="text" formControlName="destination" clearOnEdit="true"
-                      class="ion-input-inline ion-input-underline ion-input-centered"
-                      [(ngModel)]="attackTarget" (ngModelChange)="helper.setDestinationPlanet($event)"
-                      (click)="$event?.target?.select && $event?.target?.select()"></ion-input>
-                  </label>
-                  <label>with
-                    <ion-input type="text" formControlName="shipcount" clearOnEdit="true"
-                      class="ion-input-inline ion-input-underline ion-input-centered"
-                      [(ngModel)]="helper.attack.ships"></ion-input>
-                    ships</label>
-                  <ion-button margin-left color="danger" type="submit">
-                    Send
-                  </ion-button>
-                </form>
-              </div>
-              <div *ngIf="attackFormSubmitted && (!attackForm.valid || attackFormError)" class="attackFormError">
-                Attack's data missing or incorrect
-              </div>
+          <ion-item class="attack-info">
+            <form [formGroup]="attackForm" (ngSubmit)="attack()">
+              <label>Attack from
+                  <ion-input type="text" formControlName="source" clearOnEdit="true"
+                  class="ion-input-inline ion-input-underline"
+                  [(ngModel)]="attackSource" (ngModelChange)="helper.setSourcePlanet($event)"
+                  (click)="$event?.target?.select && $event?.target?.select()"></ion-input>
+              </label>
+              <label>to
+                  <ion-input type="text" formControlName="destination" clearOnEdit="true"
+                  class="ion-input-inline ion-input-underline"
+                  [(ngModel)]="attackTarget" (ngModelChange)="helper.setDestinationPlanet($event)"
+                  (click)="$event?.target?.select && $event?.target?.select()"></ion-input>
+              </label>
+              <label>with
+                <ion-input type="text" formControlName="shipcount" clearOnEdit="true"
+                  class="ion-input-inline ion-input-underline"
+                  [(ngModel)]="helper.attack.ships"></ion-input>
+                ships</label>
+              <ion-button margin-start color="danger" type="submit">
+                Send
+              </ion-button>
+            </form>
+          </ion-item>
+          <div *ngIf="attackFormSubmitted && (!attackForm.valid || attackFormError)" class="attackFormError">
+            Attack's data missing or incorrect
+          </div>
 
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-        <ion-list no-lines>
+        </ion-list>
+        <ion-list lines="none">
 
           <ion-item-group>
             <ion-item-divider color="dark"><ion-label>
@@ -127,7 +125,7 @@
           </ion-item-group>
 
         </ion-list>
-        <ion-list no-lines>
+        <ion-list lines="none">
 
           <ion-item-divider color="dark" [hidden]="helper.turnCounter === 1"><ion-label>
             Attacks in progress ({{ helper.attacksList?.length }})

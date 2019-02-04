@@ -1,27 +1,31 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PLAYER_COLORS} from '../../services/playerColors';
 import {AppOptions} from '../../services/AppOptions';
 import { SetupNeutral, SetupPlayer, SetupGame } from './SetupGameData';
 import { GameConfig } from 'webkonquest-core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
+import { TempStorageService } from 'src/app/services/temp-storage.service';
 
 @Component({
   selector: 'page-setup-game',
   templateUrl: 'setup-game.page.html',
   styleUrls: ['setup-game.page.scss'],
 })
-export class SetupGamePage {
+export class SetupGamePage implements OnInit {
   neutral: SetupNeutral;
   players: Array<SetupPlayer>;
   local: boolean;
   gameConfig: GameConfig;
-  appOptions: AppOptions;
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private tempStorage: TempStorageService,
+    public appOptions: AppOptions,
+    ) {}
 
   ngOnInit() {
     this.gameConfig = new GameConfig();
-    this.appOptions = AppOptions.instance;
 
     this.local = (this.activatedRoute.snapshot.queryParamMap.get('local') !== 'false');
     this.neutral = { name: 'Neutral', look: PLAYER_COLORS[0], planets: null };
@@ -33,7 +37,7 @@ export class SetupGamePage {
   addNewPlayer(name = '', look?: string) {
     if (look == null) {
       for (let i = 1; i < PLAYER_COLORS.length && look == null; i++) {
-        let color = PLAYER_COLORS[i];
+        const color = PLAYER_COLORS[i];
         if (this.players.every(p => p.look !== color)) {
           look = color;
         }
@@ -50,13 +54,13 @@ export class SetupGamePage {
     if (this.players.length < 2) {
       return;
     }
-    const setupGame: SetupGame = {
+    this.tempStorage.setupGame = {
       players: this.players,
       neutral: this.neutral,
       local: this.local,
     };
 
-    this.router.navigate(['/play', {setupGame}]);
+    this.router.navigate(['/play']);
   }
 
   focusInput(input): void {

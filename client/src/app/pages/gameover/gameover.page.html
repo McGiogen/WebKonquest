@@ -4,15 +4,14 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content padding>
   <ion-grid fixed>
     <ion-row>
       <ion-col size="12">
 
-        <h1>{{ winner?.name }} is the new Emperor of the Galaxy!</h1>
+        <h1>{{ winner }} is the new Emperor of the Galaxy!</h1>
         <br><br>
-        <ion-button size="large" (click)="goToHome()">Home</ion-button>
+        <ion-button size="large" [routerLink]="['/']">Home</ion-button>
 
       </ion-col>
     </ion-row>
