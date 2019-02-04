@@ -80,21 +80,16 @@
           <ion-item class="attack-info">
             <form [formGroup]="attackForm" (ngSubmit)="attack()">
               <label>Attack from
-                  <ion-input type="text" formControlName="source" clearOnEdit="true"
-                  class="ion-input-inline ion-input-underline"
-                  [(ngModel)]="attackSource" (ngModelChange)="helper.setSourcePlanet($event)"
-                  (click)="$event?.target?.select && $event?.target?.select()"></ion-input>
+                  <ion-input type="text" formControlName="source"
+                  class="ion-input-inline ion-input-underline"></ion-input>
               </label>
               <label>to
-                  <ion-input type="text" formControlName="destination" clearOnEdit="true"
-                  class="ion-input-inline ion-input-underline"
-                  [(ngModel)]="attackTarget" (ngModelChange)="helper.setDestinationPlanet($event)"
-                  (click)="$event?.target?.select && $event?.target?.select()"></ion-input>
+                  <ion-input type="text" formControlName="destination"
+                  class="ion-input-inline ion-input-underline"></ion-input>
               </label>
               <label>with
-                <ion-input type="text" formControlName="shipcount" clearOnEdit="true"
-                  class="ion-input-inline ion-input-underline"
-                  [(ngModel)]="helper.attack.ships"></ion-input>
+                <ion-input type="text" formControlName="shipcount"
+                  class="ion-input-inline ion-input-underline"></ion-input>
                 ships</label>
               <ion-button margin-start color="danger" type="submit">
                 Send

@@ -26,8 +26,6 @@ export class PlayPage implements OnInit {
 
   public attackFormError: boolean;
   public attackFormSubmitted: boolean;
-  public attackSource: string;
-  public attackTarget: string;
 
   constructor(
     public router: Router,
@@ -39,23 +37,19 @@ export class PlayPage implements OnInit {
     private location: Location,
     public appOptions: AppOptions,
   ) {
-    const setupGame: SetupGame = tempStorage.setupGame;
+    const setupGame: SetupGame = this.tempStorage.setupGame;
     if (!setupGame) {
-      router.navigate(['']);
+      this.router.navigate(['']);
     }
-
-    if (setupGame.local) {
-      this.helper = new LocalGameHelper(this, appOptions);
-    } else {
-      this.helper = new RemoteGameHelper(this, service, appOptions);
-    }
-
-    this.helper.startGame(setupGame);
-    this.setView('change-round');
     this.alertShown = false;
-
     this.attackFormError = false;
     this.attackFormSubmitted = false;
+
+    if (setupGame.local) {
+      this.helper = new LocalGameHelper(this, this.appOptions);
+    } else {
+      this.helper = new RemoteGameHelper(this, this.service, this.appOptions);
+    }
   }
 
   ngOnInit() {
@@ -64,14 +58,28 @@ export class PlayPage implements OnInit {
       destination: new FormControl('', [Validators.maxLength(1), Validators.pattern('[a-zA-Z]'), Validators.required]),
       shipcount: new FormControl('', [Validators.pattern('[0-9]*'), Validators.required])
     });
+
+    this.attackForm.get('source').valueChanges.subscribe(val => {
+      this.helper.setSourcePlanet(val);
+    });
+    this.attackForm.get('destination').valueChanges.subscribe(val => {
+      this.helper.setDestinationPlanet(val);
+    });
+    this.attackForm.get('shipcount').valueChanges.subscribe(val => {
+      this.helper.attack.ships = val;
+    });
+
+    const setupGame: SetupGame = this.tempStorage.setupGame;
+    this.helper.startGame(setupGame);
+    this.setView('change-round');
   }
 
   mapSelectedSector(sector): void {
     if (sector && sector.planet) {
       console.debug('Pianeta selezionato: ', sector.planet);
       this.helper.selectPlanet(sector.planet.name);
-      this.attackSource = this.helper.attack.source ? this.helper.attack.source.name : null;
-      this.attackTarget = this.helper.attack.destination ? this.helper.attack.destination.name : null;
+      this.attackForm.get('source').setValue(this.helper.attack.source ? this.helper.attack.source.name : null);
+      this.attackForm.get('destination').setValue(this.helper.attack.destination ? this.helper.attack.destination.name : null);
     }
   }
 
@@ -82,8 +90,7 @@ export class PlayPage implements OnInit {
 
     this.attackFormError = false;
     this.attackFormSubmitted = false;
-    this.attackSource = null;
-    this.attackTarget = null;
+    this.attackForm.reset();
   }
 
   changeRound(): void {
@@ -130,8 +137,6 @@ export class PlayPage implements OnInit {
   }
 
   onBackClick(event: Event) {
-    event.preventDefault();
-    event.stopPropagation();
     if (this.alertShown === false) {
       this.backConfirm();
     }

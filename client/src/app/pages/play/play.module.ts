@@ -11,7 +11,6 @@ import { PlayPage } from './play.page';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     IonicModule,
     HttpClientModule,
