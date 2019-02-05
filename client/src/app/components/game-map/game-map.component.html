@@ -1,8 +1,8 @@
 <div class="map-container">
   <div class="map-grid" [ngClass]="appOptions.graphics">
-    <div *ngFor='let row of map?.grid; trackBy: index;' class="map-grid-row">
+    <div *ngFor='let row of map?.grid' class="map-grid-row">
       <button
-        *ngFor='let sector of row; trackBy: index'
+        *ngFor='let sector of row'
         class="map-grid-cell"
         (click)="selectSector(sector)"
         [ngClass]="{active: selectedSector === sector}"

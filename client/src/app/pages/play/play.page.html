@@ -37,7 +37,7 @@
           <br>
         </h1>
         <div [hidden]="helper.turnCounter <= 1">
-          <div *ngFor='let fight of helper.newFights; trackBy: index'>
+          <div *ngFor='let fight of helper.newFights'>
             - {{ fightToString(fight) }}
           </div>
         </div>
@@ -108,7 +108,7 @@
               Planned attacks ({{ helper.newAttacks?.length }})
             </ion-label></ion-item-divider>
             <ion-item
-              *ngFor='let attack of helper.newAttacks; trackBy: index'>
+              *ngFor='let attack of helper.newAttacks'>
               <ion-button fill="clear" color="danger" slot="start"
                       (click)="cancelAttack(attack)">
                 <ion-icon name="close" slot="icon-only"></ion-icon>
@@ -126,7 +126,7 @@
             Attacks in progress ({{ helper.attacksList?.length }})
           </ion-label></ion-item-divider>
           <ion-item
-            *ngFor='let attack of helper.attacksList; trackBy: index'><ion-label>
+            *ngFor='let attack of helper.attacksList'><ion-label>
             From {{ attack.source.name }} to {{ attack.destination.name }} with {{ attack.shipCount }} ships, arrive at turn {{ attack.arrivalTurn }}
           </ion-label></ion-item>
 

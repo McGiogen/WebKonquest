@@ -1,4 +1,4 @@
-import {Planet, Player, GameMap, AttackFleet} from 'webkonquest-core';
+import {Planet, Player, GameMap, AttackFleet, Fight} from 'webkonquest-core';
 import {AppOptions} from '../../../services/AppOptions';
 import { SetupGame } from '../../setup-game/SetupGameData';
 
@@ -15,6 +15,7 @@ export interface GameHelper {
 
   newAttacks: Array<AttackFleet>;
   attacksList: Array<AttackFleet>;
+  newFights: Array<Fight>;
 
   map: GameMap;
 
