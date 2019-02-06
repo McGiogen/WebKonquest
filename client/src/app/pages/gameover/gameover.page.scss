@@ -1,7 +1,11 @@
 @import '../../../theme/variables';
 
-ion-content {
-  background: url($imgs-path + 'backgrounds/play-background.png') no-repeat;
+:host {
+  background: url($imgs-path + 'backgrounds/play-background.jpg') no-repeat;
   background-size: cover;
+}
+
+ion-content {
+  --background: transparent;
   text-align: center;
 }
