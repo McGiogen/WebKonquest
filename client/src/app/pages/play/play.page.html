@@ -79,7 +79,7 @@
 
           <ion-item class="attack-info">
             <form [formGroup]="attackForm" (ngSubmit)="attack()">
-              <label>Attack from
+              <label>Move from
                   <ion-input type="text" formControlName="source"
                   class="ion-input-inline ion-input-underline"></ion-input>
               </label>
@@ -97,7 +97,7 @@
             </form>
           </ion-item>
           <div *ngIf="attackFormSubmitted && (!attackForm.valid || attackFormError)" class="attackFormError">
-            Attack's data missing or incorrect
+            Form data missing or incorrect
           </div>
 
         </ion-list>
@@ -105,7 +105,7 @@
 
           <ion-item-group>
             <ion-item-divider color="dark"><ion-label>
-              Planned attacks ({{ helper.newAttacks?.length }})
+              Planned movements ({{ helper.newAttacks?.length }})
             </ion-label></ion-item-divider>
             <ion-item
               *ngFor='let attack of helper.newAttacks'>
@@ -123,7 +123,7 @@
         <ion-list lines="none">
 
           <ion-item-divider color="dark" [hidden]="helper.turnCounter === 1"><ion-label>
-            Attacks in progress ({{ helper.attacksList?.length }})
+            Movements in progress ({{ helper.attacksList?.length }})
           </ion-label></ion-item-divider>
           <ion-item
             *ngFor='let attack of helper.attacksList'><ion-label>
