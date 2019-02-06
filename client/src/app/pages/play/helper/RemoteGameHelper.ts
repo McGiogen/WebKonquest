@@ -27,7 +27,7 @@ export class RemoteGameHelper implements GameHelper {
     this.turnPlayer = { name: null, look: null };
     this.attack = { focus: null, source: null, destination: null, ships: null };
 
-    this.socketSubscription = this.service.socket.subscribe(this.onServerMessage.bind(this));
+    this.socketSubscription = this.service.subscribe(this.onServerMessage.bind(this));
   }
 
   onServerMessage(message: { type: string, data: any }): void {
