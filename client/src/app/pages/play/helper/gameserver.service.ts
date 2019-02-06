@@ -8,7 +8,7 @@ export class GameServerService {
   public socket: WebSocketSubject<any>;
 
   constructor() {
-    this.socket = WebSocketSubject.create(GameServerService.getWsUrl('/api/socket'));
+    this.socket = new WebSocketSubject(GameServerService.getWsUrl('/api/socket'));
   }
 
   public subscribe(next?: (value: any) => void, error?: (error: any) => void, complete?: () => void): Subscription {
