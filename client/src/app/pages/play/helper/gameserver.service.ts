@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class GameServerService {
 
-  public socket: WebSocketSubject<any>;
+  private socket: WebSocketSubject<any>;
 
   constructor() {
     this.socket = new WebSocketSubject(GameServerService.getWsUrl('/api/socket'));
@@ -15,7 +15,7 @@ export class GameServerService {
     return this.socket
       .subscribe(
         (message) => {
-          console.log('Ws Message', message);
+          console.debug('Ws Message', message);
           if (next) next(message);
         },
         (err) => {
@@ -23,17 +23,19 @@ export class GameServerService {
           if (error) error(err);
         },
         () => {
-          console.warn('Ws Completed');
+          console.info('Ws Completed');
           if (complete) complete();
         }
       );
   }
 
   public send(type: string, data: any): void {
-    this.socket.next(JSON.stringify({
+    const message = {
       type,
       data,
-    }));
+    };
+    console.debug('Send Ws Message', message);
+    this.socket.next(message);
   }
 
   private static getWsUrl(s: string): string {
