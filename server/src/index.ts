@@ -47,9 +47,12 @@ wss.on('connection', ws => {
       if (response != null) {
         console.log('Message sent.', response);
         ws.send(JSON.stringify(response));
+      } else {
+        ws.send('Request not recognized.');
       }
     } catch (ex) {
       console.error(ex);
+      ws.send('Error: ' + ex);
     }
   });
 
