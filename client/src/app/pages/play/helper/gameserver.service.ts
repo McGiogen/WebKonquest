@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { Subscription } from 'rxjs';
+import {environment} from "../../../../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class GameServerService {
@@ -39,7 +40,7 @@ export class GameServerService {
   }
 
   private static getWsUrl(s: string): string {
-    let l = window.location;
+    let l = environment.production ? window.location : { protocol: 'http:', host: `${window.location.hostname}:8080`};
     return (l.protocol === 'https:' ? 'wss:///' : 'ws:///') + l.host + s;
   }
 }
